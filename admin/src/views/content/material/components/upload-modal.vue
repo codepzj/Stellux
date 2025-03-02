@@ -5,7 +5,10 @@
   <a-modal
     v-model:open="open"
     title="附件上传"
-    @ok="handleOk"
+    :ok-text="fileList?.length === 0 ? '上传' : '确认上传'"
+    :cancel-text="fileList?.length === 0 ? '关闭' : '取消'"
+    @cancel="handleModalCancel"
+    @ok="handleModalOk"
     width="100%"
     wrap-class-name="full-modal"
   >
@@ -50,7 +53,6 @@ const open = ref<boolean>(false);
 const key = "upload-pictures-local";
 const fileList = ref<UploadProps["fileList"]>([]);
 const activeKey = ref("1");
-const confirmLoading = ref<boolean>(false);
 
 const handleBeforeUpload: UploadProps["beforeUpload"] = async (
   file,
@@ -84,15 +86,31 @@ const showModal = () => {
   open.value = true;
 };
 
-const handleOk = () => {
-  confirmLoading.value = true;
+const handleModalCancel = () => {
+  // 如果文件列表为空，则关闭弹窗
+  if (fileList.value?.length === 0) {
+    open.value = false;
+    fileList.value = [];
+    emit("update:list");
+  }
+  // 如果文件列表不为空，则提示用户确认上传
+  else {
+    // TODO: 回滚上传的文件
+    message.success("取消上传成功");
+    open.value = false;
+    fileList.value = [];
+  }
+};
+
+const handleModalOk = () => {
+  if (fileList.value?.length === 0) {
+    message.error("请上传文件");
+    return;
+  }
   // 清空文件列表
   fileList.value = [];
+  message.success("确认上传成功");
   emit("update:list");
-
-  // 关闭弹窗
-  open.value = false;
-  confirmLoading.value = false;
 };
 
 // 删除已上传的特定文件
