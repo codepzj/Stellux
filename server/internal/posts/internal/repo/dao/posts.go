@@ -2,10 +2,12 @@ package dao
 
 import (
 	"context"
+	"server/internal/posts/internal/domain"
+	"time"
+
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
-	"server/internal/posts/internal/domain"
 )
 
 type IPostsDao interface {
@@ -26,6 +28,9 @@ func NewPostsDao(database *mongo.Database) *PostsDao {
 }
 
 func (p *PostsDao) Create(ctx context.Context, posts *domain.Posts) error {
+	posts.ID = bson.NewObjectID()
+	posts.CreatedAt = time.Now()
+	posts.UpdatedAt = time.Now()
 	_, err := p.postColl.InsertOne(ctx, posts)
 	if err != nil {
 		return errors.Wrap(err, "添加文章失败")

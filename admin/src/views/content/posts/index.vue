@@ -37,14 +37,14 @@
       <a-form-item label="标题" name="title">
         <a-input v-model:value="configForm.title" placeholder="请输入标题" />
       </a-form-item>
-      <a-form-item label="内容" name="content">
-        <a-textarea
-          v-model:value="configForm.content"
-          placeholder="请输入内容"
-        />
-      </a-form-item>
       <a-form-item label="作者" name="author">
         <a-input v-model:value="configForm.author" placeholder="请输入作者" />
+      </a-form-item>
+      <a-form-item label="简介" name="description">
+        <a-input
+          v-model:value="configForm.description"
+          placeholder="请输入简介"
+        />
       </a-form-item>
       <a-form-item label="分类" name="category">
         <a-select
@@ -80,7 +80,6 @@ import "md-editor-v3/lib/style.css";
 import { createPost } from "@/api/modules/posts";
 import { message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form";
-import type { PostsReq } from "@/api/interfaces/posts";
 
 const themeStore = useThemeStore();
 const theme = computed(() => themeStore.tailwindTheme);
@@ -93,6 +92,7 @@ const configForm = reactive({
   title: "",
   content: "",
   author: "codepzj",
+  description: "",
   category: "",
   tags: [],
   cover: "",
@@ -121,13 +121,13 @@ const handleCreatePost = async () => {
 const handleOk = async () => {
   configFormRef.value
     .validate()
-    .then(async (res: PostsReq) => {
+    .then(async () => {
       message.loading({
         content: "文章发布中...",
         key,
       });
       try {
-        const result = await createPost(res);
+        const result = await createPost(configForm);
         open.value = false;
         confirmLoading.value = false;
         configFormRef.value.resetFields();
@@ -156,10 +156,10 @@ const rules: Record<string, Rule[]> = {
   title: [{ required: true, message: "请输入标题" }],
   content: [{ required: true, message: "请输入内容" }],
   author: [{ required: true, message: "请输入作者" }],
+  description: [{ required: true, message: "请输入简介" }],
   category: [{ required: true, message: "请选择分类" }],
   tags: [{ required: true, message: "请选择标签" }],
 };
-
 </script>
 <style lang="scss">
 @import url("https://cdn.jsdelivr.net/npm/cn-fontsource-lxgw-wen-kai-gb-screen@1.0.6/font.min.css");

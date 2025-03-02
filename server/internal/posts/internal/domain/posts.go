@@ -1,16 +1,24 @@
 package domain
 
-import "github.com/chenmingyong0423/go-mongox/v2"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
 
 type Posts struct {
-	mongox.Model `bson:",inline"`
-	Title        string
-	Content      string
-	Author       string
-	Category     string
-	Tags         []string
-	Cover        string
-	IsTop        bool
+	ID          bson.ObjectID `bson:"_id"`
+	CreatedAt   time.Time     `bson:"created_at"`
+	UpdatedAt   time.Time     `bson:"updated_at"`
+	DeletedAt   time.Time     `bson:"deleted_at,omitempty"`
+	Title       string
+	Content     string
+	Author      string
+	Description string
+	Category    string
+	Tags        []string
+	Cover       string
+	IsTop       bool `bson:"is_top"`
 }
 
 type PageDTO struct {

@@ -15,7 +15,7 @@ export default async function PostPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const post = await request.get<PostVO>(`/posts`, { id }); // 移除第二个类型参数
+  const post = await request.get<PostVO>(`/posts/${id}`);
   const { data } = post;
   return (
     <div className="w-[800px] m-auto">

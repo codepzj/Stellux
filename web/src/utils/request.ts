@@ -35,7 +35,7 @@ class Request {
     return res.json();
   }
 
-  public async get<D>(url: string, params: object): Promise<Response<D>> {
+  public async get<D>(url: string, params?: object): Promise<Response<D>> {
     const respData = this.request<unknown, D>(
       `${url}?${qs.stringify(params)}`,
       "GET"

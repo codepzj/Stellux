@@ -11,7 +11,7 @@ import Login from "@/views/auth/login.vue";
 import Test from "@/views/test/index.vue";
 import { errorView } from "@/router/modules/errorView";
 import UserRole from "@/views/user/role.vue";
-import PublishArticle from "@/views/content/posts.vue";
+import PublishArticle from "@/views/content/posts/index.vue";
 import ArticleList from "@/views/content/list.vue";
 import Draft from "@/views/content/draft.vue";
 import MaterialLibrary from "@/views/content/material/asset.vue";

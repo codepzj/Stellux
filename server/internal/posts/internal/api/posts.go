@@ -25,7 +25,7 @@ func NewPostHandler(serv service.IPostsService) *PostsHandler {
 func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 	group := router.Group("/posts")
 	{
-		group.GET("/", h.FindPostById)
+		group.GET("/:id", h.FindPostById)
 		group.GET("/list", h.FindAllPosts)
 		group.POST("/create", h.CreatePosts)
 	}
@@ -33,8 +33,8 @@ func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 
 func (h *PostsHandler) CreatePosts(ctx *gin.Context) {
 	var postsReq PostsReq
-	if ctx.ShouldBindJSON(&postsReq) != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
+	if err := ctx.ShouldBindJSON(&postsReq); err != nil {
+		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error()+" 参数错误")
 		return
 	}
 	err := h.serv.CreatePosts(ctx, toPosts(postsReq))
@@ -46,7 +46,7 @@ func (h *PostsHandler) CreatePosts(ctx *gin.Context) {
 }
 
 func (h *PostsHandler) FindPostById(ctx *gin.Context) {
-	id := ctx.Query("id")
+	id := ctx.Param("id")
 	if id == "" {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
 		return
