@@ -29,6 +29,8 @@ type FileDTO struct {
 func GetFileFromTime(file *File) *File {
 	return &File{
 		ID:        bson.NewObjectID(),
+		Uid:       file.Uid,
+		FileName:  file.FileName,
 		CreatedAt: time.Now().Local(),
 		Type:      file.Type,
 		Url:       file.Url,
@@ -50,6 +52,8 @@ func ToFilePtrSlice(files []File) []*File {
 func ToFileDTO(file *File) *FileDTO {
 	return &FileDTO{
 		ID:        file.ID,
+		Uid:       file.Uid,
+		FileName:  file.FileName,
 		CreatedAt: file.CreatedAt,
 		Type:      file.Type,
 		Url:       file.Url,

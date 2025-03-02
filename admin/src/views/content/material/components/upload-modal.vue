@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-row justify-end my-2 pr-14">
+  <div class="w-full flex flex-row justify-end my-2 pr-8">
     <a-button @click="showModal"> 上传附件 </a-button>
   </div>
   <a-modal
@@ -10,7 +10,7 @@
     wrap-class-name="full-modal"
   >
     <div class="flex flex-col items-center">
-      <a-tabs v-model:activeKey="activeKey" @change="handleKeyChange">
+      <a-tabs v-model:activeKey="activeKey">
         <a-tab-pane key="1" tab="文件上传"></a-tab-pane>
         <a-tab-pane key="2" tab="文件夹上传"></a-tab-pane>
       </a-tabs>
@@ -39,10 +39,11 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { uploadPicturesLocal } from "@/api/modules/file";
+import { deletePhotoByUid, uploadPicturesLocal } from "@/api/modules/file";
 import { message, type UploadFile } from "ant-design-vue";
 import { InboxOutlined } from "@ant-design/icons-vue";
 import type { UploadProps } from "ant-design-vue/lib/upload/interface";
+
 // 父组件重新获取图片列表
 const emit = defineEmits(["update:list"]);
 const open = ref<boolean>(false);
@@ -50,10 +51,6 @@ const key = "upload-pictures-local";
 const fileList = ref<UploadProps["fileList"]>([]);
 const activeKey = ref("1");
 const confirmLoading = ref<boolean>(false);
-
-const handleKeyChange = (key: string) => {
-  console.log(key);
-};
 
 const handleBeforeUpload: UploadProps["beforeUpload"] = async (
   file,
@@ -92,15 +89,22 @@ const handleOk = () => {
   // 清空文件列表
   fileList.value = [];
   emit("update:list");
-  
+
   // 关闭弹窗
   open.value = false;
   confirmLoading.value = false;
 };
 
 // 删除已上传的特定文件
-const handleRemove = (file: UploadFile) => {
-  console.log(file);
+const handleRemove = async (file: UploadFile) => {
+  try {
+    const res = await deletePhotoByUid({ uid: file.uid });
+    message.success(res.msg);
+    emit("update:list");
+  } catch (error: any) {
+    message.error(error);
+    return false;
+  }
 };
 </script>
 

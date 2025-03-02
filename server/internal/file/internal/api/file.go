@@ -12,6 +12,7 @@ import (
 type IFileHandler interface {
 	UploadFilesLocal(ctx *gin.Context)
 	GetPhotosLocalByPage(ctx *gin.Context)
+	DeletePhotoByUid(ctx *gin.Context)
 }
 
 type FileHandler struct {
@@ -30,6 +31,7 @@ func (h *FileHandler) RegisterGinRoutes(router *gin.Engine) {
 	{
 		group.GET("/list", h.GetPhotosLocalByPage)
 		group.POST("/local/upload", h.UploadFilesLocal)
+		group.DELETE("/local/delete", h.DeletePhotoByUid)
 	}
 }
 
@@ -77,4 +79,18 @@ func (h *FileHandler) GetPhotosLocalByPage(ctx *gin.Context) {
 
 	filePageDTO := wrap.ToPageVO(int64(pageNo), int64(size), totalCount, totalPage, photos)
 	wrap.SuccessWithData(ctx, filePageDTO)
+}
+
+func (h *FileHandler) DeletePhotoByUid(ctx *gin.Context) {
+	uid := ctx.DefaultQuery("uid", "")
+	if uid == "" {
+		wrap.FailWithMsg(ctx, http.StatusBadRequest, "uid不能为空")
+		return
+	}
+	err := h.serv.DeletePhotoByUid(ctx, uid)
+	if err != nil {
+		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+	wrap.SuccessWithMsg(ctx, "删除成功")
 }

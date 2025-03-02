@@ -15,6 +15,7 @@ type IFileDao interface {
 	Delete(ctx context.Context, filesId []bson.ObjectID) error
 	FindListByPage(ctx context.Context, page int64, pageSize int64) ([]*domain.File, error)
 	FindCount(ctx context.Context) (int64, error)
+	DeleteByUid(ctx context.Context, uid string) error
 }
 
 type FileDao struct {
@@ -74,4 +75,15 @@ func (p *FileDao) FindListByPage(ctx context.Context, page int64, pageSize int64
 
 func (p *FileDao) FindCount(ctx context.Context) (int64, error) {
 	return p.fileColl.CountDocuments(ctx, bson.M{})
+}
+
+func (p *FileDao) DeleteByUid(ctx context.Context, uid string) error {
+	result, err := p.fileColl.DeleteOne(ctx, bson.M{"uid": uid})
+	if err != nil {
+		return err
+	}
+	if result.DeletedCount == 0 {
+		return errors.Wrap(err, "删除失败，文件不存在")
+	}
+	return nil
 }

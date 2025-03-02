@@ -26,3 +26,9 @@ export const getFilesByPage: (data: {
 }) => {
   return request.get("/picture/list", { params: { page_no, size } });
 };
+
+export const deletePhotoByUid: (data: {
+  uid: string;
+}) => Promise<Response<any>> = ({ uid }: { uid: string }) => {
+  return request.delete("/picture/local/delete", { params: { uid } });
+};

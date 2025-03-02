@@ -14,6 +14,7 @@ type IFileRepo interface {
 	DeleteMany(ctx context.Context, files []*domain.File) error
 	FindByPage(ctx context.Context, page int64, pageSize int64) ([]*domain.FileDTO, error)
 	GetAllCount(ctx context.Context) (int64, error)
+	DeleteByUid(ctx context.Context, uid string) error
 }
 
 type FileRepo struct {
@@ -47,4 +48,8 @@ func (p *FileRepo) FindByPage(ctx context.Context, page int64, pageSize int64) (
 
 func (p *FileRepo) GetAllCount(ctx context.Context) (int64, error) {
 	return p.dao.FindCount(ctx)
+}
+
+func (p *FileRepo) DeleteByUid(ctx context.Context, uid string) error {
+	return p.dao.DeleteByUid(ctx, uid)
 }

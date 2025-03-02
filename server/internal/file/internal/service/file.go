@@ -18,6 +18,7 @@ import (
 type IFileService interface {
 	UploadFilesLocal(ctx context.Context, uids []string, fileNames []string, files []*multipart.FileHeader) ([]*domain.File, error)
 	GetPhotosByPage(ctx context.Context, page int64, pageSize int64) ([]*domain.FileDTO, int64, int64, error)
+	DeletePhotoByUid(ctx context.Context, uid string) error
 }
 
 type FileService struct {
@@ -97,4 +98,8 @@ func (s *FileService) GetPhotosByPage(ctx context.Context, page int64, pageSize 
 		totalPage++
 	}
 	return photos, totalCount, totalPage, nil
+}
+
+func (s *FileService) DeletePhotoByUid(ctx context.Context, uid string) error {
+	return s.repo.DeleteByUid(ctx, uid)
 }

@@ -1,14 +1,17 @@
 <template>
-  <UploadModal @update:list="getList" />
-  <a-skeleton :loading="systemStore.loading" :paragraph="{ rows: 12 }">
-    <PhotoWall
-      :list="list"
-      :current="pageNo"
-      :size="size"
-      :total="total"
-      @update:pagination="handlePagePagination"
-    />
-  </a-skeleton>
+  <div class="w-[98%] mx-auto">
+    <UploadModal @update:list="getList" />
+    <a-skeleton :loading="systemStore.loading" :paragraph="{ rows: 12 }">
+      <PhotoWall
+        :list="list"
+        :current="pageNo"
+        :size="size"
+        :total="total"
+        @update:pagination="handlePagePagination"
+        @update:list="handleDeletePhoto"
+      />
+    </a-skeleton>
+  </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
@@ -16,7 +19,7 @@ import PhotoWall from "./components/photo-wall.vue";
 import UploadModal from "./components/upload-modal.vue";
 import { getFilesByPage } from "@/api/modules/file";
 import type { IFile } from "@/api/interfaces/file";
-import { message } from "ant-design-vue";
+import { message, type UploadFile } from "ant-design-vue";
 import { useSystemStore } from "@/store/system";
 
 const systemStore = useSystemStore();
@@ -50,6 +53,10 @@ const handlePagePagination = (pagination: {
   pageNo.value = pagination.current;
   size.value = pagination.size;
   getList();
+};
+
+const handleDeletePhoto = (file: UploadFile) => {
+  list.value = list.value.filter((item) => item.uid !== file.uid);
 };
 
 onMounted(async () => {

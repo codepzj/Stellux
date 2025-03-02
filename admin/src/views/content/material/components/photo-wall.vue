@@ -1,10 +1,12 @@
 <template>
   <a-upload
+    v-if="photosWall.length > 0"
     v-model:file-list="photosWall"
     list-type="picture-card"
     @preview="handlePreview"
     @remove="handleRemove"
   />
+  <a-empty v-else />
 
   <div class="flex flex-row justify-end">
     <a-pagination
@@ -27,7 +29,8 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
 import type { IFile } from "@/api/interfaces/file";
-import { type UploadFile } from "ant-design-vue";
+import { message, type UploadFile } from "ant-design-vue";
+import { deletePhotoByUid } from "@/api/modules/file";
 
 const props = defineProps<{
   current: number;
@@ -38,6 +41,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "update:pagination", pagination: { current: number; size: number }): void;
+  (e: "update:list", deleteItem: UploadFile): void;
 }>();
 
 const pagination = reactive({
@@ -58,7 +62,8 @@ const photosWall = computed(() => {
     const reg = /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)$/i;
     if (reg.test(imageUrl)) {
       return {
-        uid: item.id,
+        uid: item.uid,
+        name: item.name,
         status: "done",
         url: imageUrl,
         thumbUrl: imageUrl,
@@ -106,8 +111,15 @@ const handleCancel = () => {
 };
 
 // 删除图片
-const handleRemove = (file: UploadFile) => {
-  console.log(file);
+const handleRemove = async (file: UploadFile) => {
+  try {
+    const res = await deletePhotoByUid({ uid: file.uid });
+    // 回调成功删除特定图片，避免重复获取图片列表
+    emit("update:list", file);
+    message.success(res.msg);
+  } catch (error: any) {
+    message.error(error);
+  }
 };
 
 // 分页

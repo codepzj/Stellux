@@ -45,6 +45,7 @@ web/.next
 
 web/dist
 admin/dist
+*_test.go
 
 */.DS_Store
 .DS_Store
