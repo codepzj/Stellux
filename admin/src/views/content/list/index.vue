@@ -2,7 +2,7 @@
   <div>文章列表</div>
 </template>
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import type { PostsVO } from "@/api/interfaces/posts";
 import { getPostsByPage } from "@/api/modules/posts";
 
