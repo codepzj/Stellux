@@ -12,7 +12,7 @@ import Test from "@/views/test/index.vue";
 import { errorView } from "@/router/modules/errorView";
 import UserRole from "@/views/user/role.vue";
 import PublishArticle from "@/views/content/posts/index.vue";
-import ArticleList from "@/views/content/list.vue";
+import ArticleList from "@/views/content/list/index.vue";
 import Draft from "@/views/content/draft.vue";
 import MaterialLibrary from "@/views/content/material/asset.vue";
 import RecycleBin from "@/views/content/bin.vue";

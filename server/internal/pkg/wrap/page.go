@@ -5,6 +5,12 @@ type Page struct {
 	PageNo int64 `form:"page_no" json:"page_no" binding:"required"`
 	// 每页条数
 	Size int64 `form:"size" json:"size" binding:"required"`
+	// 排序字段
+	Field string `form:"field" json:"field,omitempty" `
+	// 排序方式
+	Order string `form:"order" json:"order,omitempty" `
+	// 搜索内容
+	Keyword string `form:"keyword" json:"keyword,omitempty" `
 }
 
 type PageVO[T any] struct {
