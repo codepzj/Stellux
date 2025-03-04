@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 	"server/internal/pkg/wrap"
-	"server/internal/posts/internal/domain"
 	"server/internal/posts/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,7 @@ type IPostHandler interface {
 	CreatePosts(ctx *gin.Context)
 	FindPostById(ctx *gin.Context)
 	FindAllPosts(ctx *gin.Context)
-	FindPostsByPage(ctx *gin.Context)
+	FindPostsByCondition(ctx *gin.Context)
 }
 type PostsHandler struct {
 	serv service.IPostsService
@@ -29,7 +28,7 @@ func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 	{
 		group.GET("/:id", h.FindPostById)
 		group.GET("/list/all", h.FindAllPosts)
-		group.GET("/list", h.FindPostsByPage)
+		group.GET("/list", h.FindPostsByCondition)
 		group.POST("/create", h.CreatePosts)
 	}
 }
@@ -64,7 +63,7 @@ func (h *PostsHandler) FindPostById(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	wrap.SuccessWithDetail(ctx, domain.ToPostsVO(posts), "获取文章详情成功")
+	wrap.SuccessWithDetail(ctx, DTOToVO(posts), "获取文章详情成功")
 }
 
 func (h *PostsHandler) FindAllPosts(ctx *gin.Context) {
@@ -73,36 +72,26 @@ func (h *PostsHandler) FindAllPosts(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	postsVO := make([]*domain.PostsVO, 0)
-	for _, post := range posts {
-		postsVO = append(postsVO, domain.ToPostsVO(post))
-	}
-	wrap.SuccessWithDetail(ctx, postsVO, "获取文章列表成功")
+	wrap.SuccessWithDetail(ctx, DTOsToVOs(posts), "获取文章列表成功")
 }
 
-func (h *PostsHandler) FindPostsByPage(ctx *gin.Context) {
+func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context) {
 	var page wrap.Page
 	if err := ctx.ShouldBind(&page); err != nil {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error()+"，参数错误")
 		return
 	}
-	posts, total_count, total_page, err := h.serv.FindPostsByPage(ctx, &domain.PageDTO{
-		PageNo:   page.PageNo,
-		PageSize: page.Size,
-		Field:    page.Field,
-		Order:    page.Order,
-		Keyword:  page.Keyword,
-	})
+	posts, totalCount, totalPage, err := h.serv.FindPostsByCondition(ctx, &page)
 	if err != nil {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	postsVO := domain.ToPostsVOs(posts)
-	pageVO := wrap.PageVO[domain.PostsVO]{
+
+	pageVO := wrap.PageVO[PostsVO]{
 		Page:       page,
-		TotalCount: total_count,
-		TotalPage:  total_page,
-		List:       postsVO,
+		TotalCount: totalCount,
+		TotalPage:  totalPage,
+		List:       DTOsToVOs(posts),
 	}
 	wrap.SuccessWithDetail(ctx, pageVO, "获取文章列表成功")
 }

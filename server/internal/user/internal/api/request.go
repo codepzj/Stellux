@@ -13,9 +13,17 @@ type CreateUserReq struct {
 	RoleId   int    `json:"role_id" binding:"required"`
 }
 
-func toUser(loginReq LoginReq) domain.User {
-	return domain.User{
-		Username: loginReq.Username,
-		Password: loginReq.Password,
+func LoginReqToDO(req *LoginReq) *domain.User {
+	return &domain.User{
+		Username: req.Username,
+		Password: req.Password,
+	}
+}
+
+func CreateUserReqToDO(req *CreateUserReq) *domain.User {
+	return &domain.User{
+		Username: req.Username,
+		Password: req.Password,
+		RoleId:   req.RoleId,
 	}
 }

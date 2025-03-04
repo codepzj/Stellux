@@ -5,7 +5,6 @@ go 1.24
 require (
 	github.com/casbin/casbin/v2 v2.103.0
 	github.com/casbin/mongodb-adapter/v3 v3.7.0
-	github.com/chenmingyong0423/go-mongox/v2 v2.3.0
 	github.com/fsnotify/fsnotify v1.8.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1

@@ -8,8 +8,8 @@ import (
 
 type IUserService interface {
 	CreateUser(ctx context.Context, user *domain.User) error
-	FindUserIsExist(ctx context.Context, user *domain.User) (*domain.User, bool)
-	FindAllUsers(ctx context.Context) ([]*domain.User, error)
+	FindUserIsExist(ctx context.Context, user *domain.User) (*UserDto, bool)
+	FindAllUsers(ctx context.Context) ([]*UserDto, error)
 }
 
 var _ IUserService = (*UserService)(nil)
@@ -26,10 +26,18 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
 	return s.repo.CreateUser(ctx, user)
 }
 
-func (s *UserService) FindUserIsExist(ctx context.Context, user *domain.User) (*domain.User, bool) {
-	return s.repo.FindUserIsExist(ctx, user)
+func (s *UserService) FindUserIsExist(ctx context.Context, user *domain.User) (*UserDto, bool) {
+	user, ok := s.repo.FindUserIsExist(ctx, user)
+	if !ok {
+		return nil, false
+	}
+	return DoToDTO(user), true
 }
 
-func (s *UserService) FindAllUsers(ctx context.Context) ([]*domain.User, error) {
-	return s.repo.FindAllUsers(ctx)
+func (s *UserService) FindAllUsers(ctx context.Context) ([]*UserDto, error) {
+	users, err := s.repo.FindAllUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return DOsToDTOs(users), nil
 }

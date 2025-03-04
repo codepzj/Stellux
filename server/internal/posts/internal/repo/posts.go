@@ -10,9 +10,9 @@ import (
 
 type IPostsRepo interface {
 	CreatePost(ctx context.Context, posts *domain.Posts) error
-	FindPostById(ctx context.Context, id bson.ObjectID) (*domain.PostsDTO, error)
-	FindAllPosts(ctx context.Context) ([]*domain.PostsDTO, error)
-	FindPostsByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.PostsDTO, int64, int64, error)
+	FindPostById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error)
+	FindAllPosts(ctx context.Context) ([]*domain.Posts, error)
+	FindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error)
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
 	DeletePostById(ctx context.Context, Id bson.ObjectID) error
@@ -32,36 +32,25 @@ func (p *PostsRepo) CreatePost(ctx context.Context, posts *domain.Posts) error {
 	return p.dao.Create(ctx, posts)
 }
 
-func (p *PostsRepo) FindPostById(ctx context.Context, id bson.ObjectID) (*domain.PostsDTO, error) {
-	posts, err := p.dao.FindById(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return domain.ToPostsDTO(posts), nil
+func (p *PostsRepo) FindPostById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error) {
+	return p.dao.FindById(ctx, id)
 }
 
-func (p *PostsRepo) FindAllPosts(ctx context.Context) ([]*domain.PostsDTO, error) {
-	posts, err := p.dao.FindAll(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return domain.ToPostsDTOs(posts), nil
+func (p *PostsRepo) FindAllPosts(ctx context.Context) ([]*domain.Posts, error) {
+	return p.dao.FindAll(ctx)
 }
 
-func (p *PostsRepo) FindPostsByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.PostsDTO, int64, int64, error) {
-	total_count, err := p.GetAllCountByKeyword(ctx, pageDTO.Keyword)
+func (p *PostsRepo) FindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error) {
+	totalCount, err := p.GetAllCountByKeyword(ctx, keyword)
 	if err != nil {
 		return nil, 0, 0, err
 	}
-	total_page := total_count / pageDTO.PageSize
-	if total_count%pageDTO.PageSize != 0 {
-		total_page++
-	}
-	list, err := p.dao.FindListByPage(ctx, pageDTO)
+	totalPage := (totalCount + pageSize - 1) / pageSize
+	list, err := p.dao.FindListByCondition(ctx, (pageNo-1)*pageSize, pageSize, keyword, field, order)
 	if err != nil {
 		return nil, 0, 0, err
 	}
-	return domain.ToPostsDTOs(list), total_count, total_page, nil
+	return list, totalCount, totalPage, nil
 }
 
 func (p *PostsRepo) GetAllCount(ctx context.Context) (int64, error) {

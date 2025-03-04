@@ -3,7 +3,6 @@ package api
 import (
 	"server/internal/pkg/utils"
 	"server/internal/pkg/wrap"
-	"server/internal/user/internal/domain"
 	"server/internal/user/internal/service"
 
 	"net/http"
@@ -34,11 +33,11 @@ func (h *UserHandler) Login(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
 		return
 	}
-	user := toUser(loginReq)
-	if u, isExist := h.serv.FindUserIsExist(ctx, &user); isExist {
-		token, _ := utils.GenerateJwt(u.ID.Hex())
+	user := LoginReqToDO(&loginReq)
+	if u, isExist := h.serv.FindUserIsExist(ctx, user); isExist {
+		token, _ := utils.GenerateJwt(u.ID)
 		loginVo := LoginVO{
-			User:  toUserVO(u),
+			User:  DTOToVO(u),
 			Token: token,
 		}
 		wrap.SuccessWithDetail(ctx, loginVo, "登录成功")
@@ -48,25 +47,17 @@ func (h *UserHandler) Login(ctx *gin.Context) {
 }
 
 func (h *UserHandler) CreateUser(ctx *gin.Context) {
-	var createUserReq CreateUserReq
-	if err := ctx.ShouldBindJSON(&createUserReq); err != nil {
+	var createUserReq *CreateUserReq
+	if err := ctx.ShouldBindJSON(createUserReq); err != nil {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
 		return
 	}
-	user := h.CreateUserReqToUser(createUserReq)
-	if err := h.serv.CreateUser(ctx, &user); err != nil {
+	user := CreateUserReqToDO(createUserReq)
+	if err := h.serv.CreateUser(ctx, user); err != nil {
 		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 	wrap.SuccessWithMsg(ctx, "创建用户成功")
-}
-
-func (h *UserHandler) CreateUserReqToUser(createUserReq CreateUserReq) domain.User {
-	return domain.User{
-		Username: createUserReq.Username,
-		Password: createUserReq.Password,
-		RoleId:   createUserReq.RoleId,
-	}
 }
 
 func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
@@ -75,5 +66,5 @@ func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
-	wrap.SuccessWithDetail(ctx, toUserListVO(users), "查询成功")
+	wrap.SuccessWithDetail(ctx, DTOsToVOs(users), "查询成功")
 }

@@ -14,7 +14,7 @@ import (
 type IPostsDao interface {
 	Create(ctx context.Context, posts *domain.Posts) error
 	FindAll(ctx context.Context) ([]*domain.Posts, error)
-	FindListByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.Posts, error)
+	FindListByCondition(ctx context.Context, skip int64, limit int64, keyword string, field string, order int) ([]*domain.Posts, error)
 	FindById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error)
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
@@ -63,19 +63,12 @@ func (p *PostsDao) FindAll(ctx context.Context) ([]*domain.Posts, error) {
 	return posts, nil
 }
 
-func (p *PostsDao) FindListByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.Posts, error) {
-	skip := (pageDTO.PageNo - 1) * pageDTO.PageSize
-	limit := pageDTO.PageSize
-	findOptions := options.Find()
-	findOptions.SetSkip(skip)
-	findOptions.SetLimit(limit)
+func (p *PostsDao) FindListByCondition(ctx context.Context, skip int64, limit int64, keyword string, field string, order int) ([]*domain.Posts, error) {
+	findOptions := options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{field: order})
 	// 查询搜索内容是否在title、description中出现
-	if pageDTO.Field == "" {
-		pageDTO.Field = "created_at"
-	}
 	filter := bson.D{{Key: "$or", Value: bson.A{
-		bson.D{{Key: "title", Value: bson.D{{Key: "$regex", Value: pageDTO.Keyword}}}},
-		bson.D{{Key: "description", Value: bson.D{{Key: "$regex", Value: pageDTO.Keyword}}}},
+		bson.D{{Key: "title", Value: bson.D{{Key: "$regex", Value: keyword}}}},
+		bson.D{{Key: "description", Value: bson.D{{Key: "$regex", Value: keyword}}}},
 	}}}
 	cursor, err := p.postColl.Find(ctx, filter, findOptions)
 	if err != nil {
@@ -85,7 +78,7 @@ func (p *PostsDao) FindListByPage(ctx context.Context, pageDTO *domain.PageDTO) 
 	if err := cursor.All(ctx, &posts); err != nil {
 		return nil, err
 	}
-	return domain.ToPostsPtr(posts), nil
+	return domain.ToPtr(posts), nil
 }
 
 func (p *PostsDao) GetAllCount(ctx context.Context) (int64, error) {

@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"time"
 
 	"server/internal/user/internal/domain"
 
@@ -32,6 +33,8 @@ func NewUserDao(database *mongo.Database) *UserDao {
 }
 
 func (u *UserDao) CreateOne(ctx context.Context, user *domain.User) error {
+	user.CreatedAt = time.Now().Local()
+	user.UpdatedAt = time.Now().Local()
 	_, err := u.userColl.InsertOne(ctx, user)
 	if err != nil {
 		return errors.Wrapf(err, "添加user失败,%+v", user)
@@ -71,7 +74,7 @@ func (u *UserDao) FindAll(ctx context.Context) ([]*domain.User, error) {
 	if err := cursor.All(ctx, &users); err != nil {
 		return nil, err
 	}
-	return domain.ToUserPtrSlice(users), nil
+	return domain.ToPtr(users), nil
 }
 
 func (u *UserDao) FindAllByRoleID(ctx context.Context, roleId int) ([]*domain.User, error) {
@@ -85,7 +88,7 @@ func (u *UserDao) FindAllByRoleID(ctx context.Context, roleId int) ([]*domain.Us
 	if err := cursor.All(ctx, &users); err != nil {
 		return nil, err
 	}
-	return domain.ToUserPtrSlice(users), nil
+	return domain.ToPtr(users), nil
 }
 
 func (u *UserDao) FindUserIsExist(ctx context.Context, user *domain.User) (*domain.User, bool) {

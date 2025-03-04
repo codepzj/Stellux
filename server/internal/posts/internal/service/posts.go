@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"server/internal/pkg/wrap"
 	"server/internal/posts/internal/domain"
 	"server/internal/posts/internal/repo"
 
@@ -10,9 +11,9 @@ import (
 
 type IPostsService interface {
 	CreatePosts(ctx context.Context, posts *domain.Posts) error
-	FindPostById(ctx context.Context, id bson.ObjectID) (*domain.PostsDTO, error) // 修改返回类型为 *domain.PostsDTO
-	FindAllPosts(ctx context.Context) ([]*domain.PostsDTO, error)
-	FindPostsByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.PostsDTO, int64, int64, error)
+	FindPostById(ctx context.Context, id bson.ObjectID) (*PostsDTO, error)
+	FindAllPosts(ctx context.Context) ([]*PostsDTO, error)
+	FindPostsByCondition(ctx context.Context, page *wrap.Page) ([]*PostsDTO, int64, int64, error)
 }
 
 type PostsService struct {
@@ -29,18 +30,29 @@ func (p *PostsService) CreatePosts(ctx context.Context, posts *domain.Posts) err
 	return p.repo.CreatePost(ctx, posts)
 }
 
-func (p *PostsService) FindPostById(ctx context.Context, id bson.ObjectID) (*domain.PostsDTO, error) { // 修改返回类型为 *domain.PostsDTO
+func (p *PostsService) FindPostById(ctx context.Context, id bson.ObjectID) (*PostsDTO, error) {
 	posts, err := p.repo.FindPostById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return posts, nil
+	return DoToDTO(posts), nil
 }
 
-func (p *PostsService) FindAllPosts(ctx context.Context) ([]*domain.PostsDTO, error) {
-	return p.repo.FindAllPosts(ctx)
+func (p *PostsService) FindAllPosts(ctx context.Context) ([]*PostsDTO, error) {
+	post, err := p.repo.FindAllPosts(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return DOsToDTOs(post), nil
 }
 
-func (p *PostsService) FindPostsByPage(ctx context.Context, pageDTO *domain.PageDTO) ([]*domain.PostsDTO, int64, int64, error) {
-	return p.repo.FindPostsByPage(ctx, pageDTO)
+func (p *PostsService) FindPostsByCondition(ctx context.Context, page *wrap.Page) ([]*PostsDTO, int64, int64, error) {
+	pageDTO := PageToPageDTO(page)
+	posts, totalCount, totalPage, err := p.repo.FindPostsByCondition(ctx, pageDTO.PageNo, pageDTO.PageSize, pageDTO.Keyword, pageDTO.Field, pageDTO.OrderConvertToInt())
+	if err != nil {
+		return make([]*PostsDTO, 0), 0, 0, err
+	}
+
+	return DOsToDTOs(posts), totalCount, totalPage, nil
+
 }
