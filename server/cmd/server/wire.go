@@ -8,6 +8,7 @@ import (
 	"server/internal/ioc"
 	"server/internal/posts"
 	"server/internal/user"
+	"server/internal/user_detail"
 
 	"github.com/google/wire"
 )
@@ -20,6 +21,9 @@ func InitApp() *HttpServer {
 
 		user.InitUserModule,
 		wire.FieldsOf(new(*user.Module), "Hdl"),
+
+		user_detail.InitUserDetailModule,
+		wire.FieldsOf(new(*user_detail.Module), "Hdl"),
 
 		posts.InitPostsModule,
 		wire.FieldsOf(new(*posts.Module), "Hdl"),

@@ -4,12 +4,13 @@ import (
 	"server/internal/file"
 	"server/internal/posts"
 	"server/internal/user"
+	"server/internal/user_detail"
 
 	"github.com/gin-gonic/gin"
 )
 
 // NewGin 初始化gin服务器
-func NewGin(usrHdl *user.Handler, postsHdl *posts.Handler, fileHdl *file.Handler, middleware []gin.HandlerFunc) *gin.Engine {
+func NewGin(userHdl *user.Handler, userDetailHdl *user_detail.Handler, postsHdl *posts.Handler, fileHdl *file.Handler, middleware []gin.HandlerFunc) *gin.Engine {
 	router := gin.New()
 
 	// 中间件
@@ -17,7 +18,8 @@ func NewGin(usrHdl *user.Handler, postsHdl *posts.Handler, fileHdl *file.Handler
 
 	// 初始化路由
 	{
-		usrHdl.RegisterGinRoutes(router)
+		userHdl.RegisterGinRoutes(router)
+		userDetailHdl.RegisterGinRoutes(router)
 		postsHdl.RegisterGinRoutes(router)
 		fileHdl.RegisterGinRoutes(router)
 	}

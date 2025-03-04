@@ -20,7 +20,7 @@ func NewUserDetailHandler(userDetailService service.IUserDetailService) *UserDet
 	return &UserDetailHandler{userDetailService: userDetailService}
 }
 
-func (u *UserDetailHandler) RegisterGinRoutes(router *gin.RouterGroup) {
+func (u *UserDetailHandler) RegisterGinRoutes(router *gin.Engine) {
 	group := router.Group("/user_detail")
 	{
 		group.PUT("/update", u.UpdateOne)
@@ -30,7 +30,7 @@ func (u *UserDetailHandler) RegisterGinRoutes(router *gin.RouterGroup) {
 func (u *UserDetailHandler) UpdateOne(ctx *gin.Context) {
 	var userDetailRequest UserDetailRequest
 	if err := ctx.ShouldBindJSON(&userDetailRequest); err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
+		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
 		return
 	}
 	userDetail := UserDetailReqToDO(&userDetailRequest)
