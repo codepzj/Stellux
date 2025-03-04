@@ -32,8 +32,8 @@ func SuccessWithDetail(c *gin.Context, data interface{}, msg string) {
 	respond(c, http.StatusOK, data, msg)
 }
 
-func Fail(c *gin.Context, code int, msg string) {
-	respond(c, code, nil, msg)
+func Fail(c *gin.Context, code int) {
+	respond(c, code, nil, "操作失败")
 }
 
 func FailWithMsg(c *gin.Context, code int, msg string) {
