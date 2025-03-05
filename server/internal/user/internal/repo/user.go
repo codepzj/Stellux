@@ -2,12 +2,13 @@ package repo
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"server/internal/user/internal/domain"
 	"server/internal/user/internal/repo/dao"
 )
 
 type IUserRepo interface {
-	CreateUser(ctx context.Context, user *domain.User) error
+	CreateUser(ctx context.Context, user *domain.User) (bson.ObjectID, error)
 	FindUserIsExist(ctx context.Context, user *domain.User) (*domain.User, bool)
 	FindAllUsers(ctx context.Context) ([]*domain.User, error)
 }
@@ -22,7 +23,7 @@ func NewUserRepo(dao dao.IUserDao) *UserRepo {
 	return &UserRepo{dao}
 }
 
-func (u *UserRepo) CreateUser(ctx context.Context, user *domain.User) error {
+func (u *UserRepo) CreateUser(ctx context.Context, user *domain.User) (bson.ObjectID, error) {
 	return u.dao.CreateOne(ctx, user)
 }
 

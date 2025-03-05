@@ -4,10 +4,10 @@
 package file
 
 import (
-	"server/internal/file/internal/api"
 	"server/internal/file/internal/repo"
 	"server/internal/file/internal/repo/dao"
 	"server/internal/file/internal/service"
+	"server/internal/file/internal/web"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
@@ -15,7 +15,7 @@ import (
 )
 
 var fileProvider = wire.NewSet(
-	api.NewFileHandler,
+	web.NewFileHandler,
 	service.NewFileService,
 	repo.NewFileRepo,
 	dao.NewFileDao,

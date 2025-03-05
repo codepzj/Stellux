@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"server/internal/user/internal/domain"
 	"server/internal/user/internal/repo"
 )
 
 type IUserService interface {
-	CreateUser(ctx context.Context, user *domain.User) error
+	CreateUser(ctx context.Context, user *domain.User) (bson.ObjectID, error)
 	FindUserIsExist(ctx context.Context, user *domain.User) (*UserDto, bool)
 	FindAllUsers(ctx context.Context) ([]*UserDto, error)
 }
@@ -22,7 +23,7 @@ func NewUserService(repo repo.IUserRepo) *UserService {
 	return &UserService{repo}
 }
 
-func (s *UserService) CreateUser(ctx context.Context, user *domain.User) error {
+func (s *UserService) CreateUser(ctx context.Context, user *domain.User) (bson.ObjectID, error) {
 	return s.repo.CreateUser(ctx, user)
 }
 

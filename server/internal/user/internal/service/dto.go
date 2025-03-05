@@ -12,7 +12,7 @@ type UserDto struct {
 	Username  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	RoleId    int
+	RoleId    *int
 }
 
 func DoToDTO(user *domain.User) *UserDto {

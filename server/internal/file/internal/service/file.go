@@ -33,7 +33,10 @@ func NewFileService(fileRepo repo.IFileRepo) *FileService {
 
 func (s *FileService) UploadFilesLocal(ctx context.Context, uids []string, fileNames []string, files []*multipart.FileHeader) ([]*domain.File, error) {
 	var pictures []*domain.File
-	os.MkdirAll("static/images", os.ModePerm)
+	err := os.MkdirAll("static/images", os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
 	for i := range files {
 		uid := uids[i]
 		fileName := fileNames[i]
@@ -56,9 +59,15 @@ func (s *FileService) UploadFilesLocal(ctx context.Context, uids []string, fileN
 	if err := s.repo.CreateMany(ctx, pictures); err != nil {
 		// 回滚
 		for _, picture := range pictures {
-			os.Remove(picture.Dst)
+			err := os.Remove(picture.Dst)
+			if err != nil {
+				return nil, err
+			}
 		}
-		s.repo.DeleteMany(ctx, pictures)
+		err := s.repo.DeleteMany(ctx, pictures)
+		if err != nil {
+			return nil, err
+		}
 		return nil, errors.Wrap(err, "保存到数据库失败")
 	}
 
@@ -68,13 +77,11 @@ func (s *FileService) UploadFilesLocal(ctx context.Context, uids []string, fileN
 		if err != nil {
 			return nil, errors.Wrap(err, "打开文件失败")
 		}
-		defer file.Close()
 		// 创建目标文件
 		dst, err := os.Create(pictures[i].Dst)
 		if err != nil {
 			return nil, errors.Wrap(err, "创建目标文件失败")
 		}
-		defer dst.Close()
 		// 保存文件
 		if _, err := io.Copy(dst, file); err != nil {
 			return nil, errors.Wrap(err, "保存文件失败")

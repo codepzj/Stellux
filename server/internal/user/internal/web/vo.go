@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"server/internal/user/internal/service"
@@ -11,7 +11,7 @@ type UserVO struct {
 	Username  string `json:"username"`
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
-	RoleId    int    `json:"role_id"`
+	RoleId    *int   `json:"role_id"`
 }
 
 type LoginVO struct {

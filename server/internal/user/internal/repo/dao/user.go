@@ -14,7 +14,7 @@ import (
 )
 
 type IUserDao interface {
-	CreateOne(ctx context.Context, user *domain.User) error
+	CreateOne(ctx context.Context, user *domain.User) (bson.ObjectID, error)
 	FindByName(ctx context.Context, username string) (*domain.User, error)
 	FindById(ctx context.Context, userId bson.ObjectID) (*domain.User, error)
 	FindAll(ctx context.Context) ([]*domain.User, error)
@@ -32,14 +32,19 @@ func NewUserDao(database *mongo.Database) *UserDao {
 	return &UserDao{userColl: database.Collection("user")}
 }
 
-func (u *UserDao) CreateOne(ctx context.Context, user *domain.User) error {
+func (u *UserDao) CreateOne(ctx context.Context, user *domain.User) (bson.ObjectID, error) {
+	user.ID = bson.NewObjectID()
 	user.CreatedAt = time.Now().Local()
 	user.UpdatedAt = time.Now().Local()
-	_, err := u.userColl.InsertOne(ctx, user)
+	result, err := u.userColl.InsertOne(ctx, user)
 	if err != nil {
-		return errors.Wrapf(err, "添加user失败,%+v", user)
+		return bson.ObjectID{}, err
 	}
-	return err
+	id, ok := result.InsertedID.(bson.ObjectID)
+	if !ok {
+		return bson.ObjectID{}, err
+	}
+	return id, nil
 }
 
 func (u *UserDao) FindByName(ctx context.Context, username string) (*domain.User, error) {
@@ -69,7 +74,12 @@ func (u *UserDao) FindAll(ctx context.Context) ([]*domain.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(ctx)
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err := cursor.Close(ctx)
+		if err != nil {
+
+		}
+	}(cursor, ctx)
 	var users []domain.User
 	if err := cursor.All(ctx, &users); err != nil {
 		return nil, err
@@ -82,7 +92,12 @@ func (u *UserDao) FindAllByRoleID(ctx context.Context, roleId int) ([]*domain.Us
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(ctx)
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err := cursor.Close(ctx)
+		if err != nil {
+
+		}
+	}(cursor, ctx)
 
 	var users []domain.User
 	if err := cursor.All(ctx, &users); err != nil {

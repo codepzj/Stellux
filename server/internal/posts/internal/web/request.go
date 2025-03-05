@@ -1,4 +1,4 @@
-package api
+package web
 
 import "server/internal/posts/internal/domain"
 

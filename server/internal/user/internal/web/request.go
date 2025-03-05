@@ -1,4 +1,4 @@
-package api
+package web
 
 import "server/internal/user/internal/domain"
 
@@ -10,7 +10,7 @@ type LoginReq struct {
 type CreateUserReq struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	RoleId   int    `json:"role_id" binding:"required"`
+	RoleId   *int   `json:"role_id" binding:"required"`
 }
 
 func LoginReqToDO(req *LoginReq) *domain.User {
@@ -25,5 +25,18 @@ func CreateUserReqToDO(req *CreateUserReq) *domain.User {
 		Username: req.Username,
 		Password: req.Password,
 		RoleId:   req.RoleId,
+	}
+}
+
+func roleIdConvertToString(roleId int) string {
+	switch roleId {
+	case 0:
+		return "admin"
+	case 1:
+		return "user"
+	case 2:
+		return "test"
+	default:
+		return "unknown"
 	}
 }

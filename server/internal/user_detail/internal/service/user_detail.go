@@ -8,8 +8,8 @@ import (
 )
 
 type IUserDetailService interface {
-	CreateOne(ctx context.Context, userDetail *domain.UserDetail) error
-	UpdateOne(ctx context.Context, userDetail *domain.UserDetail) error
+	CreateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error
+	UpdateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error
 }
 
 type UserDetailService struct {
@@ -20,10 +20,10 @@ func NewUserDetailService(userDetailRepo repo.IUserDetailRepo) *UserDetailServic
 	return &UserDetailService{userDetailRepo: userDetailRepo}
 }
 
-func (u *UserDetailService) CreateOne(ctx context.Context, userDetail *domain.UserDetail) error {
-	return u.userDetailRepo.CreateOne(ctx, userDetail)
+func (u *UserDetailService) CreateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error {
+	return u.userDetailRepo.CreateUserDetail(ctx, userDetail)
 }
 
-func (u *UserDetailService) UpdateOne(ctx context.Context, userDetail *domain.UserDetail) error {
-	return u.userDetailRepo.UpdateOne(ctx, userDetail)
+func (u *UserDetailService) UpdateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error {
+	return u.userDetailRepo.UpdateUserDetail(ctx, userDetail)
 }

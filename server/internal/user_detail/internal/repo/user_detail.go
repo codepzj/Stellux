@@ -8,8 +8,8 @@ import (
 )
 
 type IUserDetailRepo interface {
-	CreateOne(ctx context.Context, userDetail *domain.UserDetail) error
-	UpdateOne(ctx context.Context, userDetail *domain.UserDetail) error
+	CreateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error
+	UpdateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error
 }
 
 var _ IUserDetailRepo = (*UserDetailRepo)(nil)
@@ -22,10 +22,10 @@ func NewUserDetailRepo(userDetailDao dao.IUserDetailDao) *UserDetailRepo {
 	return &UserDetailRepo{userDetailDao: userDetailDao}
 }
 
-func (u *UserDetailRepo) CreateOne(ctx context.Context, userDetail *domain.UserDetail) error {
-	return u.userDetailDao.CreateOne(ctx, userDetail)
+func (u *UserDetailRepo) CreateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error {
+	return u.userDetailDao.CreateUserDetail(ctx, userDetail)
 }
 
-func (u *UserDetailRepo) UpdateOne(ctx context.Context, userDetail *domain.UserDetail) error {
-	return u.userDetailDao.UpdateOne(ctx, userDetail)
+func (u *UserDetailRepo) UpdateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error {
+	return u.userDetailDao.UpdateUserDetail(ctx, userDetail)
 }

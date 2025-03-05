@@ -4,17 +4,17 @@
 package posts
 
 import (
-	"server/internal/posts/internal/api"
 	"server/internal/posts/internal/repo"
 	"server/internal/posts/internal/repo/dao"
 	"server/internal/posts/internal/service"
+	"server/internal/posts/internal/web"
 
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 var postsProvider = wire.NewSet(
-	api.NewPostHandler,
+	web.NewPostHandler,
 	service.NewPostsService,
 	repo.NewPostsRepo,
 	dao.NewPostsDao,

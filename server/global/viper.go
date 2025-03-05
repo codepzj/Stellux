@@ -1,6 +1,10 @@
 package global
 
 import (
+	"fmt"
+	"github.com/casbin/casbin/v2"
+	mongodbadapter "github.com/casbin/mongodb-adapter/v3"
+	mongooptions "go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 
 	"github.com/fsnotify/fsnotify"
@@ -11,7 +15,8 @@ import (
 )
 
 var (
-	Env *EnvConfig
+	Env      *EnvConfig
+	Enforcer *casbin.Enforcer
 )
 
 type EnvConfig struct {
@@ -57,4 +62,18 @@ func init() {
 		log.Println("配置文件发生改变:", e.Name)
 	})
 
+	mongoClientOption := mongooptions.Client().ApplyURI(Env.URL)
+	databaseName := Env.MongoDatabase
+	a, err := mongodbadapter.NewAdapterWithClientOption(mongoClientOption, databaseName)
+	if err != nil {
+		panic(err)
+	}
+	Enforcer, err = casbin.NewEnforcer("config/policy.conf", a)
+	if err != nil {
+		panic(err)
+	}
+	err = Enforcer.LoadPolicy()
+	if err != nil {
+		Logger.Error(fmt.Sprintf("权限加载失败：%s", err.Error()))
+	}
 }

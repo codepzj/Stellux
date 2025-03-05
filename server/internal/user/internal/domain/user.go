@@ -15,7 +15,7 @@ type User struct {
 	DeletedAt time.Time     `bson:"deleted_at,omitempty"`
 	Username  string        `bson:"username"`
 	Password  string        `bson:"password"`
-	RoleId    int           `bson:"role_id"`
+	RoleId    *int          `bson:"role_id"`
 }
 
 func ToPtr(users []User) []*User {

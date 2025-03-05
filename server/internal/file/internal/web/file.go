@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"fmt"
@@ -77,7 +77,7 @@ func (h *FileHandler) GetPhotosLocalByPage(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
 	}
 
-	filePageDTO := wrap.ToPageVO(int64(pageNo), int64(size), totalCount, totalPage, photos)
+	filePageDTO := wrap.ToPageVO(pageNo, size, totalCount, totalPage, photos)
 	wrap.SuccessWithData(ctx, filePageDTO)
 }
 

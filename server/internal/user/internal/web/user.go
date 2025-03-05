@@ -1,9 +1,12 @@
-package api
+package web
 
 import (
+	"log"
+	"server/global"
 	"server/internal/pkg/utils"
 	"server/internal/pkg/wrap"
 	"server/internal/user/internal/service"
+	"server/internal/user_detail"
 
 	"net/http"
 
@@ -11,11 +14,12 @@ import (
 )
 
 type UserHandler struct {
-	serv service.IUserService
+	serv           service.IUserService
+	userDetailServ user_detail.Service
 }
 
-func NewUserHandler(serv service.IUserService) *UserHandler {
-	return &UserHandler{serv}
+func NewUserHandler(serv service.IUserService, userDetailServ user_detail.Service) *UserHandler {
+	return &UserHandler{serv, userDetailServ}
 }
 
 func (h *UserHandler) RegisterGinRoutes(router *gin.Engine) {
@@ -47,13 +51,32 @@ func (h *UserHandler) Login(ctx *gin.Context) {
 }
 
 func (h *UserHandler) CreateUser(ctx *gin.Context) {
-	var createUserReq *CreateUserReq
-	if err := ctx.ShouldBindJSON(createUserReq); err != nil {
+	var createUserReq CreateUserReq
+	if err := ctx.ShouldBindJSON(&createUserReq); err != nil {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
+		log.Println(err.Error())
 		return
 	}
-	user := CreateUserReqToDO(createUserReq)
-	if err := h.serv.CreateUser(ctx, user); err != nil {
+	user := CreateUserReqToDO(&createUserReq)
+	id, err := h.serv.CreateUser(ctx, user)
+	if err != nil {
+		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+	err = h.userDetailServ.CreateUserDetail(ctx, &user_detail.UserDetail{
+		UserID:      id,
+		NickName:    "未命名",
+		Avatar:      "",
+		Description: "",
+		Email:       "email@codepzj.cn",
+	})
+	if err != nil {
+		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	_, err = global.Enforcer.AddGroupingPolicy(id.Hex(), roleIdConvertToString(*createUserReq.RoleId))
+	if err != nil {
 		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}

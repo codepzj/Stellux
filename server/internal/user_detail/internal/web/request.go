@@ -1,8 +1,12 @@
-package api
+package web
 
-import "server/internal/user_detail/internal/domain"
+import (
+	"server/internal/user_detail/internal/domain"
 
-type UserDetailVO struct {
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
+
+type UserDetailRequest struct {
 	UserId      string `json:"user_id" binding:"required"`
 	NickName    string `json:"nick_name"`
 	Avatar      string `json:"avatar"`
@@ -10,9 +14,13 @@ type UserDetailVO struct {
 	Email       string `json:"email"`
 }
 
-func DOToVO(userDetail *domain.UserDetail) *UserDetailVO {
-	return &UserDetailVO{
-		UserId:      userDetail.UserID.Hex(),
+func UserDetailReqToDO(userDetail *UserDetailRequest) *domain.UserDetail {
+	userID, err := bson.ObjectIDFromHex(userDetail.UserId)
+	if err != nil {
+		return nil
+	}
+	return &domain.UserDetail{
+		UserID:      userID,
 		NickName:    userDetail.NickName,
 		Avatar:      userDetail.Avatar,
 		Description: userDetail.Description,

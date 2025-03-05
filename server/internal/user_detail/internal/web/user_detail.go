@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 )
 
 type IUserDetailHandler interface {
-	UpdateOne(ctx *gin.Context) error
+	UpdateUserDetail(ctx *gin.Context) error
 }
 
 type UserDetailHandler struct {
@@ -38,7 +38,7 @@ func (u *UserDetailHandler) UpdateOne(ctx *gin.Context) {
 		wrap.FailWithMsg(ctx, http.StatusBadRequest, "用户ID格式错误")
 		return
 	}
-	err := u.userDetailService.UpdateOne(ctx, userDetail)
+	err := u.userDetailService.UpdateUserDetail(ctx, userDetail)
 	if err != nil {
 		wrap.FailWithMsg(ctx, http.StatusInternalServerError, err.Error())
 		return

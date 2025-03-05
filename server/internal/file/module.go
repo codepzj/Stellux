@@ -1,12 +1,12 @@
 package file
 
 import (
-	"server/internal/file/internal/api"
 	"server/internal/file/internal/service"
+	"server/internal/file/internal/web"
 )
 
 type (
-	Handler = api.FileHandler
+	Handler = web.FileHandler
 	Service = service.IFileService
 	Module  struct {
 		Hdl *Handler

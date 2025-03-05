@@ -18,10 +18,10 @@ import (
 
 func InitApp() *HttpServer {
 	database := ioc.NewMongoDB()
-	module := user.InitUserModule(database)
-	userHandler := module.Hdl
-	user_detailModule := user_detail.InitUserDetailModule(database)
-	userDetailHandler := user_detailModule.Hdl
+	module := user_detail.InitUserDetailModule(database)
+	userModule := user.InitUserModule(database, module)
+	userHandler := userModule.Hdl
+	userDetailHandler := module.Hdl
 	postsModule := posts.InitPostsModule(database)
 	postsHandler := postsModule.Hdl
 	fileModule := file.InitFileModule(database)
