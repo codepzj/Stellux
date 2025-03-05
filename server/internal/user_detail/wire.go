@@ -10,7 +10,6 @@ import (
 	"server/internal/user_detail/internal/web"
 
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 var userDetailProvider = wire.NewSet(
@@ -20,7 +19,7 @@ var userDetailProvider = wire.NewSet(
 	wire.Bind(new(dao.IUserDetailDao), new(*dao.UserDetailDao)),
 )
 
-func InitUserDetailModule(db *mongo.Database) *Module {
+func InitUserDetailModule() *Module {
 	wire.Build(
 		userDetailProvider,
 		wire.Struct(new(Module), "Hdl", "Svc"),

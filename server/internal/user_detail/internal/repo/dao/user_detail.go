@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"server/global"
 
 	"server/internal/user_detail/internal/domain"
 
@@ -21,8 +22,8 @@ type UserDetailDao struct {
 	userDetailColl *mongo.Collection
 }
 
-func NewUserDetailDao(db *mongo.Database) *UserDetailDao {
-	return &UserDetailDao{userDetailColl: db.Collection("user_detail")}
+func NewUserDetailDao() *UserDetailDao {
+	return &UserDetailDao{userDetailColl: global.DB.Collection("user_detail")}
 }
 
 func (u *UserDetailDao) CreateUserDetail(ctx context.Context, userDetail *domain.UserDetail) error {

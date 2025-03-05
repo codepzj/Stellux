@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"server/global"
 	"server/internal/posts/internal/domain"
 	"time"
 
@@ -27,8 +28,8 @@ type PostsDao struct {
 
 var _ IPostsDao = (*PostsDao)(nil)
 
-func NewPostsDao(database *mongo.Database) *PostsDao {
-	return &PostsDao{postColl: database.Collection("posts")}
+func NewPostsDao() *PostsDao {
+	return &PostsDao{postColl: global.DB.Collection("posts")}
 }
 
 func (p *PostsDao) Create(ctx context.Context, posts *domain.Posts) error {

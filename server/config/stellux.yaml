@@ -1,5 +1,5 @@
 mongodb:
-  URL: "mongodb://admin:123456@localhost:27017/?authSource=admin"
+  URL: "mongodb://admin:123456@localhost:27017/?authSource=admin&replicaSet=rs0"
   MONGO_INITDB_ROOT_USERNAME: "admin"
   MONGO_INITDB_ROOT_PASSWORD: "123456"
   MONGO_INITDB_DATABASE: "stellux"

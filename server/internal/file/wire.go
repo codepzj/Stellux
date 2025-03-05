@@ -9,8 +9,6 @@ import (
 	"server/internal/file/internal/service"
 	"server/internal/file/internal/web"
 
-	"go.mongodb.org/mongo-driver/v2/mongo"
-
 	"github.com/google/wire"
 )
 
@@ -24,7 +22,7 @@ var fileProvider = wire.NewSet(
 	wire.Bind(new(dao.IFileDao), new(*dao.FileDao)),
 )
 
-func InitFileModule(database *mongo.Database) *Module {
+func InitFileModule() *Module {
 	wire.Build(
 		fileProvider,
 		wire.Struct(new(Module), "Hdl", "Svc"),

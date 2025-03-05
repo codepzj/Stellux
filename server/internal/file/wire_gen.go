@@ -8,7 +8,6 @@ package file
 
 import (
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 	"server/internal/file/internal/repo"
 	"server/internal/file/internal/repo/dao"
 	"server/internal/file/internal/service"
@@ -17,8 +16,8 @@ import (
 
 // Injectors from wire.go:
 
-func InitFileModule(database *mongo.Database) *Module {
-	fileDao := dao.NewFileDao(database)
+func InitFileModule() *Module {
+	fileDao := dao.NewFileDao()
 	fileRepo := repo.NewFileRepo(fileDao)
 	fileService := service.NewFileService(fileRepo)
 	fileHandler := web.NewFileHandler(fileService)

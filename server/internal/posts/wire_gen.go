@@ -8,7 +8,6 @@ package posts
 
 import (
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 	"server/internal/posts/internal/repo"
 	"server/internal/posts/internal/repo/dao"
 	"server/internal/posts/internal/service"
@@ -17,8 +16,8 @@ import (
 
 // Injectors from wire.go:
 
-func InitPostsModule(database *mongo.Database) *Module {
-	postsDao := dao.NewPostsDao(database)
+func InitPostsModule() *Module {
+	postsDao := dao.NewPostsDao()
 	postsRepo := repo.NewPostsRepo(postsDao)
 	postsService := service.NewPostsService(postsRepo)
 	postsHandler := web.NewPostHandler(postsService)

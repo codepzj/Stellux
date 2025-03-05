@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"server/global"
 	"server/internal/file/internal/domain"
 
 	"github.com/pkg/errors"
@@ -24,9 +25,9 @@ type FileDao struct {
 
 var _ IFileDao = (*FileDao)(nil)
 
-func NewFileDao(database *mongo.Database) *FileDao {
+func NewFileDao() *FileDao {
 	return &FileDao{
-		fileColl: database.Collection("file"),
+		fileColl: global.DB.Collection("file"),
 	}
 }
 

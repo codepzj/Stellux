@@ -153,4 +153,5 @@ db.getCollection("posts").insert( {
     cover: "https://avatars.githubusercontent.com/u/183695872?v=4",
     is_top: true
 });
+
 EOF

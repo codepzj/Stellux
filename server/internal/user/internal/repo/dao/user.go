@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"server/global"
 	"time"
 
 	"server/internal/user/internal/domain"
@@ -28,8 +29,8 @@ type UserDao struct {
 	userColl *mongo.Collection
 }
 
-func NewUserDao(database *mongo.Database) *UserDao {
-	return &UserDao{userColl: database.Collection("user")}
+func NewUserDao() *UserDao {
+	return &UserDao{userColl: global.DB.Collection("user")}
 }
 
 func (u *UserDao) CreateOne(ctx context.Context, user *domain.User) (bson.ObjectID, error) {

@@ -1,8 +1,8 @@
-.DEFAULT_GOAL := up
+.DEFAULT_GOAL := deploy
 
-up:
+deploy:
 	docker compose -f scripts/docker-compose.yaml up -d
-	air
+	bash scripts/mongo/replset.sh
 
 down:
 	docker compose -f scripts/docker-compose.yaml down

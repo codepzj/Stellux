@@ -11,7 +11,6 @@ import (
 	"server/internal/user_detail"
 
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 var userProvider = wire.NewSet(web.NewUserHandler, service.NewUserService, repo.NewUserRepo, dao.NewUserDao,
@@ -19,7 +18,7 @@ var userProvider = wire.NewSet(web.NewUserHandler, service.NewUserService, repo.
 	wire.Bind(new(repo.IUserRepo), new(*repo.UserRepo)),
 	wire.Bind(new(dao.IUserDao), new(*dao.UserDao)))
 
-func InitUserModule(database *mongo.Database, userDetailModule *user_detail.Module) *Module {
+func InitUserModule(userDetailModule *user_detail.Module) *Module {
 	panic(wire.Build(
 		userProvider,
 		wire.FieldsOf(new(*user_detail.Module), "Svc"),

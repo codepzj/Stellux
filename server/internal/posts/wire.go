@@ -10,7 +10,6 @@ import (
 	"server/internal/posts/internal/web"
 
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 var postsProvider = wire.NewSet(
@@ -23,7 +22,7 @@ var postsProvider = wire.NewSet(
 	wire.Bind(new(dao.IPostsDao), new(*dao.PostsDao)),
 )
 
-func InitPostsModule(database *mongo.Database) *Module {
+func InitPostsModule() *Module {
 	wire.Build(
 		postsProvider,
 		wire.Struct(new(Module), "Hdl", "Svc"),

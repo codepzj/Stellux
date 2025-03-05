@@ -4,8 +4,9 @@
 package main
 
 import (
-	"server/internal/file"
 	"server/internal/ioc"
+
+	"server/internal/file"
 	"server/internal/posts"
 	"server/internal/user"
 	"server/internal/user_detail"
@@ -15,7 +16,6 @@ import (
 
 func InitApp() *HttpServer {
 	wire.Build(
-		ioc.NewMongoDB,
 		ioc.InitMiddleWare,
 		ioc.NewGin,
 

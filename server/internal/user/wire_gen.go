@@ -8,7 +8,6 @@ package user
 
 import (
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 	"server/internal/user/internal/repo"
 	"server/internal/user/internal/repo/dao"
 	"server/internal/user/internal/service"
@@ -18,8 +17,8 @@ import (
 
 // Injectors from wire.go:
 
-func InitUserModule(database *mongo.Database, userDetailModule *user_detail.Module) *Module {
-	userDao := dao.NewUserDao(database)
+func InitUserModule(userDetailModule *user_detail.Module) *Module {
+	userDao := dao.NewUserDao()
 	userRepo := repo.NewUserRepo(userDao)
 	userService := service.NewUserService(userRepo)
 	iUserDetailService := userDetailModule.Svc
