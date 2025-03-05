@@ -30,3 +30,16 @@ func DOsToDTOs(users []*domain.User) []*UserDto {
 		return DoToDTO(user)
 	})
 }
+
+func roleIdConvertToString(roleId int) string {
+	switch roleId {
+	case 0:
+		return "admin"
+	case 1:
+		return "user"
+	case 2:
+		return "test"
+	default:
+		return "unknown"
+	}
+}

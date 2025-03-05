@@ -22,7 +22,7 @@ var userDetailProvider = wire.NewSet(
 func InitUserDetailModule() *Module {
 	wire.Build(
 		userDetailProvider,
-		wire.Struct(new(Module), "Hdl", "Svc"),
+		wire.Struct(new(Module), "*"),
 	)
 	return nil
 }

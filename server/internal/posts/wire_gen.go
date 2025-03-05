@@ -22,8 +22,9 @@ func InitPostsModule() *Module {
 	postsService := service.NewPostsService(postsRepo)
 	postsHandler := web.NewPostHandler(postsService)
 	module := &Module{
-		Hdl: postsHandler,
-		Svc: postsService,
+		Hdl:  postsHandler,
+		Svc:  postsService,
+		Repo: postsRepo,
 	}
 	return module
 }

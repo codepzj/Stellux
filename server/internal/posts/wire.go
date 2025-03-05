@@ -25,7 +25,7 @@ var postsProvider = wire.NewSet(
 func InitPostsModule() *Module {
 	wire.Build(
 		postsProvider,
-		wire.Struct(new(Module), "Hdl", "Svc"),
+		wire.Struct(new(Module), "*"),
 	)
 	return nil
 }

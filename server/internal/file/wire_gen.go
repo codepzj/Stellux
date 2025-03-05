@@ -22,8 +22,9 @@ func InitFileModule() *Module {
 	fileService := service.NewFileService(fileRepo)
 	fileHandler := web.NewFileHandler(fileService)
 	module := &Module{
-		Hdl: fileHandler,
-		Svc: fileService,
+		Hdl:  fileHandler,
+		Svc:  fileService,
+		Repo: fileRepo,
 	}
 	return module
 }

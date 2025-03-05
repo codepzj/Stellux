@@ -3,6 +3,8 @@ package global
 import (
 	"context"
 	"fmt"
+	. "server/internal/pkg/logger"
+
 	"github.com/casbin/casbin/v2"
 	mongodbadapter "github.com/casbin/mongodb-adapter/v3"
 	"github.com/pkg/errors"
@@ -12,7 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 	"go.uber.org/zap"
-	. "server/internal/pkg/logger"
 )
 
 func init() {
@@ -58,6 +59,7 @@ func NewEnforcer(url string, dbName string) *casbin.Enforcer {
 	}
 	enforcer, err := casbin.NewEnforcer("config/policy.conf", a)
 	if err != nil {
+		fmt.Println(err.Error())
 		panic(err)
 	}
 	err = enforcer.LoadPolicy()
@@ -71,9 +73,6 @@ func NewMongoClient() *mongo.Client {
 	MongoClient, err := mongo.Connect(options.Client().ApplyURI(Env.URL))
 	if err != nil {
 		panic(errors.Wrap(err, "数据库连接失败"))
-	}
-	if err != nil {
-		panic(fmt.Sprintf("mongo客户端初始化失败：%s", err.Error()))
 	}
 	return MongoClient
 }

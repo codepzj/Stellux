@@ -22,8 +22,9 @@ func InitUserDetailModule() *Module {
 	userDetailService := service.NewUserDetailService(userDetailRepo)
 	userDetailHandler := web.NewUserDetailHandler(userDetailService)
 	module := &Module{
-		Hdl: userDetailHandler,
-		Svc: userDetailService,
+		Hdl:  userDetailHandler,
+		Svc:  userDetailService,
+		Repo: userDetailRepo,
 	}
 	return module
 }

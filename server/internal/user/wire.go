@@ -21,7 +21,7 @@ var userProvider = wire.NewSet(web.NewUserHandler, service.NewUserService, repo.
 func InitUserModule(userDetailModule *user_detail.Module) *Module {
 	panic(wire.Build(
 		userProvider,
-		wire.FieldsOf(new(*user_detail.Module), "Svc"),
-		wire.Struct(new(Module), "Hdl", "Svc"),
+		wire.FieldsOf(new(*user_detail.Module), "Repo"),
+		wire.Struct(new(Module), "*"),
 	))
 }

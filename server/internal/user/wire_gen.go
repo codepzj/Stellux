@@ -20,12 +20,13 @@ import (
 func InitUserModule(userDetailModule *user_detail.Module) *Module {
 	userDao := dao.NewUserDao()
 	userRepo := repo.NewUserRepo(userDao)
-	userService := service.NewUserService(userRepo)
-	iUserDetailService := userDetailModule.Svc
-	userHandler := web.NewUserHandler(userService, iUserDetailService)
+	iUserDetailRepo := userDetailModule.Repo
+	userService := service.NewUserService(userRepo, iUserDetailRepo)
+	userHandler := web.NewUserHandler(userService)
 	module := &Module{
-		Hdl: userHandler,
-		Svc: userService,
+		Hdl:  userHandler,
+		Svc:  userService,
+		Repo: userRepo,
 	}
 	return module
 }

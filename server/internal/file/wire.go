@@ -25,7 +25,7 @@ var fileProvider = wire.NewSet(
 func InitFileModule() *Module {
 	wire.Build(
 		fileProvider,
-		wire.Struct(new(Module), "Hdl", "Svc"),
+		wire.Struct(new(Module), "*"),
 	)
 	return nil
 }
