@@ -27,6 +27,8 @@
     okText="确定"
     cancelText="取消"
     @ok="handleOk"
+    style="top: 20px"
+    width="800px"
   >
     <a-form
       :layout="layout"
@@ -39,6 +41,12 @@
       </a-form-item>
       <a-form-item label="作者" name="author">
         <a-input v-model:value="configForm.author" placeholder="请输入作者" />
+      </a-form-item>
+      <a-form-item label="内容" name="content">
+        <a-textarea
+          v-model:value="configForm.content"
+          placeholder="请输入内容"
+        />
       </a-form-item>
       <a-form-item label="简介" name="description">
         <a-input
@@ -66,8 +74,14 @@
       <a-form-item label="封面" name="cover">
         <a-input v-model:value="configForm.cover" placeholder="请输入封面" />
       </a-form-item>
-      <a-form-item label="是否置顶" name="isTop">
-        <a-switch v-model:checked="configForm.isTop" />
+      <a-form-item label="操作">
+        <a-space>
+          <span>置顶</span>
+          <a-switch v-model:checked="configForm.isTop" />
+          <a-divider type="vertical" />
+          <span>发布</span>
+          <a-switch v-model:checked="configForm.isPublish" />
+        </a-space>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -80,7 +94,9 @@ import "md-editor-v3/lib/style.css";
 import { createPost } from "@/api/modules/posts";
 import { message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const themeStore = useThemeStore();
 const theme = computed(() => themeStore.tailwindTheme);
 const open = ref<boolean>(false);
@@ -97,6 +113,7 @@ const configForm = reactive({
   tags: [],
   cover: "",
   isTop: false,
+  isPublish: true,
 });
 const options = reactive({
   category: [
@@ -135,6 +152,7 @@ const handleOk = async () => {
           content: result.msg,
           key,
         });
+        router.push({ name: "ArticleList" });
       } catch (error: any) {
         message.error({
           content: error,

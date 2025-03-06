@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :data-source="processedUserList">
+  <a-table :columns="columns" :data-source="userList">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'name'">
         <span> Name </span>
@@ -7,9 +7,9 @@
     </template>
 
     <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'name'">
+      <template v-if="column.key === 'username'">
         <a>
-          {{ record.name }}
+          {{ record.username }}
         </a>
       </template>
       <template v-else-if="column.key === 'role_id'">
@@ -18,6 +18,12 @@
             {{ toRole(record.role_id).role }}
           </a-tag>
         </span>
+      </template>
+      <template v-else-if="column.key === 'created_at'">
+        {{ formatTime(record.created_at) }}
+      </template>
+      <template v-else-if="column.key === 'updated_at'">
+        {{ formatTime(record.updated_at) }}
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
@@ -32,11 +38,11 @@
   </a-table>
 </template>
 <script lang="ts" setup>
-import dayjs from "dayjs";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import type { UserListVO } from "@/api/interfaces/user";
 import { getUserList } from "@/api/modules/user";
 import { message } from "ant-design-vue";
+import { formatTime } from "@/utils/time";
 const userList = ref<UserListVO>([]);
 
 onMounted(async () => {
@@ -73,14 +79,6 @@ const columns = [
     key: "action",
   },
 ];
-
-const processedUserList = computed(() => {
-  return userList.value.map((user) => ({
-    ...user,
-    created_at: dayjs(user.created_at).format("YYYY-MM-DD HH:mm:ss"),
-    updated_at: dayjs(user.updated_at).format("YYYY-MM-DD HH:mm:ss"),
-  }));
-});
 
 function toRole(role_id: number) {
   switch (role_id) {

@@ -1,4 +1,8 @@
-import type { PostsReq, PostsVO } from "@/api/interfaces/posts";
+import type {
+  PostsReq,
+  PostsUpdateStatusReq,
+  PostsVO,
+} from "@/api/interfaces/posts";
 import type { PageResponse, Response } from "@/api/interfaces/resp";
 import request from "@/utils/request";
 export const createPost: (data: PostsReq) => Promise<Response<any>> = (
@@ -12,6 +16,13 @@ export const createPost: (data: PostsReq) => Promise<Response<any>> = (
 export const getPostsByPage: (
   pageNo?: number,
   pageSize?: number
-) => Promise<PageResponse<PostsVO>> = (pageNo = 1, pageSize = 10) => {
-  return request.get("/posts/list", { params: { pageNo, pageSize } });
+) => Promise<PageResponse<PostsVO>> = (page_no = 1, size = 10) => {
+  return request.get("/posts/list", { params: { page_no, size } });
+};
+
+// 更新文章状态
+export const updatePostStatus: (
+  data: PostsUpdateStatusReq
+) => Promise<PageResponse<any>> = (data) => {
+  return request.put("/posts/update/status", data);
 };

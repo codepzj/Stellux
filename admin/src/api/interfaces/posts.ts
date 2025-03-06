@@ -7,6 +7,7 @@ export interface PostsReq {
   tags: string[];
   cover: string;
   isTop: boolean;
+  isPublish: boolean;
 }
 
 export interface PostsVO {
@@ -20,5 +21,11 @@ export interface PostsVO {
   category: string;
   tags: string[];
   cover: string;
-  isTop: boolean;
+  is_top: boolean;
+  is_publish: boolean;
+}
+
+export interface PostsUpdateStatusReq {
+  id: string;
+  is_publish: boolean;
 }
