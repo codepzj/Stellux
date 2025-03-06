@@ -17,8 +17,7 @@ down:
 	rm -rf scripts/mongo/keyFile
 	
 up:
-	make deploy
-	bash scripts/mongo/replset.sh
+	make deploy && make init
 
 restart:
 	make down && make up

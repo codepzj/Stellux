@@ -21,6 +21,7 @@ type IPostsDao interface {
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
 	FindOneAndUpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
+	ResumePostById(ctx context.Context, id bson.ObjectID) error
 	DeleteSoftById(ctx context.Context, id bson.ObjectID) error
 	DeleteById(ctx context.Context, id bson.ObjectID) error
 }
@@ -105,6 +106,12 @@ func (p *PostsDao) FindOneAndUpdateStatus(ctx context.Context, id bson.ObjectID,
 
 func (p *PostsDao) DeleteSoftById(ctx context.Context, id bson.ObjectID) error {
 	result := p.postColl.FindOneAndUpdate(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"deleted_at": time.Now().Local()}})
+	return result.Err()
+}
+
+func (p *PostsDao) ResumePostById(ctx context.Context, id bson.ObjectID) error {
+	// 删除deleted_at字段
+	result := p.postColl.FindOneAndUpdate(ctx, bson.M{"_id": id}, bson.M{"$unset": bson.M{"deleted_at": nil}})
 	return result.Err()
 }
 
