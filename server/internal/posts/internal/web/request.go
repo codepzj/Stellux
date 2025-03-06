@@ -11,6 +11,7 @@ type PostsReq struct {
 	Tags        []string `json:"tags" binding:"required"`
 	Cover       string   `json:"cover"`
 	IsTop       bool     `json:"isTop"`
+	Status      int      `json:"status"`
 }
 
 func toPosts(postsReq PostsReq) *domain.Posts {
@@ -23,5 +24,6 @@ func toPosts(postsReq PostsReq) *domain.Posts {
 		Tags:        postsReq.Tags,
 		Cover:       postsReq.Cover,
 		IsTop:       postsReq.IsTop,
+		Status:      &postsReq.Status,
 	}
 }

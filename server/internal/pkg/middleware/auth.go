@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"server/global"
-	"server/internal/pkg/wrap"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +16,6 @@ func Auth() gin.HandlerFunc {
 		log.Println("requestURI为:", requestURI, "method为:", method)
 		ok, err := global.Enforcer.Enforce(userId, requestURI, method)
 		if err != nil {
-			wrap.FailWithMsg(ctx, http.StatusInternalServerError, "权限校验失败")
 			ctx.Abort()
 			return
 		}

@@ -32,7 +32,7 @@ func GenerateJwt(id string) (string, error) {
 
 func ParseJwt(jwtStr string) (*JwtCustomClaims, error) {
 	claims := new(JwtCustomClaims)
-	token, err := jwt.ParseWithClaims(jwtStr, claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(jwtStr, claims, func(token *jwt.Token) (any, error) {
 		return jwtKey, nil
 	})
 	if err != nil {

@@ -20,6 +20,7 @@ type PostsDTO struct {
 	Tags        []string
 	Cover       string
 	IsTop       bool `bson:"is_top"`
+	Status      *int
 }
 
 type PageDTO struct {
@@ -73,6 +74,7 @@ func DoToDTO(posts *domain.Posts) *PostsDTO {
 		Tags:        posts.Tags,
 		Cover:       posts.Cover,
 		IsTop:       posts.IsTop,
+		Status:      posts.Status,
 	}
 }
 

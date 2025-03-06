@@ -42,7 +42,7 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) (bson.O
 		return bson.ObjectID{}, err
 	}
 	defer session.EndSession(context.TODO())
-	result, err := session.WithTransaction(ctx, func(ctx context.Context) (interface{}, error) {
+	result, err := session.WithTransaction(ctx, func(ctx context.Context) (any, error) {
 		// 判断用户是否存在
 		if _, isExist := s.repo.FindUserIsExist(ctx, user); isExist {
 			return nil, errors.New("用户已存在")

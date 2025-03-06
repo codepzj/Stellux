@@ -6,32 +6,47 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Response struct {
-	Code int         `json:"code,omitempty"`
-	Data interface{} `json:"data,omitempty"`
-	Msg  string      `json:"msg,omitempty"`
+type Response[T any] struct {
+	Code int    `json:"code,omitempty"`
+	Data T      `json:"data,omitempty"`
+	Msg  string `json:"msg,omitempty"`
 }
 
-func respond(c *gin.Context, code int, data interface{}, msg string) {
-	c.JSON(code, Response{Code: code, Data: data, Msg: msg})
+func respond[T any](code int, data T, msg string) *Response[T] {
+	return &Response[T]{Code: code, Data: data, Msg: msg}
 }
 
-func SuccessWithMsg(c *gin.Context, msg string) {
-	respond(c, http.StatusOK, nil, msg)
+func Success[T any](data T, msg string) *Response[T] {
+	return respond(http.StatusOK, data, msg)
 }
 
-func SuccessWithData(c *gin.Context, data interface{}) {
-	respond(c, http.StatusOK, data, "操作成功")
+func Fail[T any](code int, data T, msg string) *Response[T] {
+	return respond(code, data, msg)
 }
 
-func SuccessWithDetail(c *gin.Context, data interface{}, msg string) {
-	respond(c, http.StatusOK, data, msg)
+func Wrap[T any](fn func(ctx *gin.Context) (T, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		data, err := fn(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, data)
+			return
+		}
+		ctx.JSON(http.StatusOK, data)
+	}
 }
 
-func FailWithMsg(c *gin.Context, code int, msg string) {
-	respond(c, code, nil, msg)
-}
-
-func FailWithDetail(c *gin.Context, code int, data interface{}, msg string) {
-	respond(c, code, data, msg)
+func WrapWithBody[R any, T any](fn func(ctx *gin.Context, req R) (T, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var req R
+		if ctx.ShouldBind(&req) != nil {
+			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, "参数错误"))
+			return
+		}
+		data, err := fn(ctx, req)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, data)
+			return
+		}
+		ctx.JSON(http.StatusOK, data)
+	}
 }

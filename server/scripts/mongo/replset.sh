@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 10
 
 # 默认用户名和密码
 username=${1:-admin}
@@ -7,6 +8,7 @@ password=${2:-123456}
 # 检查副本集状态
 status=$(mongosh "mongodb://$username:$password@localhost:27017/admin" --eval "rs.status().ok" --quiet)
 
+echo $status
 # 如果 rs.status().ok 返回 1，说明副本集已初始化
 if [ "$status" -eq 1 ]; then
   echo "副本集已初始化，跳过初始化步骤。"

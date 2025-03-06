@@ -5,15 +5,17 @@ import (
 	"server/internal/pkg/wrap"
 	"server/internal/posts/internal/service"
 
+	"github.com/pkg/errors"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type IPostHandler interface {
-	CreatePosts(ctx *gin.Context)
-	FindPostById(ctx *gin.Context)
-	FindAllPosts(ctx *gin.Context)
-	FindPostsByCondition(ctx *gin.Context)
+	CreatePosts(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error)
+	FindPostById(ctx *gin.Context) (*wrap.Response[any], error)
+	FindAllPosts(ctx *gin.Context) (*wrap.Response[any], error)
+	FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error)
 }
 type PostsHandler struct {
 	serv service.IPostsService
@@ -26,65 +28,49 @@ func NewPostHandler(serv service.IPostsService) *PostsHandler {
 func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 	group := router.Group("/posts")
 	{
-		group.GET("/:id", h.FindPostById)
-		group.GET("/list/all", h.FindAllPosts)
-		group.GET("/list", h.FindPostsByCondition)
-		group.POST("/create", h.CreatePosts)
+		group.GET("/:id", wrap.Wrap(h.FindPostById))
+		group.GET("/list/all", wrap.Wrap(h.FindAllPosts))
+		group.GET("/list", wrap.WrapWithBody(h.FindPostsByCondition))
+		group.POST("/create", wrap.WrapWithBody(h.CreatePosts))
 	}
 }
 
-func (h *PostsHandler) CreatePosts(ctx *gin.Context) {
-	var postsReq PostsReq
-	if err := ctx.ShouldBindJSON(&postsReq); err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error()+" 参数错误")
-		return
-	}
+func (h *PostsHandler) CreatePosts(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error) {
 	err := h.serv.CreatePosts(ctx, toPosts(postsReq))
 	if err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	wrap.SuccessWithMsg(ctx, "新增文章成功")
+	return wrap.Success[any](nil, "新增文章成功"), nil
 }
 
-func (h *PostsHandler) FindPostById(ctx *gin.Context) {
+func (h *PostsHandler) FindPostById(ctx *gin.Context) (*wrap.Response[any], error) {
 	id := ctx.Param("id")
 	if id == "" {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, "参数错误")
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, "参数错误"), errors.New("参数错误")
 	}
 	idObj, err := bson.ObjectIDFromHex(id)
 	if err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
 	posts, err := h.serv.FindPostById(ctx, idObj)
 	if err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	wrap.SuccessWithDetail(ctx, DTOToVO(posts), "获取文章详情成功")
+	return wrap.Success[any](DTOToVO(posts), "获取文章详情成功"), nil
 }
 
-func (h *PostsHandler) FindAllPosts(ctx *gin.Context) {
+func (h *PostsHandler) FindAllPosts(ctx *gin.Context) (*wrap.Response[any], error) {
 	posts, err := h.serv.FindAllPosts(ctx)
 	if err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	wrap.SuccessWithDetail(ctx, DTOsToVOs(posts), "获取文章列表成功")
+	return wrap.Success[any](DTOsToVOs(posts), "获取文章列表成功"), nil
 }
 
-func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context) {
-	var page wrap.Page
-	if err := ctx.ShouldBind(&page); err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error()+"，参数错误")
-		return
-	}
+func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error) {
 	posts, totalCount, totalPage, err := h.serv.FindPostsByCondition(ctx, &page)
 	if err != nil {
-		wrap.FailWithMsg(ctx, http.StatusBadRequest, err.Error())
-		return
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
 
 	pageVO := wrap.PageVO[PostsVO]{
@@ -93,5 +79,5 @@ func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context) {
 		TotalPage:  totalPage,
 		List:       DTOsToVOs(posts),
 	}
-	wrap.SuccessWithDetail(ctx, pageVO, "获取文章列表成功")
+	return wrap.Success[any](pageVO, "获取文章列表成功"), nil
 }

@@ -20,6 +20,7 @@ type Posts struct {
 	Tags        []string
 	Cover       string
 	IsTop       bool `bson:"is_top"`
+	Status      *int 
 }
 
 func ToPtr(posts []Posts) []*Posts {
