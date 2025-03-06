@@ -20,6 +20,7 @@ type IPostsDao interface {
 	FindById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error)
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
+	FindOneAndUpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 	DeleteById(ctx context.Context, Id bson.ObjectID) error
 }
 
@@ -94,6 +95,11 @@ func (p *PostsDao) GetAllCountByKeyword(ctx context.Context, keyword string) (in
 		bson.D{{Key: "description", Value: bson.D{{Key: "$regex", Value: keyword}}}},
 	}}}
 	return p.postColl.CountDocuments(ctx, filter)
+}
+
+func (p *PostsDao) FindOneAndUpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error {
+	result := p.postColl.FindOneAndUpdate(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"is_publish": isPublish}})
+	return result.Err()
 }
 
 func (p *PostsDao) DeleteById(ctx context.Context, Id bson.ObjectID) error {

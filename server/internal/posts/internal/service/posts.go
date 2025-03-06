@@ -15,6 +15,7 @@ type IPostsService interface {
 	FindPostById(ctx context.Context, id bson.ObjectID) (*PostsDTO, error)
 	FindAllPosts(ctx context.Context) ([]*PostsDTO, error)
 	FindPostsByCondition(ctx context.Context, page *wrap.Page) ([]*PostsDTO, int64, int64, error)
+	UpdatePostsPublishStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 }
 
 type PostsService struct {
@@ -56,4 +57,8 @@ func (p *PostsService) FindPostsByCondition(ctx context.Context, page *wrap.Page
 
 	return DOsToDTOs(posts), totalCount, totalPage, nil
 
+}
+
+func (p *PostsService) UpdatePostsPublishStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error {
+	return p.repo.UpdateStatus(ctx, id, isPublish)
 }

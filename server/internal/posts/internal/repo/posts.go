@@ -16,6 +16,7 @@ type IPostsRepo interface {
 	FindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error)
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
+	UpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 	DeletePostById(ctx context.Context, Id bson.ObjectID) error
 }
 
@@ -60,6 +61,10 @@ func (p *PostsRepo) GetAllCount(ctx context.Context) (int64, error) {
 
 func (p *PostsRepo) GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error) {
 	return p.dao.GetAllCountByKeyword(ctx, keyword)
+}
+
+func (p *PostsRepo) UpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error {
+	return p.dao.FindOneAndUpdateStatus(ctx, id, isPublish)
 }
 
 func (p *PostsRepo) DeletePostById(ctx context.Context, Id bson.ObjectID) error {

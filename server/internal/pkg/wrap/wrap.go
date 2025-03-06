@@ -38,8 +38,8 @@ func Wrap[T any](fn func(ctx *gin.Context) (T, error)) gin.HandlerFunc {
 func WrapWithBody[R any, T any](fn func(ctx *gin.Context, req R) (T, error)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req R
-		if ctx.ShouldBind(&req) != nil {
-			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, "参数错误"))
+		if err := ctx.ShouldBind(&req); err != nil {
+			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, err.Error()+" 参数错误"))
 			return
 		}
 		data, err := fn(ctx, req)

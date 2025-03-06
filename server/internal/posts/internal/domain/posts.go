@@ -19,8 +19,8 @@ type Posts struct {
 	Category    string
 	Tags        []string
 	Cover       string
-	IsTop       bool `bson:"is_top"`
-	Status      *int 
+	IsTop       *bool `bson:"is_top"`
+	IsPublish   *bool `bson:"is_publish"`
 }
 
 func ToPtr(posts []Posts) []*Posts {

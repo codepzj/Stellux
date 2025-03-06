@@ -1,10 +1,10 @@
 package service
 
 import (
-	"time"
-
 	"github.com/codepzj/Stellux/server/internal/pkg/wrap"
 	"github.com/codepzj/Stellux/server/internal/posts/internal/domain"
+	"time"
+
 	"github.com/samber/lo"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
@@ -20,8 +20,8 @@ type PostsDTO struct {
 	Category    string
 	Tags        []string
 	Cover       string
-	IsTop       bool `bson:"is_top"`
-	Status      *int
+	IsTop       *bool `bson:"is_top"`
+	IsPublish   *bool `bson:"is_publish"`
 }
 
 type PageDTO struct {
@@ -75,7 +75,7 @@ func DoToDTO(posts *domain.Posts) *PostsDTO {
 		Tags:        posts.Tags,
 		Cover:       posts.Cover,
 		IsTop:       posts.IsTop,
-		Status:      posts.Status,
+		IsPublish:   posts.IsPublish,
 	}
 }
 

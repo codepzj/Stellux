@@ -10,8 +10,13 @@ type PostsReq struct {
 	Category    string   `json:"category" binding:"required"`
 	Tags        []string `json:"tags" binding:"required"`
 	Cover       string   `json:"cover"`
-	IsTop       bool     `json:"isTop"`
-	Status      int      `json:"status"`
+	IsTop       *bool    `json:"is_top"`
+	IsPublish   *bool    `json:"is_publish"`
+}
+
+type UpdatePublishStatusReq struct {
+	ID        string `json:"id" binding:"required"`
+	IsPublish *bool   `json:"is_publish" binding:"required"`
 }
 
 func toPosts(postsReq PostsReq) *domain.Posts {
@@ -24,6 +29,6 @@ func toPosts(postsReq PostsReq) *domain.Posts {
 		Tags:        postsReq.Tags,
 		Cover:       postsReq.Cover,
 		IsTop:       postsReq.IsTop,
-		Status:      &postsReq.Status,
+		IsPublish:   postsReq.IsPublish,
 	}
 }

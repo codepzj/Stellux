@@ -18,7 +18,8 @@ type PostsVO struct {
 	Category    string    `json:"category"`
 	Tags        []string  `json:"tags"`
 	Cover       string    `json:"cover"`
-	IsTop       bool      `json:"is_top"`
+	IsTop       *bool     `json:"is_top"`
+	IsPublish   *bool     `json:"is_publish"`
 }
 
 func DTOToVO(posts *service.PostsDTO) *PostsVO {
@@ -34,6 +35,7 @@ func DTOToVO(posts *service.PostsDTO) *PostsVO {
 		Tags:        posts.Tags,
 		Cover:       posts.Cover,
 		IsTop:       posts.IsTop,
+		IsPublish:   posts.IsPublish,
 	}
 }
 
