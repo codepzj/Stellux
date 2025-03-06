@@ -2,8 +2,9 @@ package web
 
 import (
 	"net/http"
-	"server/internal/pkg/wrap"
-	"server/internal/user_detail/internal/service"
+
+	"github.com/codepzj/Stellux/server/internal/pkg/wrap"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"

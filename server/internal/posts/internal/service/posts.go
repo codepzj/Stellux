@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
-	"server/internal/pkg/wrap"
-	"server/internal/posts/internal/domain"
-	"server/internal/posts/internal/repo"
+
+	"github.com/codepzj/Stellux/server/internal/pkg/wrap"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/repo"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )

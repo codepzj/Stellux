@@ -1,10 +1,10 @@
 package user_detail
 
 import (
-	"server/internal/user_detail/internal/domain"
-	"server/internal/user_detail/internal/repo"
-	"server/internal/user_detail/internal/service"
-	"server/internal/user_detail/internal/web"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/service"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/web"
 )
 
 type (

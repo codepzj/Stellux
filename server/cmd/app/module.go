@@ -1,9 +1,10 @@
-package main
+package app
 
 import (
 	"fmt"
 	"log"
-	"server/global"
+
+	"github.com/codepzj/Stellux/server/global"
 
 	"github.com/gin-gonic/gin"
 )

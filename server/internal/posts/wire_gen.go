@@ -8,10 +8,10 @@ package posts
 
 import (
 	"github.com/google/wire"
-	"server/internal/posts/internal/repo"
-	"server/internal/posts/internal/repo/dao"
-	"server/internal/posts/internal/service"
-	"server/internal/posts/internal/web"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/repo/dao"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/service"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/web"
 )
 
 // Injectors from wire.go:

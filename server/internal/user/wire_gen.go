@@ -8,11 +8,11 @@ package user
 
 import (
 	"github.com/google/wire"
-	"server/internal/user/internal/repo"
-	"server/internal/user/internal/repo/dao"
-	"server/internal/user/internal/service"
-	"server/internal/user/internal/web"
-	"server/internal/user_detail"
+	"github.com/codepzj/Stellux/server/internal/user/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/user/internal/repo/dao"
+	"github.com/codepzj/Stellux/server/internal/user/internal/service"
+	"github.com/codepzj/Stellux/server/internal/user/internal/web"
+	"github.com/codepzj/Stellux/server/internal/user_detail"
 )
 
 // Injectors from wire.go:

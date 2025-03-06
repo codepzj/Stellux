@@ -3,7 +3,8 @@ package middleware
 import (
 	"log"
 	"net/http"
-	"server/global"
+
+	"github.com/codepzj/Stellux/server/global"
 
 	"github.com/gin-gonic/gin"
 )

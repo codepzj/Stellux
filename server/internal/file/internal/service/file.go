@@ -5,10 +5,11 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
-	"server/internal/file/internal/domain"
-	"server/internal/file/internal/repo"
 	"strings"
 	"time"
+
+	"github.com/codepzj/Stellux/server/internal/file/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/file/internal/repo"
 
 	"github.com/pkg/errors"
 

@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 
-	"server/internal/user_detail/internal/domain"
-	"server/internal/user_detail/internal/repo/dao"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/repo/dao"
 )
 
 type IUserDetailRepo interface {

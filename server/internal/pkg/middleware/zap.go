@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	. "server/internal/pkg/logger"
+	. "github.com/codepzj/Stellux/server/internal/pkg/logger"
 )
 
 // GinLogger gin日志中间件

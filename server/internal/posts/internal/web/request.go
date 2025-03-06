@@ -1,6 +1,6 @@
 package web
 
-import "server/internal/posts/internal/domain"
+import "github.com/codepzj/Stellux/server/internal/posts/internal/domain"
 
 type PostsReq struct {
 	Title       string   `json:"title" binding:"required"`

@@ -4,14 +4,14 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package app
 
 import (
-	"server/internal/file"
-	"server/internal/ioc"
-	"server/internal/posts"
-	"server/internal/user"
-	"server/internal/user_detail"
+	"github.com/codepzj/Stellux/server/internal/file"
+	"github.com/codepzj/Stellux/server/internal/ioc"
+	"github.com/codepzj/Stellux/server/internal/posts"
+	"github.com/codepzj/Stellux/server/internal/user"
+	"github.com/codepzj/Stellux/server/internal/user_detail"
 )
 
 // Injectors from wire.go:
@@ -19,14 +19,14 @@ import (
 func InitApp() *HttpServer {
 	module := user_detail.InitUserDetailModule()
 	userModule := user.InitUserModule(module)
-	userHandler := userModule.Hdl
-	userDetailHandler := module.Hdl
+	v := userModule.Hdl
+	v2 := module.Hdl
 	postsModule := posts.InitPostsModule()
-	postsHandler := postsModule.Hdl
+	v3 := postsModule.Hdl
 	fileModule := file.InitFileModule()
-	fileHandler := fileModule.Hdl
-	v := ioc.InitMiddleWare()
-	engine := ioc.NewGin(userHandler, userDetailHandler, postsHandler, fileHandler, v)
+	v4 := fileModule.Hdl
+	v5 := ioc.InitMiddleWare()
+	engine := ioc.NewGin(v, v2, v3, v4, v5)
 	httpServer := NewHttpServer(engine)
 	return httpServer
 }

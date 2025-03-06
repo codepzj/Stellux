@@ -3,8 +3,9 @@ package web
 import (
 	"fmt"
 	"net/http"
-	"server/internal/file/internal/service"
-	"server/internal/pkg/wrap"
+
+	"github.com/codepzj/Stellux/server/internal/file/internal/service"
+	"github.com/codepzj/Stellux/server/internal/pkg/wrap"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"

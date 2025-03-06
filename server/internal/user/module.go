@@ -1,9 +1,9 @@
 package user
 
 import (
-	"server/internal/user/internal/repo"
-	"server/internal/user/internal/service"
-	"server/internal/user/internal/web"
+	"github.com/codepzj/Stellux/server/internal/user/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/user/internal/service"
+	"github.com/codepzj/Stellux/server/internal/user/internal/web"
 )
 
 type (
@@ -11,7 +11,7 @@ type (
 	Service    = service.IUserService
 	Repository = repo.IUserRepo
 	Module     struct {
-		Hdl *Handler
+		Hdl  *Handler
 		Svc  Service
 		Repo Repository
 	}

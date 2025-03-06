@@ -1,6 +1,6 @@
 package web
 
-import "server/internal/user/internal/domain"
+import "github.com/codepzj/Stellux/server/internal/user/internal/domain"
 
 type LoginReq struct {
 	Username string `json:"username" binding:"required"`
@@ -27,5 +27,3 @@ func CreateUserReqToDO(req *CreateUserReq) *domain.User {
 		RoleId:   req.RoleId,
 	}
 }
-
-

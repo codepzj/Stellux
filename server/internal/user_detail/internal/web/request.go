@@ -1,7 +1,7 @@
 package web
 
 import (
-	"server/internal/user_detail/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )

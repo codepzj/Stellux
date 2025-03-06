@@ -2,10 +2,11 @@ package dao
 
 import (
 	"context"
-	"server/global"
 	"time"
 
-	"server/internal/user/internal/domain"
+	"github.com/codepzj/Stellux/server/global"
+
+	"github.com/codepzj/Stellux/server/internal/user/internal/domain"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
@@ -109,7 +110,7 @@ func (u *UserDao) FindAllByRoleID(ctx context.Context, roleId int) ([]*domain.Us
 
 func (u *UserDao) FindUserIsExist(ctx context.Context, user *domain.User) (*domain.User, bool) {
 	var usr domain.User
-	err := u.userColl.FindOne(ctx, bson.D{{Key: "username", Value: user.Username}, {Key: "password", Value: user.Password}}).Decode(&usr)
+	err := u.userColl.FindOne(ctx, bson.D{{Key: "username", Value: user.Username}}).Decode(&usr)
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, false
 	} else if err != nil {

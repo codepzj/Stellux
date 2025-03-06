@@ -1,9 +1,9 @@
 package web
 
 import (
-	"server/internal/pkg/utils"
-	"server/internal/pkg/wrap"
-	"server/internal/user/internal/service"
+	"github.com/codepzj/Stellux/server/internal/pkg/utils"
+	"github.com/codepzj/Stellux/server/internal/pkg/wrap"
+	"github.com/codepzj/Stellux/server/internal/user/internal/service"
 
 	"net/http"
 

@@ -3,10 +3,12 @@ package service
 import (
 	"context"
 	"fmt"
-	"server/global"
-	"server/internal/user/internal/domain"
-	"server/internal/user/internal/repo"
-	"server/internal/user_detail"
+
+	"github.com/codepzj/Stellux/server/global"
+	"github.com/codepzj/Stellux/server/internal/pkg/utils"
+	"github.com/codepzj/Stellux/server/internal/user/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/user_detail"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -81,11 +83,22 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) (bson.O
 }
 
 func (s *UserService) FindUserIsExist(ctx context.Context, user *domain.User) (*UserDto, bool) {
-	user, ok := s.repo.FindUserIsExist(ctx, user)
+	u, ok := s.repo.FindUserIsExist(ctx, user)
 	if !ok {
 		return nil, false
 	}
-	return DoToDTO(user), true
+
+	// TODO: 为了开发环境方便，生产环境应该让后台初始化账号密码
+	// 如果密码为初始化密码，跳过校验
+	if user.Password == "123456" && u.Password == "123456" {
+		return DoToDTO(u), true
+	}
+
+	// bcrypt校验密码是否有效
+	if utils.CompareHashAndPassword(u.Password, user.Password) {
+		return DoToDTO(u), true
+	}
+	return nil, false
 }
 
 func (s *UserService) FindAllUsers(ctx context.Context) ([]*UserDto, error) {

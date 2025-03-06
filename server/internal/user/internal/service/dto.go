@@ -1,8 +1,9 @@
 package service
 
 import (
-	"server/internal/user/internal/domain"
 	"time"
+
+	"github.com/codepzj/Stellux/server/internal/user/internal/domain"
 
 	"github.com/samber/lo"
 )

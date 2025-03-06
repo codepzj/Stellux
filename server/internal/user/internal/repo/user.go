@@ -2,9 +2,13 @@ package repo
 
 import (
 	"context"
+
+	"github.com/codepzj/Stellux/server/internal/pkg/utils"
+	"github.com/codepzj/Stellux/server/internal/user/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user/internal/repo/dao"
+
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/v2/bson"
-	"server/internal/user/internal/domain"
-	"server/internal/user/internal/repo/dao"
 )
 
 type IUserRepo interface {
@@ -24,6 +28,12 @@ func NewUserRepo(dao dao.IUserDao) *UserRepo {
 }
 
 func (u *UserRepo) CreateUser(ctx context.Context, user *domain.User) (bson.ObjectID, error) {
+	hashPassword, err := utils.GenerateHashPassword(user.Password)
+	// bcrypt加密密码
+	if err != nil {
+		return bson.ObjectID{}, errors.New("系统错误，密码加密失败")
+	}
+	user.Password = hashPassword
 	return u.dao.CreateOne(ctx, user)
 }
 

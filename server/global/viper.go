@@ -3,7 +3,8 @@ package global
 import (
 	"context"
 	"fmt"
-	. "server/internal/pkg/logger"
+
+	. "github.com/codepzj/Stellux/server/internal/pkg/logger"
 
 	"github.com/casbin/casbin/v2"
 	mongodbadapter "github.com/casbin/mongodb-adapter/v3"

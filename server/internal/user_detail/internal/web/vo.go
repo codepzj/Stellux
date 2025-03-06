@@ -1,6 +1,6 @@
 package web
 
-import "server/internal/user_detail/internal/domain"
+import "github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
 
 type UserDetailVO struct {
 	UserId      string `json:"user_id" binding:"required"`

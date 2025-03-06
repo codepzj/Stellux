@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"server/internal/user_detail/internal/domain"
-	"server/internal/user_detail/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/repo"
 )
 
 type IUserDetailService interface {

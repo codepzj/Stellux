@@ -4,10 +4,10 @@
 package file
 
 import (
-	"server/internal/file/internal/repo"
-	"server/internal/file/internal/repo/dao"
-	"server/internal/file/internal/service"
-	"server/internal/file/internal/web"
+	"github.com/codepzj/Stellux/server/internal/file/internal/repo"
+	"github.com/codepzj/Stellux/server/internal/file/internal/repo/dao"
+	"github.com/codepzj/Stellux/server/internal/file/internal/service"
+	"github.com/codepzj/Stellux/server/internal/file/internal/web"
 
 	"github.com/google/wire"
 )

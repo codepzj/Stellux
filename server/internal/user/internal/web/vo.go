@@ -1,7 +1,7 @@
 package web
 
 import (
-	"server/internal/user/internal/service"
+	"github.com/codepzj/Stellux/server/internal/user/internal/service"
 
 	"github.com/samber/lo"
 )

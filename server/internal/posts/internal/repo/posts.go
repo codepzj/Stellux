@@ -2,8 +2,9 @@ package repo
 
 import (
 	"context"
-	"server/internal/posts/internal/domain"
-	"server/internal/posts/internal/repo/dao"
+
+	"github.com/codepzj/Stellux/server/internal/posts/internal/domain"
+	"github.com/codepzj/Stellux/server/internal/posts/internal/repo/dao"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )

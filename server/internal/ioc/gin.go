@@ -1,10 +1,10 @@
 package ioc
 
 import (
-	"server/internal/file"
-	"server/internal/posts"
-	"server/internal/user"
-	"server/internal/user_detail"
+	"github.com/codepzj/Stellux/server/internal/file"
+	"github.com/codepzj/Stellux/server/internal/posts"
+	"github.com/codepzj/Stellux/server/internal/user"
+	"github.com/codepzj/Stellux/server/internal/user_detail"
 
 	"github.com/gin-gonic/gin"
 )

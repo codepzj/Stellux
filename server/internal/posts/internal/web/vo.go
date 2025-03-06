@@ -1,9 +1,10 @@
 package web
 
 import (
-	"github.com/samber/lo"
-	"server/internal/posts/internal/service"
 	"time"
+
+	"github.com/codepzj/Stellux/server/internal/posts/internal/service"
+	"github.com/samber/lo"
 )
 
 type PostsVO struct {

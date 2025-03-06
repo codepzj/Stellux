@@ -2,9 +2,10 @@ package dao
 
 import (
 	"context"
-	"server/global"
 
-	"server/internal/user_detail/internal/domain"
+	"github.com/codepzj/Stellux/server/global"
+
+	"github.com/codepzj/Stellux/server/internal/user_detail/internal/domain"
 
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/v2/bson"
