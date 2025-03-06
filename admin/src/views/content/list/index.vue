@@ -58,7 +58,9 @@
           <a-divider type="vertical" />
           <a-button size="small">编辑</a-button>
           <a-divider type="vertical" />
-          <a-button danger size="small"  >删除</a-button>
+          <a-button danger size="small" @click="handleDelete(record.id)"
+            >删除</a-button
+          >
         </span>
       </template>
     </template>
@@ -67,7 +69,11 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
 import type { PostsVO } from "@/api/interfaces/posts";
-import { getPostsByPage, updatePostStatus } from "@/api/modules/posts";
+import {
+  deletePostSoft,
+  getPostsByPage,
+  updatePostStatus,
+} from "@/api/modules/posts";
 
 import { formatTime } from "@/utils/time";
 import { message } from "ant-design-vue";
@@ -140,6 +146,20 @@ const handleChange = async (checked: boolean, id: string) => {
       is_publish: checked,
     });
     message.success(checked ? "发布成功" : "下架成功");
+  } catch (err: any) {
+    message.error(err);
+    const post = posts.list.find((item) => item.id === id);
+    if (post) {
+      post.is_publish = !checked;
+    }
+  }
+};
+
+const handleDelete = async (id: string) => {
+  try {
+    const res = await deletePostSoft(id);
+    message.success(res.msg);
+    posts.list = posts.list.filter((item) => item.id !== id);
   } catch (err: any) {
     message.error(err);
   }

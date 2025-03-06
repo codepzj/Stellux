@@ -18,6 +18,7 @@ type IPostHandler interface {
 	FindAllPosts(ctx *gin.Context) (*wrap.Response[any], error)
 	FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error)
 	UpdatePublishStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error)
+	DeletePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
 }
 type PostsHandler struct {
 	serv service.IPostsService
@@ -35,6 +36,7 @@ func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 		group.GET("/list", wrap.WrapWithBody(h.FindPostsByCondition))
 		group.POST("/create", wrap.WrapWithBody(h.CreatePosts))
 		group.PUT("/update/status", wrap.WrapWithBody(h.UpdatePublishStatus))
+		group.DELETE("/soft-delete/:id", wrap.Wrap(h.DeletePostSoftById))
 	}
 }
 
@@ -97,4 +99,20 @@ func (h *PostsHandler) UpdatePublishStatus(ctx *gin.Context, updatePublishStatus
 		return wrap.Fail[any](http.StatusInternalServerError, nil, err.Error()), err
 	}
 	return wrap.Success[any](nil, "更新文章状态成功"), nil
+}
+
+func (h *PostsHandler) DeletePostSoftById(ctx *gin.Context) (*wrap.Response[any], error) {
+	id := ctx.Param("id")
+	if id == "" {
+		return wrap.Fail[any](http.StatusBadRequest, nil, "参数错误"), errors.New("参数错误")
+	}
+	idObj, err := bson.ObjectIDFromHex(id)
+	if err != nil {
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
+	}
+	err = h.serv.DeletePostSoftById(ctx, idObj)
+	if err != nil {
+		return wrap.Fail[any](http.StatusInternalServerError, nil, err.Error()), err
+	}
+	return wrap.Success[any](nil, "软删除文章成功"), nil
 }

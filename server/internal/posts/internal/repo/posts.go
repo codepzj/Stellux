@@ -17,7 +17,7 @@ type IPostsRepo interface {
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
 	UpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
-	DeletePostById(ctx context.Context, Id bson.ObjectID) error
+	DeletePostSoftById(ctx context.Context, id bson.ObjectID) error
 }
 
 type PostsRepo struct {
@@ -67,6 +67,6 @@ func (p *PostsRepo) UpdateStatus(ctx context.Context, id bson.ObjectID, isPublis
 	return p.dao.FindOneAndUpdateStatus(ctx, id, isPublish)
 }
 
-func (p *PostsRepo) DeletePostById(ctx context.Context, Id bson.ObjectID) error {
-	return p.dao.DeleteById(ctx, Id)
+func (p *PostsRepo) DeletePostSoftById(ctx context.Context, id bson.ObjectID) error {
+	return p.dao.DeleteById(ctx, id)
 }

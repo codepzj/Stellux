@@ -26,3 +26,8 @@ export const updatePostStatus: (
 ) => Promise<PageResponse<any>> = (data) => {
   return request.put("/posts/update/status", data);
 };
+
+// 软删除文章
+export const deletePostSoft: (id: string) => Promise<Response<any>> = (id) => {
+  return request.delete(`/posts/soft-delete/${id}`);
+};

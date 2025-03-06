@@ -11,7 +11,7 @@ type Posts struct {
 	ID          bson.ObjectID `bson:"_id"`
 	CreatedAt   time.Time     `bson:"created_at"`
 	UpdatedAt   time.Time     `bson:"updated_at"`
-	DeletedAt   time.Time     `bson:"deleted_at,omitempty"`
+	DeletedAt   time.Time     `bson:"deleted_at"`
 	Title       string
 	Content     string
 	Author      string
