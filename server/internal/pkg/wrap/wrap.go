@@ -39,7 +39,7 @@ func WrapWithBody[R any, T any](fn func(ctx *gin.Context, req R) (T, error)) gin
 	return func(ctx *gin.Context) {
 		var req R
 		if err := ctx.ShouldBind(&req); err != nil {
-			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, err.Error()+" 参数错误"))
+			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, err.Error()))
 			return
 		}
 		data, err := fn(ctx, req)
