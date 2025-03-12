@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroui/react": "^2.7.2",
     "classnames": "^2.5.1",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.4.7",
     "github-markdown-css": "^5.8.1",
     "highlight.js": "^11.11.1",

@@ -1,13 +1,8 @@
 import request from "@/utils/request";
-import StelluxMarkdown from "@/app/posts/components/markdown/md";
-
-interface PostVO {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  updated_at: string;
-}
+import StelluxMarkdown from "@/components/markdown/md";
+import { PostVO } from "@/types/posts";
+import { Divider } from "@heroui/divider";
+import dayjs from "dayjs";
 
 export default async function PostPage({
   params,
@@ -18,12 +13,15 @@ export default async function PostPage({
   const post = await request.get<PostVO>(`/posts/${id}`);
   const { data } = post;
   return (
-    <div className="w-[800px] m-auto">
-      <h1 className="text-2xl font-bold">{data.title}</h1>
+    <div className="max-w-[800px] m-auto p-4 my-4">
+      <h1 className="text-4xl font-bold mt-4">{data.title}</h1>
+      <Divider className="my-4" />
       <div className="flex justify-between">
-        <span className="text-gray-500">{data.created_at}</span>
-        <span className="text-gray-500">{data.updated_at}</span>
+        <span className="text-sm text-gray-500 dark:text-slate-400">
+          {dayjs(data.created_at).format("YYYY-MM-DD")}
+        </span>
       </div>
+
       <StelluxMarkdown content={data.content} />
     </div>
   );

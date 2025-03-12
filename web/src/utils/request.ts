@@ -4,53 +4,47 @@ import qs from "qs";
 type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 class Request {
-  private baseUrl: string;
+  private readonly baseUrl: string;
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  public async request<T, D>(
+  private async request<T, D>(
     url: string,
     method: RequestMethod,
     data?: T
   ): Promise<Response<D>> {
+    // 请求配置项
     const options: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
       },
+      body: data ? JSON.stringify(data) : undefined, // body携带参数
     };
 
-    if (data) {
-      options.body = JSON.stringify(data);
+    try {
+      const res = await fetch(`${this.baseUrl}${url}`, options);
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.msg);
+      }
+      return result;
+    } catch (err: any) {
+      throw new Error(err.message);
     }
-
-    console.log(`${this.baseUrl}${url}`);
-    const res = await fetch(`${this.baseUrl}${url}`, options);
-
-    if (!res.ok) {
-      throw new Error(`网络错误: ${res.status}`);
-    }
-
-    return res.json();
   }
 
-  public async get<D>(url: string, params?: object): Promise<Response<D>> {
-    const respData = this.request<unknown, D>(
-      `${url}?${qs.stringify(params)}`,
-      "GET"
-    );
-    return respData;
+  public get<D>(url: string, params?: object): Promise<Response<D>> {
+    return this.request<any, D>(`${url}?${qs.stringify(params)}`, "GET");
   }
 
   public async post<T, D>(url: string, data: T): Promise<Response<D>> {
-    const respData = this.request<T, D>(url, "POST", data);
-    return respData;
+    return this.request<T, D>(url, "POST", data);
   }
 
   public async put<T, D>(url: string, data: T): Promise<Response<D>> {
-    const respData = this.request<T, D>(url, "PUT", data);
-    return respData;
+    return this.request<T, D>(url, "PUT", data);
   }
 
   public async delete<T, D>(url: string, data: T): Promise<Response<D>> {
