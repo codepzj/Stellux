@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [23.x] 
@@ -22,8 +20,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: npm install, build and test
+    - name: Use pnpm
       working-directory: ./admin
       run: |
-        npm install
-        npm run build
+        npm install -g pnpm
+
+    - name: pnpm install 
+      working-directory: ./admin
+      run: |
+        pnpm install
+
+    - name: pnpm build
+      working-directory: ./admin
+      run: |
+        pnpm run build

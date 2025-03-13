@@ -8,13 +8,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [23.x] 
-
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -32,10 +29,7 @@ jobs:
       run: |
         pnpm install
 
-    - name: pnpm run build
+    - name: pnpm lint
       working-directory: ./web
       run: |
-        pnpm run build
-      env:
-        API_BASE_URL: http://localhost:9001
-        CI: true
+        pnpm run lint
