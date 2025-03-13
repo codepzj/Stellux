@@ -22,10 +22,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: npm install, build and test
+    - name: Use pnpm
       working-directory: ./web
       run: |
-        npm install
-        npm run build
+        npm install -g pnpm
+
+    - name: pnpm install 
+      working-directory: ./web
+      run: |
+        pnpm install
+
+    - name: pnpm run build
+      working-directory: ./web
+      run: |
+        pnpm run build
       env:
+        API_BASE_URL: http://localhost:9001
         CI: true
