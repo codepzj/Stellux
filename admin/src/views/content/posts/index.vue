@@ -77,10 +77,10 @@
       <a-form-item label="操作">
         <a-space>
           <span>置顶</span>
-          <a-switch v-model:checked="configForm.isTop" />
+          <a-switch v-model:checked="configForm.is_top" />
           <a-divider type="vertical" />
           <span>发布</span>
-          <a-switch v-model:checked="configForm.isPublish" />
+          <a-switch v-model:checked="configForm.is_publish" />
         </a-space>
       </a-form-item>
     </a-form>
@@ -88,13 +88,14 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, computed } from "vue";
-import { MdEditor } from "md-editor-v3";
 import { useThemeStore } from "@/store/theme";
+import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { createPost } from "@/api/modules/posts";
 import { message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form";
 import { useRouter } from "vue-router";
+import type { PostReq } from "@/api/interfaces/posts";
 
 const router = useRouter();
 const themeStore = useThemeStore();
@@ -104,7 +105,7 @@ const confirmLoading = ref<boolean>(false);
 const layout = ref<string>("vertical");
 const configFormRef = ref();
 const key = "submit-post";
-const configForm = reactive({
+const configForm = reactive<PostReq>({
   title: "",
   content: "",
   author: "codepzj",
@@ -112,8 +113,8 @@ const configForm = reactive({
   category: "",
   tags: [],
   cover: "",
-  isTop: false,
-  isPublish: true,
+  is_top: false,
+  is_publish: true,
 });
 const options = reactive({
   category: [
@@ -180,7 +181,6 @@ const rules: Record<string, Rule[]> = {
 };
 </script>
 <style lang="scss">
-@import url("https://cdn.jsdelivr.net/npm/cn-fontsource-lxgw-wen-kai-gb-screen@1.0.6/font.min.css");
 
 .md-editor-toolbar-wrapper {
   height: 40px;
@@ -204,6 +204,6 @@ const rules: Record<string, Rule[]> = {
   font-size: 17px;
   margin-top: 10px;
   font-weight: 500;
-  font-family: "LXGW WenKai GB Screen";
+  font-family: "consolas";
 }
 </style>

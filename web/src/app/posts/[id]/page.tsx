@@ -8,12 +8,12 @@ export default async function PostPage({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) {
+  }) {
   const { id } = await params;
   const post = await request.get<PostVO>(`/posts/${id}`);
   const { data } = post;
   return (
-    <div className="max-w-[800px] m-auto p-4 my-4">
+    <div className="max-w-[850px] m-auto p-6 my-4">
       <h1 className="text-4xl font-bold mt-4">{data.title}</h1>
       <Divider className="my-4" />
       <div className="flex justify-between">

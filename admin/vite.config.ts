@@ -21,4 +21,14 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  server: {
+    port: 9002,
+    proxy: {
+      "/api": {
+        target: "http://localhost:9001",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 });

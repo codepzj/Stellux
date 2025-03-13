@@ -35,6 +35,22 @@ func Wrap[T any](fn func(ctx *gin.Context) (T, error)) gin.HandlerFunc {
 	}
 }
 
+func WrapWithUri[R any, T any](fn func(ctx *gin.Context, req R) (T, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var req R
+		if err := ctx.ShouldBindUri(&req); err != nil {
+			ctx.JSON(http.StatusBadRequest, Fail[any](http.StatusBadRequest, nil, err.Error()))
+			return
+		}
+		data, err := fn(ctx, req)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, data)
+			return
+		}
+		ctx.JSON(http.StatusOK, data)
+	}
+}
+
 func WrapWithBody[R any, T any](fn func(ctx *gin.Context, req R) (T, error)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req R

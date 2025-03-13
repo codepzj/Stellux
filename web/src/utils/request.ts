@@ -30,13 +30,16 @@ class Request {
         throw new Error(result.msg);
       }
       return result;
-    } catch (err: any) {
-      throw new Error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw new Error("未知错误");
     }
   }
 
   public get<D>(url: string, params?: object): Promise<Response<D>> {
-    return this.request<any, D>(`${url}?${qs.stringify(params)}`, "GET");
+    return this.request<unknown, D>(`${url}?${qs.stringify(params)}`, "GET");
   }
 
   public async post<T, D>(url: string, data: T): Promise<Response<D>> {

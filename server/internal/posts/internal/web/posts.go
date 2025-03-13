@@ -13,13 +13,13 @@ import (
 )
 
 type IPostHandler interface {
-	CreatePosts(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error)
 	FindPostById(ctx *gin.Context) (*wrap.Response[any], error)
 	FindAllPosts(ctx *gin.Context) (*wrap.Response[any], error)
 	FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error)
-	UpdatePublishStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error)
+	AdminUpdatePostsStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error)
+	AdminCreatePost(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error)
+	AdminResumePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
 	DeletePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
-	ResumePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
 }
 type PostsHandler struct {
 	serv service.IPostsService
@@ -30,26 +30,22 @@ func NewPostHandler(serv service.IPostsService) *PostsHandler {
 }
 
 func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
-	group := router.Group("/posts")
+	postsGroup := router.Group("/posts")
 	{
-		group.GET("/:id", wrap.Wrap(h.FindPostById))
-		group.GET("/list/all", wrap.Wrap(h.FindAllPosts))
-		group.GET("/list", wrap.WrapWithBody(h.FindPostsByCondition))
-		group.POST("/create", wrap.WrapWithBody(h.CreatePosts))
-		group.PUT("/update/status", wrap.WrapWithBody(h.UpdatePublishStatus))
-		group.PUT("/resume/:id", wrap.Wrap(h.ResumePostSoftById))
-		group.DELETE("/soft-delete/:id", wrap.Wrap(h.DeletePostSoftById))
+		postsGroup.GET("/:id", wrap.Wrap(h.FindPostById))                  // 获取特定文章
+		postsGroup.GET("/list/all", wrap.Wrap(h.FindAllPosts))             // 获取所有文章
+		postsGroup.GET("/list", wrap.WrapWithBody(h.FindPostsByCondition)) // 根据条件获取文章（分页，排序，关键词）
+	}
+	adminPostsGroup := router.Group("/admin-api/posts")
+	{
+		adminPostsGroup.POST("/create", wrap.WrapWithBody(h.AdminCreatePost))         // 管理员创建文章
+		adminPostsGroup.PATCH("/status", wrap.WrapWithBody(h.AdminUpdatePostsStatus)) // 管理员更新文章发布状态
+		adminPostsGroup.PATCH("/resume/:id", wrap.WrapWithUri(h.AdminResumePostSoftById))    // 管理员恢复删除文章
+		adminPostsGroup.PATCH("/delete/:id", wrap.WrapWithUri(h.AdminDeletePostSoftById))    // 管理员软删除文章
 	}
 }
 
-func (h *PostsHandler) CreatePosts(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error) {
-	err := h.serv.CreatePosts(ctx, toPosts(postsReq))
-	if err != nil {
-		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
-	}
-	return wrap.Success[any](nil, "新增文章成功"), nil
-}
-
+// FindPostById 获取特定文章
 func (h *PostsHandler) FindPostById(ctx *gin.Context) (*wrap.Response[any], error) {
 	id := ctx.Param("id")
 	if id == "" {
@@ -66,6 +62,7 @@ func (h *PostsHandler) FindPostById(ctx *gin.Context) (*wrap.Response[any], erro
 	return wrap.Success[any](DTOToVO(posts), "获取文章详情成功"), nil
 }
 
+// FindAllPosts 获取所有文章
 func (h *PostsHandler) FindAllPosts(ctx *gin.Context) (*wrap.Response[any], error) {
 	posts, err := h.serv.FindAllPosts(ctx)
 	if err != nil {
@@ -74,8 +71,9 @@ func (h *PostsHandler) FindAllPosts(ctx *gin.Context) (*wrap.Response[any], erro
 	return wrap.Success[any](DTOsToVOs(posts), "获取文章列表成功"), nil
 }
 
+// FindPostsByCondition 根据条件获取文章（分页，排序，关键词）
 func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error) {
-	posts, totalCount, totalPage, err := h.serv.FindPostsByCondition(ctx, &page)
+	posts, totalCount, totalPage, err := h.serv.FindPostByCondition(ctx, &page)
 	if err != nil {
 		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
@@ -89,46 +87,48 @@ func (h *PostsHandler) FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*
 	return wrap.Success[any](pageVO, "获取文章列表成功"), nil
 }
 
-func (h *PostsHandler) UpdatePublishStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error) {
-	id := updatePublishStatusReq.ID
-	isPublish := updatePublishStatusReq.IsPublish
-	idObj, err := bson.ObjectIDFromHex(id)
+// AdminCreatePost 管理员创建文章
+func (h *PostsHandler) AdminCreatePost(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error) {
+	err := h.serv.AdminCreatePost(ctx, toPosts(postsReq))
 	if err != nil {
 		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	err = h.serv.UpdatePostsPublishStatus(ctx, idObj, isPublish)
+	return wrap.Success[any](nil, "新增文章成功"), nil
+}
+
+// AdminUpdatePostsStatus 管理员更新文章发布状态
+func (h *PostsHandler) AdminUpdatePostsStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error) {
+	idObj, err := bson.ObjectIDFromHex(updatePublishStatusReq.ID)
+	if err != nil {
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
+	}
+	err = h.serv.AdminUpdatePostStatus(ctx, idObj, updatePublishStatusReq.IsPublish)
 	if err != nil {
 		return wrap.Fail[any](http.StatusInternalServerError, nil, err.Error()), err
 	}
 	return wrap.Success[any](nil, "更新文章状态成功"), nil
 }
 
-func (h *PostsHandler) DeletePostSoftById(ctx *gin.Context) (*wrap.Response[any], error) {
-	id := ctx.Param("id")
-	if id == "" {
-		return wrap.Fail[any](http.StatusBadRequest, nil, "id值为空"), errors.New("id值为空")
-	}
-	idObj, err := bson.ObjectIDFromHex(id)
+// AdminDeletePostSoftById 管理员软删除文章
+func (h *PostsHandler) AdminDeletePostSoftById(ctx *gin.Context, postIDReq PostIDReq) (*wrap.Response[any], error) {
+	idObj, err := bson.ObjectIDFromHex(postIDReq.ID)
 	if err != nil {
 		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	err = h.serv.DeletePostSoftById(ctx, idObj)
+	err = h.serv.AdminDeletePostSoftById(ctx, idObj)
 	if err != nil {
 		return wrap.Fail[any](http.StatusInternalServerError, nil, err.Error()), err
 	}
 	return wrap.Success[any](nil, "软删除文章成功"), nil
 }
 
-func (h *PostsHandler) ResumePostSoftById(ctx *gin.Context) (*wrap.Response[any], error) {
-	id := ctx.Param("id")
-	if id == "" {
-		return wrap.Fail[any](http.StatusBadRequest, nil, "id值为空"), errors.New("id值为空")
-	}
-	idObj, err := bson.ObjectIDFromHex(id)
+// AdminResumePostSoftById 管理员恢复删除文章
+func (h *PostsHandler) AdminResumePostSoftById(ctx *gin.Context, postIDReq PostIDReq) (*wrap.Response[any], error) {
+	idObj, err := bson.ObjectIDFromHex(postIDReq.ID)
 	if err != nil {
 		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
-	err = h.serv.ResumePostSoftById(ctx, idObj)
+	err = h.serv.AdminResumePostSoftById(ctx, idObj)
 	if err != nil {
 		return wrap.Fail[any](http.StatusInternalServerError, nil, err.Error()), err
 	}

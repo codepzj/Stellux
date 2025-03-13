@@ -1,21 +1,14 @@
-"use client"
-import { useEffect } from "react"
+"use client";
+import { useEffect } from "react";
 
 export default function Error({
-     error,
-     reset
+  error,
 }: {
-     error: Error & { digest?: string },
-     reset: () => void
+  error: Error & { digest?: string };
 }) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
 
-     useEffect(() => {
-         console.error(error)
-     },[error])
-
-    return (
-        <div>
-            文章不存在呢
-        </div>
-    );
+  return <div>文章不存在呢</div>;
 }

@@ -1,5 +1,10 @@
 <template>
-  <a-table :columns="columns" :data-source="posts.list">
+  <a-table
+    :columns="columns"
+    :data-source="posts.list"
+    :scroll="{ x: 1200 }"
+    :expand-column-width="100"
+  >
     <template #headerCell="{ column }">
       <template v-if="column.key === 'title'"> 标题 </template>
     </template>
@@ -48,17 +53,15 @@
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
-          <a-switch
-            v-model:checked="record.is_publish"
-            @change="(checked:any) => handleChange(checked, record.id)"
+          <a-button
+            size="small"
+            @click="handleChange(record.is_publish, record.id)"
+            >{{ record.is_publish ? "下架" : "发布" }}</a-button
           >
-            <template #checkedChildren><check-outlined /></template>
-            <template #unCheckedChildren><close-outlined /></template>
-          </a-switch>
           <a-divider type="vertical" />
           <a-button size="small">编辑</a-button>
           <a-divider type="vertical" />
-          <a-button danger size="small" @click="handleDelete(record.id)"
+          <a-button size="small" danger @click="handleDelete(record.id)"
             >删除</a-button
           >
         </span>
@@ -68,7 +71,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
-import type { PostsVO } from "@/api/interfaces/posts";
+import type { PostVO } from "@/api/interfaces/posts";
 import {
   deletePostSoft,
   getPostsByPage,
@@ -77,13 +80,13 @@ import {
 
 import { formatTime } from "@/utils/time";
 import { message } from "ant-design-vue";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons-vue";
+
 const posts = reactive({
   page_no: 1,
   size: 10,
   total_count: 0,
   total_page: 1,
-  list: [] as PostsVO[],
+  list: [] as PostVO[],
 });
 
 onMounted(async () => {
@@ -94,64 +97,82 @@ onMounted(async () => {
 const columns = [
   {
     name: "标题",
+    width: 200,
     dataIndex: "title",
     key: "title",
+    fixed: "left",
   },
   {
     title: "作者",
+    width: 100,
     dataIndex: "author",
     key: "author",
+    fixed: "left",
   },
   {
     title: "创建时间",
+    width: 200,
     dataIndex: "created_at",
     key: "created_at",
   },
   {
     title: "更新时间",
-    key: "updated_at",
+    width: 200,
     dataIndex: "updated_at",
+    key: "updated_at",
   },
   {
     title: "分类",
+    width: 100,
     key: "category",
     dataIndex: "category",
   },
   {
     title: "标签",
+    width: 200,
     key: "tags",
     dataIndex: "tags",
   },
   {
     title: "封面",
+    width: 100,
     key: "cover",
     dataIndex: "cover",
   },
   {
     title: "状态",
+    width: 100,
     key: "is_publish",
     dataIndex: "is_publish",
   },
   {
     title: "操作",
+    width: 250,
     key: "action",
     dataIndex: "action",
+    fixed: "right",
   },
 ];
 
-const handleChange = async (checked: boolean, id: string) => {
+const handleChange = async (is_publish: boolean, id: string) => {
   try {
-    await updatePostStatus({
+    const res = await updatePostStatus({
       id: id,
-      is_publish: checked,
+      is_publish: !is_publish,
     });
-    message.success(checked ? "发布成功" : "下架成功");
+    if (res.code === 200) {
+      message.success(is_publish ? "下架成功" : "发布成功");
+      posts.list = posts.list.map((item) => {
+        if (item.id === id) {
+          item.is_publish = !is_publish;
+        }
+        return item;
+      });
+    } else {
+      message.error(res.msg);
+    }
   } catch (err: any) {
     message.error(err);
-    const post = posts.list.find((item) => item.id === id);
-    if (post) {
-      post.is_publish = !checked;
-    }
   }
 };
 

@@ -2,7 +2,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from 'rehype-raw'
 import rehypeHighlight from "rehype-highlight";
-import "highlight.js/styles/atom-one-light.css";
+import "highlight.js/styles/atom-one-dark.css";
 import "@/style/md.scss";
 import { Terminal } from "lucide-react";
 import CopyButton from "./copy";
@@ -10,7 +10,7 @@ import React from "react";
 
 export default function StelluxMarkdown({ content }: { content: string }) {
   return (
-    <div className="markdown-body p-4">
+    <div className="markdown-body py-4">
       <Markdown
         rehypePlugins={[rehypeRaw,rehypeHighlight]}
         remarkPlugins={[remarkGfm]}

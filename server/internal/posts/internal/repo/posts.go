@@ -10,15 +10,16 @@ import (
 )
 
 type IPostsRepo interface {
-	CreatePost(ctx context.Context, posts *domain.Posts) error
 	FindPostById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error)
 	FindAllPosts(ctx context.Context) ([]*domain.Posts, error)
 	FindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error)
 	GetAllCount(ctx context.Context) (int64, error)
 	GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
-	UpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
-	DeletePostSoftById(ctx context.Context, id bson.ObjectID) error
-	ResumePostById(ctx context.Context, id bson.ObjectID) error
+	AdminCreatePost(ctx context.Context, posts *domain.Posts) error
+	AdminUpdatePostStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
+	AdminResumePostById(ctx context.Context, id bson.ObjectID) error
+	AdminDeletePostSoftById(ctx context.Context, id bson.ObjectID) error
+	AdminDeletePostById(ctx context.Context, id bson.ObjectID) error
 }
 
 type PostsRepo struct {
@@ -31,18 +32,17 @@ func NewPostsRepo(dao dao.IPostsDao) *PostsRepo {
 	return &PostsRepo{dao}
 }
 
-func (p *PostsRepo) CreatePost(ctx context.Context, posts *domain.Posts) error {
-	return p.dao.Create(ctx, posts)
-}
-
+// FindPostById 获取特定文章
 func (p *PostsRepo) FindPostById(ctx context.Context, id bson.ObjectID) (*domain.Posts, error) {
 	return p.dao.FindById(ctx, id)
 }
 
+// FindAllPosts 获取所有文章
 func (p *PostsRepo) FindAllPosts(ctx context.Context) ([]*domain.Posts, error) {
 	return p.dao.FindAll(ctx)
 }
 
+// FindPostsByCondition 根据条件获取文章（分页，排序，关键词）
 func (p *PostsRepo) FindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error) {
 	totalCount, err := p.GetAllCountByKeyword(ctx, keyword)
 	if err != nil {
@@ -56,22 +56,37 @@ func (p *PostsRepo) FindPostsByCondition(ctx context.Context, pageNo int64, page
 	return list, totalCount, totalPage, nil
 }
 
+// GetAllCount 获取文章总数
 func (p *PostsRepo) GetAllCount(ctx context.Context) (int64, error) {
 	return p.dao.GetAllCount(ctx)
 }
 
+// GetAllCountByKeyword 用户通过关键词获取文章总数
 func (p *PostsRepo) GetAllCountByKeyword(ctx context.Context, keyword string) (int64, error) {
 	return p.dao.GetAllCountByKeyword(ctx, keyword)
 }
 
-func (p *PostsRepo) UpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error {
-	return p.dao.FindOneAndUpdateStatus(ctx, id, isPublish)
+// AdminCreatePost 管理员创建文章
+func (p *PostsRepo) AdminCreatePost(ctx context.Context, posts *domain.Posts) error {
+	return p.dao.AdminCreate(ctx, posts)
 }
 
-func (p *PostsRepo) DeletePostSoftById(ctx context.Context, id bson.ObjectID) error {
-	return p.dao.DeleteSoftById(ctx, id)
+// AdminUpdatePostStatus 管理员上下架文章
+func (p *PostsRepo) AdminUpdatePostStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error {
+	return p.dao.AdminFindOneAndUpdateStatus(ctx, id, isPublish)
 }
 
-func (p *PostsRepo) ResumePostById(ctx context.Context, id bson.ObjectID) error {
-	return p.dao.ResumePostById(ctx, id)
+// AdminDeletePostSoftById 管理员软删除文章
+func (p *PostsRepo) AdminDeletePostSoftById(ctx context.Context, id bson.ObjectID) error {
+	return p.dao.AdminDeleteSoftById(ctx, id)
+}
+
+// AdminResumePostById 管理员恢复文章
+func (p *PostsRepo) AdminResumePostById(ctx context.Context, id bson.ObjectID) error {
+	return p.dao.AdminResumePostById(ctx, id)
+}
+
+// AdminDeletePostById 管理员硬删除文章
+func (p *PostsRepo) AdminDeletePostById(ctx context.Context, id bson.ObjectID) error {
+	return p.dao.AdminDeletePostById(ctx, id)
 }

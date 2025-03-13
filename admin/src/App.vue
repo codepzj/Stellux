@@ -7,8 +7,9 @@
           : theme.defaultAlgorithm,
       token: {
         fontSize: 15,
-        borderRadius: 6,
-        wireframe: false,
+        wireframe: true,
+        fontSizeSM: 13,
+        borderRadius: 8,
       },
     }"
     :locale="locale"

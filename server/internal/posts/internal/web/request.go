@@ -10,13 +10,17 @@ type PostsReq struct {
 	Category    string   `json:"category" binding:"required"`
 	Tags        []string `json:"tags" binding:"required"`
 	Cover       string   `json:"cover"`
-	IsTop       *bool    `json:"is_top"`
-	IsPublish   *bool    `json:"is_publish"`
+	IsTop       *bool    `json:"is_top" binding:"required"`
+	IsPublish   *bool    `json:"is_publish" binding:"required"`
 }
 
 type UpdatePublishStatusReq struct {
 	ID        string `json:"id" binding:"required"`
 	IsPublish *bool   `json:"is_publish" binding:"required"`
+}
+
+type PostIDReq struct {
+	ID string `uri:"id" binding:"required"`
 }
 
 func toPosts(postsReq PostsReq) *domain.Posts {

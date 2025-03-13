@@ -8,8 +8,8 @@ import {
 } from "@heroui/react";
 import { SearchIconProps } from "@/types/icons";
 import Logo from "./logo";
-import ThemeSwitcher from "./switcher";
 import Link from "next/link";
+import Switcher from "@/components/navbar/switcher";
 
 export const SearchIcon = ({
   size = 24,
@@ -50,7 +50,7 @@ export const SearchIcon = ({
 export default function NavBar() {
   return (
     <Navbar
-      className="
+      className="w-full z-50
         bg-white/80 dark:bg-gray-900/80 
         hover:bg-white dark:hover:bg-gray-800 
         backdrop-blur-md 
@@ -59,7 +59,7 @@ export default function NavBar() {
       isBordered
       maxWidth="2xl"
     >
-      <NavbarBrand>
+      <NavbarBrand className="max-w-[150px] flex items-center justify-center">
         <Logo />
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-6" justify="start">
@@ -91,7 +91,7 @@ export default function NavBar() {
           type="search"
         />
         <NavbarItem>
-          <ThemeSwitcher />
+          <Switcher />
         </NavbarItem>
       </NavbarContent>
     </Navbar>

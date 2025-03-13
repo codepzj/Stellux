@@ -1,5 +1,10 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
+  <a-table
+    :columns="columns"
+    :data-source="posts.list"
+    :scroll="{ x: 1200 }"
+    :expand-column-width="100"
+  >
     <template #headerCell="{ column }">
       <template v-if="column.key === 'title'"> 标题 </template>
     </template>
@@ -17,19 +22,19 @@
       </template>
       <template v-else-if="column.key === 'created_at'">
         <span>
-          {{ record.created_at }}
+          {{ formatTime(record.created_at) }}
         </span>
       </template>
       <template v-else-if="column.key === 'updated_at'">
         <span>
-          {{ record.updated_at }}
+          {{ formatTime(record.updated_at) }}
         </span>
       </template>
       <template v-else-if="column.key === 'category'">
-        <a-tag>{{ record.category }}</a-tag>
+        <a-tag class="text-sm">{{ record.category }}</a-tag>
       </template>
       <template v-else-if="column.key === 'tags'">
-        <a-tag v-for="tag in record.tags" :key="tag">
+        <a-tag class="text-sm" v-for="tag in record.tags" :key="tag">
           {{ tag }}
         </a-tag>
       </template>
@@ -43,30 +48,45 @@
       </template>
       <template v-else-if="column.key === 'is_publish'">
         <span>
-          {{ record.is_publish === 1 ? "已发布" : "未发布" }}
+          {{ record.is_publish ? "已发布" : "未发布" }}
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
-          <a-button type="primary" size="small">编辑</a-button>
+          <a-switch
+            v-model:checked="record.is_publish"
+            @change="(checked:any) => handleChange(checked, record.id)"
+          >
+            <template #checkedChildren><check-outlined /></template>
+            <template #unCheckedChildren><close-outlined /></template>
+          </a-switch>
           <a-divider type="vertical" />
-          <a-button type="danger" size="small">删除</a-button>
+          <a-button>编辑</a-button>
+          <a-divider type="vertical" />
+          <a-button danger @click="handleDelete(record.id)">删除</a-button>
         </span>
       </template>
     </template>
   </a-table>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, reactive } from "vue";
-import type { PostsVO } from "@/api/interfaces/posts";
-import { getPostsByPage } from "@/api/modules/posts";
+import { onMounted, reactive } from "vue";
+import type { PostVO } from "@/api/interfaces/posts";
+import {
+  deletePostSoft,
+  getPostsByPage,
+  updatePostStatus,
+} from "@/api/modules/posts";
 
+import { formatTime } from "@/utils/time";
+import { message } from "ant-design-vue";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons-vue";
 const posts = reactive({
   page_no: 1,
   size: 10,
   total_count: 0,
   total_page: 1,
-  list: [] as PostsVO[],
+  list: [] as PostVO[],
 });
 
 onMounted(async () => {
@@ -77,41 +97,51 @@ onMounted(async () => {
 const columns = [
   {
     name: "标题",
+    width: 200,
     dataIndex: "title",
     key: "title",
+    fixed: "left",
   },
   {
     title: "作者",
+    width: 100,
     dataIndex: "author",
     key: "author",
+    fixed: "left",
   },
   {
     title: "创建时间",
+    width: 200,
     dataIndex: "created_at",
     key: "created_at",
   },
   {
     title: "更新时间",
-    key: "updated_at",
+    width: 200,
     dataIndex: "updated_at",
+    key: "updated_at",
   },
   {
     title: "分类",
+    width: 100,
     key: "category",
     dataIndex: "category",
   },
   {
     title: "标签",
+    width: 200,
     key: "tags",
     dataIndex: "tags",
   },
   {
     title: "封面",
+    width: 100,
     key: "cover",
     dataIndex: "cover",
   },
   {
     title: "状态",
+    width: 100,
     key: "is_publish",
     dataIndex: "is_publish",
   },
@@ -122,17 +152,29 @@ const columns = [
   },
 ];
 
-const data = computed(() =>
-  posts.list.map((post) => ({
-    key: post.id,
-    title: post.title,
-    author: post.author,
-    created_at: post.created_at,
-    updated_at: post.updated_at,
-    category: post.category,
-    tags: post.tags,
-    cover: post.cover,
-    is_publish: post.is_publish,
-  }))
-);
+const handleChange = async (checked: boolean, id: string) => {
+  try {
+    await updatePostStatus({
+      id: id,
+      is_publish: checked,
+    });
+    message.success(checked ? "发布成功" : "下架成功");
+  } catch (err: any) {
+    message.error(err);
+    const post = posts.list.find((item) => item.id === id);
+    if (post) {
+      post.is_publish = !checked;
+    }
+  }
+};
+
+const handleDelete = async (id: string) => {
+  try {
+    const res = await deletePostSoft(id);
+    message.success(res.msg);
+    posts.list = posts.list.filter((item) => item.id !== id);
+  } catch (err: any) {
+    message.error(err);
+  }
+};
 </script>

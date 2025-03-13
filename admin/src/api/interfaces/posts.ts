@@ -1,4 +1,4 @@
-export interface PostsReq {
+export interface PostReq {
   title: string;
   content: string;
   author: string;
@@ -6,11 +6,11 @@ export interface PostsReq {
   category: string;
   tags: string[];
   cover: string;
-  isTop: boolean;
-  isPublish: boolean;
+  is_top: boolean;
+  is_publish: boolean;
 }
 
-export interface PostsVO {
+export interface PostVO {
   id: string;
   created_at: string;
   updated_at: string;
@@ -25,7 +25,7 @@ export interface PostsVO {
   is_publish: boolean;
 }
 
-export interface PostsUpdateStatusReq {
+export interface PostUpdateStatusReq {
   id: string;
   is_publish: boolean;
 }

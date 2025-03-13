@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-gb-web@1.510.0/style.min.css");
-
-body,#app {
-    height: 100vh;
-    font-family: "LXGW WenKai GB", sans-serif;
-}
-
 .message {
     font-size: 0.9rem;
 }

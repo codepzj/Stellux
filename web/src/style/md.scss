@@ -107,3 +107,25 @@
     --color-prettylights-syntax-meta-diff-range: #d2a8ff;
     --color-prettylights-syntax-sublimelinter-gutter-mark: #3d444d;
 }
+
+// 列表显示黑色圆点
+.markdown-body ul,
+.markdown-body ol {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2em;
+    list-style: disc;
+}
+
+// 图片居中
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+    margin: 2em auto;
+}
+
+// 注释字体
+.markdown-body pre .hljs-comment {
+    font-family: "WeiRuanYaHei";
+}
