@@ -37,6 +37,8 @@ server/scripts/mongo/keyFile
 server/static/images/
 admin/node_modules
 
+.env*
+
 *.log*
 
 web/.next
