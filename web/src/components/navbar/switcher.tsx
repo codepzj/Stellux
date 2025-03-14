@@ -57,6 +57,11 @@ export default function Switcher() {
           <MoonIcon className={className} />
         )
       }
+      className={`h-6 ${
+        isDark
+          ? "[&>.bg-default-200]:!bg-[#4e5969]"
+          : "[&>.bg-default-200]:!bg-[#e1e1e1]"
+      }`}
     />
   );
 }

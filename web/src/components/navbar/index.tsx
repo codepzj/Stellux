@@ -1,15 +1,18 @@
 "use client";
+import { useState } from "react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Input,
+  Button,
 } from "@heroui/react";
 import { SearchIconProps } from "@/types/icons";
 import Logo from "./logo";
 import Link from "next/link";
 import Switcher from "@/components/navbar/switcher";
+import { useRouter } from "next/navigation";
 
 export const SearchIcon = ({
   size = 24,
@@ -48,12 +51,20 @@ export const SearchIcon = ({
 };
 
 export default function NavBar() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const router = useRouter();
+  const handleSearch = () => {
+    router.push(`/?keyword=${searchValue}`);
+    setIsExpanded(false); // 搜索时，收缩搜索框
+    setSearchValue(""); // 搜索时，清空搜索框
+  };
   return (
     <Navbar
       className="w-full z-50
-        bg-white/80 dark:bg-gray-900/80 
+        bg-white/20 dark:bg-gray-900/20 
         hover:bg-white dark:hover:bg-gray-800 
-        backdrop-blur-md 
+        backdrop-blur-lg
         transition-all duration-300
         border-gray-300 dark:border-gray-700"
       isBordered
@@ -77,19 +88,49 @@ export default function NavBar() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <Input
-          classNames={{
-            base: "max-w-full sm:max-w-[15rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-md",
-            inputWrapper:
-              "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-          }}
-          placeholder="搜索文章..."
-          size="md"
-          startContent={<SearchIcon size={18} width={18} height={18} />}
-          type="search"
-        />
+        <NavbarItem>
+          <Input
+            classNames={{
+              base: `transition-all duration-300 ${
+                isExpanded ? "w-64" : "w-40"
+              }`,
+              mainWrapper: "h-full",
+              input: "text-sm",
+              inputWrapper:
+                "h-full font-normal text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-700", // 修改颜色
+            }}
+            placeholder="搜索文章..."
+            size="sm"
+            radius="sm"
+            startContent={<SearchIcon size={16} width={16} height={16} />}
+            endContent={
+              isExpanded && (
+                <Button
+                  color="primary"
+                  radius="sm"
+                  className="h-7 text-white text-sm absolute right-0"
+                  onPress={handleSearch} // 按钮点击触发搜索
+                >
+                  搜索
+                </Button>
+              )
+            }
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onFocus={() => setIsExpanded(true)}
+            onBlur={() => {
+              if (!searchValue.trim()) {
+                setIsExpanded(false);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+            type="search"
+          />
+        </NavbarItem>
         <NavbarItem>
           <Switcher />
         </NavbarItem>

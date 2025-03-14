@@ -36,7 +36,9 @@ export default function PostsCard({
             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
               {description}
             </p>
+
             <div className="flex space-x-2 text-xs text-gray-500 dark:text-gray-400">
+              {/* 分类 */}
               <Code className="font-sans">
                 <div className="flex items-center">
                   <FolderOpen size={16} className="mr-1" />
@@ -44,10 +46,11 @@ export default function PostsCard({
                 </div>
               </Code>
 
+              {/* 标签 */}
               <div className="flex items-center">
                 {tags.map((tag) => (
                   <Code className="font-sans mr-1" key={tag}>
-                    <div className="flex items-center">
+                    <div className="flex items-center overflow-hidden">
                       <Tags size={16} className="mr-1" />
                       <span>{tag}</span>
                     </div>
@@ -56,7 +59,7 @@ export default function PostsCard({
               </div>
             </div>
           </div>
-          <div className="w-[100px] h-[100px] overflow-hidden rounded-xl">
+          <div className="hidden md:block w-[100px] h-[100px] rounded-xl">
             <Image
               src={
                 cover ||
