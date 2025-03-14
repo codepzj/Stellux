@@ -22,7 +22,7 @@ export default async function App({
     keyword,
   });
   // 获取文章列表
-  const PostsList = res.data.list;
+  const PostsList = res?.data?.list;
   return res.data.total_count > 0 ? (
     <div className="w-4/5 md:max-w-[800px] mx-auto display flex flex-col items-center">
       {PostsList.map((posts) => (
