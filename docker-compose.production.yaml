@@ -1,0 +1,55 @@
+services:
+  mongo:
+    image: mongo:8.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/production/mongo:/data/db
+      - ./scripts/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+    env_file:
+      - ./server/config/stellux.production.yaml
+    command: --auth --bind_ip_all
+    restart: always
+    networks:
+      - stellux-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    ports:
+      - 9001:9001
+    restart: always
+    networks:
+      - stellux-network
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    depends_on:
+      - server
+    ports:
+      - 9002:4173
+    restart: always
+    networks:
+      - stellux-network
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    depends_on:
+      - server
+    ports:
+      - 9003:9003
+    restart: always
+    networks:
+      - stellux-network
+
+networks:
+  stellux-network:
+    name: stellux-network
+    driver: bridge

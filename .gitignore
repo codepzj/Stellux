@@ -32,12 +32,13 @@ server/.vscode
 admin/.vscode
 
 web/node_modules
-server/scripts/data/
-server/scripts/mongo/keyFile
+server/tmp/
 server/static/images/
 admin/node_modules
 
-.env*
+data/
+
+.env.production
 
 *.log*
 

@@ -1,0 +1,20 @@
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:8.0
+    env_file:
+      - ./server/config/stellux.development.yaml
+    volumes:
+      - ./data/development/mongo:/data/db
+      - ./scripts/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+    ports:
+      - "27017:27017"
+    networks:
+      - stellux-development-network
+    restart: always
+    command: --auth --bind_ip_all
+
+networks:
+  stellux-development-network:
+    name: stellux-development-network
+    driver: bridge
