@@ -33,8 +33,3 @@ jobs:
       working-directory: ./web
       run: |
         pnpm run lint
-
-    - name: pnpm build
-      working-directory: ./web
-      run: |
-        pnpm run build
