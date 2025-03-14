@@ -18,6 +18,3 @@ RUN pnpm build
 EXPOSE 9003
 
 CMD ["pnpm", "start"]
-
-
-

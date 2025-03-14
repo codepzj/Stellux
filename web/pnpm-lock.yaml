@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@heroui/divider':
-        specifier: ^2.2.11
-        version: 2.2.11(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@heroui/react':
         specifier: ^2.7.2
         version: 2.7.2(@types/react@19.0.8)(framer-motion@12.4.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@3.4.17)
@@ -286,13 +283,6 @@ packages:
       react: '>=18 || >=19.0.0-rc.0'
       react-dom: '>=18 || >=19.0.0-rc.0'
 
-  '@heroui/divider@2.2.11':
-    resolution: {integrity: sha512-WMGLY+Eus/vp/hpOzTf3vr4DMTmITKoGxzWscqI9Z5eE7CY48DAv0w++e+fOBdXtVmq3AQBMdV+zCoBm+DA40w==}
-    peerDependencies:
-      '@heroui/theme': '>=2.4.6'
-      react: '>=18 || >=19.0.0-rc.0'
-      react-dom: '>=18 || >=19.0.0-rc.0'
-
   '@heroui/divider@2.2.9':
     resolution: {integrity: sha512-Pab66nKtNNl+Hm3B/xbQx8E0Enel1ReI8e1m72SXIgV4W6Cv4Vsuzz3RjnhmvdBtDXTRCHxNZotFgbbW+V55uw==}
     peerDependencies:
@@ -456,11 +446,6 @@ packages:
     peerDependencies:
       react: '>=18 || >=19.0.0-rc.0'
 
-  '@heroui/react-rsc-utils@2.1.6':
-    resolution: {integrity: sha512-slBWi9g3HdnSNRhoedDhXFybaab5MveAeECzQoj4oJrIlmiezyeZWRKbWR8li2tiZtvBoEr0Xpu/A8hdni15dQ==}
-    peerDependencies:
-      react: '>=18 || >=19.0.0-rc.0'
-
   '@heroui/react-utils@2.1.7':
     resolution: {integrity: sha512-ZjiRMIh5Mg7fhs1QDjhRvq19HncATm3FIE+mtM3wWT7MwEr46KwHbHC2rhuGlBz9cYHCnJxGMibMAnUgl7qeaQ==}
     peerDependencies:
@@ -506,9 +491,6 @@ packages:
 
   '@heroui/shared-utils@2.1.6':
     resolution: {integrity: sha512-Qz6/gyVM+jur+FOnALJBCp6YWt2CCnGu/c3SpxTx7/X9NgqLb+VYZ6XMH1HD9Sf3UzjtHZ/My1Cy6nlw1iO+zw==}
-
-  '@heroui/shared-utils@2.1.7':
-    resolution: {integrity: sha512-1nx7y41P+Bsca7nDC+QFajAoFhSRGvjKhdFeopMQNTvU95L42PD7B0ThjcOretvQD0Ye2TsAEQInwsSgZ6kK/g==}
 
   '@heroui/skeleton@2.2.9':
     resolution: {integrity: sha512-hOoNU8E2khVUd964I3d5VOp95qMIBfedKzZ2i4axqswohuag43kyMiRy4q89u0OpMaEEV2vFCkKPCaiDkIklvw==}
@@ -556,12 +538,6 @@ packages:
       '@heroui/theme': '>=2.4.3'
       react: '>=18 || >=19.0.0-rc.0'
       react-dom: '>=18 || >=19.0.0-rc.0'
-
-  '@heroui/system-rsc@2.3.11':
-    resolution: {integrity: sha512-727eu4FtQWtg6tJ1ZM0JKQayZNoU/4wkLhtncnKQEWr5XDgbBkNfzeXMc7wkREAMoSbCV5+7zEs/qqW5sIH/fw==}
-    peerDependencies:
-      '@heroui/theme': '>=2.4.6'
-      react: '>=18 || >=19.0.0-rc.0'
 
   '@heroui/system-rsc@2.3.9':
     resolution: {integrity: sha512-CF4MMKKkBSHxF+BQ9QfdhXnRio5nM6iOY1g9L+xdbJPmSdWHqm0iAsUpgZX7gs4m8caU/RKkjuZTcq46XfSyug==}
@@ -1459,11 +1435,6 @@ packages:
 
   '@react-types/shared@3.27.0':
     resolution: {integrity: sha512-gvznmLhi6JPEf0bsq7SwRYTHAKKq/wcmKqFez9sRdbED+SPMUmK5omfZ6w3EwUFQHbYUa4zPBYedQ7Knv70RMw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  '@react-types/shared@3.28.0':
-    resolution: {integrity: sha512-9oMEYIDc3sk0G5rysnYvdNrkSg7B04yTKl50HHSZVbokeHpnU0yRmsDaWb9B/5RprcKj8XszEk5guBO8Sa/Q+Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -3762,16 +3733,6 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@heroui/divider@2.2.11(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      '@heroui/react-rsc-utils': 2.1.6(react@19.0.0)
-      '@heroui/shared-utils': 2.1.7
-      '@heroui/system-rsc': 2.3.11(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react@19.0.0)
-      '@heroui/theme': 2.4.9(tailwindcss@3.4.17)
-      '@react-types/shared': 3.28.0(react@19.0.0)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-
   '@heroui/divider@2.2.9(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@heroui/react-rsc-utils': 2.1.5(react@19.0.0)
@@ -4105,10 +4066,6 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  '@heroui/react-rsc-utils@2.1.6(react@19.0.0)':
-    dependencies:
-      react: 19.0.0
-
   '@heroui/react-utils@2.1.7(react@19.0.0)':
     dependencies:
       '@heroui/react-rsc-utils': 2.1.5(react@19.0.0)
@@ -4229,8 +4186,6 @@ snapshots:
 
   '@heroui/shared-utils@2.1.6': {}
 
-  '@heroui/shared-utils@2.1.7': {}
-
   '@heroui/skeleton@2.2.9(@heroui/system@2.4.10(@heroui/theme@2.4.9(tailwindcss@3.4.17))(framer-motion@12.4.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@heroui/react-utils': 2.1.7(react@19.0.0)
@@ -4312,13 +4267,6 @@ snapshots:
       '@react-types/shared': 3.27.0(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-
-  '@heroui/system-rsc@2.3.11(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react@19.0.0)':
-    dependencies:
-      '@heroui/theme': 2.4.9(tailwindcss@3.4.17)
-      '@react-types/shared': 3.28.0(react@19.0.0)
-      clsx: 1.2.1
-      react: 19.0.0
 
   '@heroui/system-rsc@2.3.9(@heroui/theme@2.4.9(tailwindcss@3.4.17))(react@19.0.0)':
     dependencies:
@@ -5589,10 +5537,6 @@ snapshots:
       react: 19.0.0
 
   '@react-types/shared@3.27.0(react@19.0.0)':
-    dependencies:
-      react: 19.0.0
-
-  '@react-types/shared@3.28.0(react@19.0.0)':
     dependencies:
       react: 19.0.0
 

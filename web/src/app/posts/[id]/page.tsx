@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 import StelluxMarkdown from "@/components/markdown/md";
 import { PostVO } from "@/types/posts";
-import { Divider } from "@heroui/divider";
+import { Divider } from "@heroui/react";
 import dayjs from "dayjs";
 
 export default async function PostPage({

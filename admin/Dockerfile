@@ -17,7 +17,5 @@ RUN pnpm build
 
 EXPOSE 4173
 
-CMD ["pnpm", "preview"]
-
-
-
+# 运行项目
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]

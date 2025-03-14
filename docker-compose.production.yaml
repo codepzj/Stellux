@@ -1,6 +1,7 @@
 services:
   mongo:
     image: mongo:8.0
+    container_name: stellux-mongo
     ports:
       - 27017:27017
     volumes:
@@ -14,6 +15,7 @@ services:
       - stellux-network
 
   server:
+    container_name: stellux-server
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -26,6 +28,7 @@ services:
       - stellux-network
 
   admin:
+    container_name: stellux-admin
     build:
       context: ./admin
       dockerfile: Dockerfile
@@ -38,6 +41,7 @@ services:
       - stellux-network
 
   web:
+    container_name: stellux-web
     build:
       context: ./web
       dockerfile: Dockerfile
