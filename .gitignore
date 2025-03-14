@@ -26,30 +26,43 @@ web/.idea
 server/.idea
 admin/.idea
 
+# 编辑器配置
 .vscode/
 web/.vscode
 server/.vscode
 admin/.vscode
 
+# node_modules
 web/node_modules
 server/tmp/
 server/static/images/
 admin/node_modules
 
+# 数据文件
 data/
 
-.env.production
+# 生产环境配置文件
+admin/.env.production
+web/.env.production
+server/config/stellux.production.yaml
 
+# 日志文件
 *.log*
 
+# next.js 构建产物
 web/.next
 
+# 缓存
 .cache
 .output
 
+# 构建产物
 web/dist
 admin/dist
+
+# 测试文件
 *_test.go
 
+# 其他
 */.DS_Store
 .DS_Store
