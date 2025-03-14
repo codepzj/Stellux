@@ -34,7 +34,7 @@ func NewEnv() *EnvConfig {
 	viper.SetDefault("mongodb.MONGO_PASSWORD", "123456")
 	viper.SetDefault("server.PORT", "9001")
 
-	viper.SetConfigFile("./config/stellux.yaml")
+	viper.SetConfigFile("./config/stellux.development.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		Logger.Error("找不到环境配置文件，将使用默认配置", zap.Error(err))

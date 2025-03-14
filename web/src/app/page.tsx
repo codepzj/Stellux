@@ -55,7 +55,9 @@ export default async function App({
 
           <div className="xl:w-[32rem] lg:w-[26rem] md:w-[20rem] text-center mx-4">
             <h2 className="text-2xl sm:text-xl font-bold my-4">
-              未搜索到“{keyword}”相关内容
+              {keyword === undefined
+                ? "暂未发布文章"
+                : `未搜索到“${keyword}”相关内容`}
             </h2>
           </div>
         </div>
