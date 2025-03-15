@@ -3,7 +3,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from 'rehype-raw'
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/atom-one-dark.css";
-import "@/style/md.scss";
+import "@/styles/md.scss";
 import { Terminal } from "lucide-react";
 import CopyButton from "./copy";
 import React from "react";
