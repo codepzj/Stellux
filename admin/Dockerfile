@@ -1,21 +1,32 @@
-FROM node:23-alpine3.21 AS builder
+# 构建阶段
+FROM node:23-alpine AS builder
 
-# 复制package.json和package-lock.json
-COPY package*.json .
+WORKDIR /app
 
-# 配置 npm 镜像源
-RUN npm config set registry https://registry.npmmirror.com
-
+# 安装 pnpm
 RUN npm install -g pnpm
 
-RUN pnpm install
+# 复制包管理文件
+COPY package.json pnpm-lock.yaml ./
 
-# 排除node_modules
+# 配置 npm 镜像并安装依赖
+RUN npm config set registry https://registry.npmmirror.com && \
+    pnpm install --frozen-lockfile
+
+# 复制所有源代码
 COPY . .
 
+# 构建应用
 RUN pnpm build
 
-EXPOSE 4173
+# 使用 Nginx 作为生产环境的基础镜像
+FROM nginx:alpine
 
-# 运行项目
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+# 复制构建输出到 Nginx 的默认静态文件目录
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# 暴露端口
+EXPOSE 80
+
+# 启动 Nginx
+CMD ["nginx", "-g", "daemon off;"]

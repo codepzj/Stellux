@@ -19,13 +19,13 @@ export default function PostsCard({ post }: { post: IPostCard }) {
   const router = useRouter();
   return (
     <Card
-      className="w-full py-6 cursor-pointer transition-all duration-150 active:scale-95 hover:shadow-lg dark:hover:shadow-sky-400/40 active:bg-gray-100 dark:active:bg-gray-800"
+      className="w-full py-4 cursor-pointer transition-all duration-150 active:scale-[0.99] hover:shadow-lg dark:hover:shadow-sky-400/40 active:bg-gray-100 dark:active:bg-gray-800"
       onClick={() => {
         router.push(`/posts/${post.id}`);
       }}
     >
       <CardContent className="flex flex-row-reverse items-center gap-4">
-        <div className="w-[108px] h-[84px] relative">
+        <div className="w-[108px] h-[84px] relative hidden md:block">
           <Image
             src={post.cover || ""}
             alt={post.title}
@@ -38,13 +38,13 @@ export default function PostsCard({ post }: { post: IPostCard }) {
           <CardDescription className="line-clamp-1 my-1">
             {post.description || post.content}
           </CardDescription>
-          <div className="w-full flex justify-between text-xs text-gray-500">
+          <div className="w-full flex justify-between items-center text-xs text-gray-500">
             <div className="flex h-5 items-center space-x-2.5">
               <span>{post.author}</span>
               <Separator orientation="vertical" />
               <span>{timeAgo(post.created_at)}</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 py-1">
               <Badge variant="secondary">
                 <FolderOpen />
                 {post.category}

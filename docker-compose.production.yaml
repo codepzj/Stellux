@@ -35,7 +35,7 @@ services:
     depends_on:
       - server
     ports:
-      - 9002:4173
+      - 9002:80
     restart: always
     networks:
       - stellux-network
