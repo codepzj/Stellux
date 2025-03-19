@@ -1,52 +1,39 @@
-"use client";
-
-import * as React from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
+import { Menu } from "lucide-react";
+import Link from "next/link";
 
-export default function Test() {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-  const [showPanel, setShowPanel] = React.useState<Checked>(false);
-
+export default function DropdownMenuDemo() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button
+          variant="secondary"
+          size="icon"
+          className="focus-visible:ring-0 focus-visible:border-none hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+        >
+          <Menu />
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem
-          checked={showStatusBar}
-          onCheckedChange={setShowStatusBar}
-        >
-          Status Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showActivityBar}
-          onCheckedChange={setShowActivityBar}
-          disabled
-        >
-          Activity Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showPanel}
-          onCheckedChange={setShowPanel}
-        >
-          Panel
-        </DropdownMenuCheckboxItem>
+      <DropdownMenuContent className="w-16 cursor-pointer">
+        <DropdownMenuItem>
+          <Link href="/">🏠首页</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/docs">📝文档</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/notes">📒便签</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/about">👋关于</Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

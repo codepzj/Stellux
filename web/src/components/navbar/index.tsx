@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "./logo";
 import Nav from "./nav";
 import ThemeSwitcher from "./theme-switcher";
+import DropDownMenu from "./drop-menu";
 import Github from "@/components/icons/github";
 export default function NavBar() {
   return (
@@ -17,8 +18,9 @@ export default function NavBar() {
                 <Nav />
               </div>
             </div>
-            <button className="md:hidden">菜单按钮</button>
-
+            <div className="md:hidden">
+              <DropDownMenu />
+            </div>
             <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
               <Button
                 variant="secondary"

@@ -28,7 +28,7 @@ class Request {
       const res = await fetch(`${this.baseUrl}${url}`, options);
       return await res?.json();
     } catch (err: unknown) {
-      console.error("捕获到异常：",err);
+      console.error("捕获到异常：", err);
       return null as unknown as Response<D>;
     }
   }
