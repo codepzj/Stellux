@@ -162,7 +162,7 @@ const handleChange = async (is_publish: boolean, id: string) => {
     });
     if (res.code === 200) {
       message.success(is_publish ? "下架成功" : "发布成功");
-      posts.list = posts.list.map((item) => {
+      posts.list = posts.list.map(item => {
         if (item.id === id) {
           item.is_publish = !is_publish;
         }
@@ -180,7 +180,7 @@ const handleDelete = async (id: string) => {
   try {
     const res = await deletePostSoft(id);
     message.success(res.msg);
-    posts.list = posts.list.filter((item) => item.id !== id);
+    posts.list = posts.list.filter(item => item.id !== id);
   } catch (err: any) {
     message.error(err);
   }

@@ -2,9 +2,9 @@ import type { LoginForm, LoginVO, UserListVO } from "@/api/interfaces/user";
 import type { Response } from "@/api/interfaces/resp";
 import request from "@/utils/request";
 
-export const userLogin: (data: LoginForm) => Promise<Response<LoginVO>> = (
-  data
-) => {
+export const userLogin: (
+  data: LoginForm
+) => Promise<Response<LoginVO>> = data => {
   return request.post("/user/login", data);
 };
 

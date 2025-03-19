@@ -54,13 +54,13 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 :deep(.ant-spin-nested-loading .ant-spin) {
-    position: absolute;
-    top: 0;
-    inset-inline-start: 0;
-    z-index: 999;
-    display: block;
-    width: 100%;
-    height: 100vh;
-    max-height: 100vh;
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  z-index: 999;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
 }
 </style>

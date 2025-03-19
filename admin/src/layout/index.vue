@@ -9,7 +9,7 @@
     >
       <app-header></app-header>
     </a-layout-header>
-    <a-layout style="min-height: calc(100vh - 48px);">
+    <a-layout style="min-height: calc(100vh - 48px)">
       <a-layout-sider
         :style="{
           background: themeStore.tailwindTheme === 'dark' ? '#1d1d1d' : '#fff',

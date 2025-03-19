@@ -14,7 +14,7 @@ export const useTabStore = defineStore(
 
     // 接受route传递的key和title
     const addTab = ({ key, title }: { key: string; title: string }) => {
-      const existingTab = panes.value.find((tabItem) => tabItem.key === key);
+      const existingTab = panes.value.find(tabItem => tabItem.key === key);
       if (!existingTab) {
         panes.value.push({ title, key, closable: true });
       }
@@ -23,7 +23,7 @@ export const useTabStore = defineStore(
 
     // 删除tab
     const removeTab = (targetKey: string) => {
-      panes.value = panes.value.filter((item) => item.key !== targetKey);
+      panes.value = panes.value.filter(item => item.key !== targetKey);
       if (activeKey.value === targetKey) {
         activeKey.value = panes.value[panes.value.length - 1].key;
         router.push({ name: activeKey.value });

@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center justify-center h-screen w-full dark:bg-gray-900">
+  <div
+    class="flex items-center justify-center h-screen w-full dark:bg-gray-900"
+  >
     <a-card class="shadow-md w-96">
       <img
         class="m-auto my-6 w-32"

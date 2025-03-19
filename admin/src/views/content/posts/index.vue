@@ -181,7 +181,6 @@ const rules: Record<string, Rule[]> = {
 };
 </script>
 <style lang="scss">
-
 .md-editor-toolbar-wrapper {
   height: 40px;
   .md-editor-toolbar {

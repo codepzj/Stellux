@@ -55,7 +55,7 @@
         <span>
           <a-switch
             v-model:checked="record.is_publish"
-            @change="(checked:any) => handleChange(checked, record.id)"
+            @change="(checked: any) => handleChange(checked, record.id)"
           >
             <template #checkedChildren><check-outlined /></template>
             <template #unCheckedChildren><close-outlined /></template>
@@ -161,7 +161,7 @@ const handleChange = async (checked: boolean, id: string) => {
     message.success(checked ? "发布成功" : "下架成功");
   } catch (err: any) {
     message.error(err);
-    const post = posts.list.find((item) => item.id === id);
+    const post = posts.list.find(item => item.id === id);
     if (post) {
       post.is_publish = !checked;
     }
@@ -172,7 +172,7 @@ const handleDelete = async (id: string) => {
   try {
     const res = await deletePostSoft(id);
     message.success(res.msg);
-    posts.list = posts.list.filter((item) => item.id !== id);
+    posts.list = posts.list.filter(item => item.id !== id);
   } catch (err: any) {
     message.error(err);
   }

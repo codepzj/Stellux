@@ -57,7 +57,7 @@ const previewImage = ref("");
 const previewTitle = ref("");
 
 const photosWall = computed(() => {
-  return props.list.map((item) => {
+  return props.list.map(item => {
     const imageUrl = baseURL + item.url;
     const reg = /^https?:\/\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)$/i;
     if (reg.test(imageUrl)) {
@@ -82,7 +82,7 @@ function getBase64(file: File) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
+    reader.onerror = error => reject(error);
   });
 }
 

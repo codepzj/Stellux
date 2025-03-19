@@ -56,7 +56,7 @@ const handlePagePagination = (pagination: {
 };
 
 const handleDeletePhoto = (file: UploadFile) => {
-  list.value = list.value.filter((item) => item.uid !== file.uid);
+  list.value = list.value.filter(item => item.uid !== file.uid);
 };
 
 onMounted(async () => {

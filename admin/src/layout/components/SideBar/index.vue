@@ -96,7 +96,7 @@ const onSelect = ({ key }: { key: string }) => {
 
 const onOpenChange = (openKeys: string[]) => {
   const latestOpenKey = openKeys.find(
-    (key) => state.openKeys.indexOf(key) === -1
+    key => state.openKeys.indexOf(key) === -1
   );
   if (
     typeof latestOpenKey === "string" &&
