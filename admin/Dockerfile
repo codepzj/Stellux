@@ -19,14 +19,7 @@ COPY . .
 # 构建应用
 RUN pnpm build
 
-# 使用 Nginx 作为生产环境的基础镜像
-FROM nginx:alpine
-
-# 复制构建输出到 Nginx 的默认静态文件目录
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# 暴露端口
-EXPOSE 80
+EXPOSE 9002
 
 # 启动 Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["pnpm", "preview"]
