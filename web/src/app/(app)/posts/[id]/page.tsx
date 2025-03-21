@@ -3,8 +3,8 @@ import { Book, Clock } from "lucide-react";
 
 import request from "@/utils/request";
 import StelluxMarkdown from "@/components/markdown/md";
-import { getTableOfContents } from "@/lib/toc"
-import { DashboardTableOfContents } from "@/components/toc"
+import { getTableOfContents } from "@/lib/toc";
+import { DashboardTableOfContents } from "@/components/toc";
 
 import { timeAgo, readTime } from "@/utils/time";
 import { PostVO } from "@/types/posts";
@@ -26,7 +26,9 @@ export default async function PostPage({
       <div className="max-w-[850px] w-full">
         <h1 className="text-4xl font-bold my-4">{data.title}</h1>
         <div className="h-4 flex justify-start items-center gap-3 text-sm text-gray-500">
-          <span className="text-gray-700 dark:text-slate-400">{data.author}</span>
+          <span className="text-gray-700 dark:text-slate-400">
+            {data.author}
+          </span>
           <span>{timeAgo(data.created_at)}</span>
           <span className="flex items-center gap-1">
             <Book size={14} /> {words}字

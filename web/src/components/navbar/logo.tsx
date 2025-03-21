@@ -10,14 +10,16 @@ export default function Logo() {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
   const mounted = useMounted();
-  return mounted && (
-    <Image
-      src={resolvedTheme === "dark" ? DarkLogo : LightLogo}
-      alt="logo"
-      width={128}
-      height={128}
-      className="mr-4 flex items-center cursor-pointer lg:mr-6 hover:scale-95 transition-all duration-300"
-      onClick={() => router.push("/")}
-    />
+  return (
+    mounted && (
+      <Image
+        src={resolvedTheme === "dark" ? DarkLogo : LightLogo}
+        alt="logo"
+        width={128}
+        height={128}
+        className="mr-4 flex items-center cursor-pointer lg:mr-6 hover:scale-95 transition-all duration-300"
+        onClick={() => router.push("/")}
+      />
+    )
   );
 }

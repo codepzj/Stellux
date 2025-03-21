@@ -1,14 +1,14 @@
 // @ts-nocheck
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { TableOfContents } from "@/lib/toc"
-import { cn } from "@/lib/utils"
-import { useMounted } from "@/hooks/use-mounted"
+import { TableOfContents } from "@/lib/toc";
+import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 interface TocProps {
-  toc: TableOfContents
+  toc: TableOfContents;
 }
 
 export function DashboardTableOfContents({ toc }: TocProps) {
@@ -16,18 +16,18 @@ export function DashboardTableOfContents({ toc }: TocProps) {
     () =>
       toc.items
         ? toc.items
-          .flatMap((item) => [item.url, item?.items?.map((item) => item.url)])
-          .flat()
-          .filter(Boolean)
-          .map((id) => id?.split("#")[1])
+            .flatMap(item => [item.url, item?.items?.map(item => item.url)])
+            .flat()
+            .filter(Boolean)
+            .map(id => id?.split("#")[1])
         : [],
     [toc]
-  )
-  const activeHeading = useActiveItem(itemIds)
-  const mounted = useMounted()
+  );
+  const activeHeading = useActiveItem(itemIds);
+  const mounted = useMounted();
 
   if (!toc?.items?.length) {
-    return null
+    return null;
   }
 
   return (
@@ -35,55 +35,61 @@ export function DashboardTableOfContents({ toc }: TocProps) {
       <p className="text-lg font-semibold">目录</p>
       <Tree tree={toc} activeItem={activeHeading} />
     </nav>
-  )
+  );
 }
 
 function useActiveItem(itemIds: string[]) {
-  const [activeId, setActiveId] = React.useState(null)
+  const [activeId, setActiveId] = React.useState(null);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
+            setActiveId(entry.target.id);
           }
-        })
+        });
       },
       { rootMargin: `0% 0% -80% 0%` }
-    )
+    );
 
-    itemIds?.forEach((id) => {
-      const element = document.getElementById(id)
+    itemIds?.forEach(id => {
+      const element = document.getElementById(id);
       if (element) {
-        observer.observe(element)
+        observer.observe(element);
       }
-    })
+    });
 
     return () => {
-      itemIds?.forEach((id) => {
-        const element = document.getElementById(id)
+      itemIds?.forEach(id => {
+        const element = document.getElementById(id);
         if (element) {
-          observer.unobserve(element)
+          observer.unobserve(element);
         }
-      })
-    }
-  }, [itemIds])
+      });
+    };
+  }, [itemIds]);
 
-  return activeId
+  return activeId;
 }
 
 interface TreeProps {
-  tree: TableOfContents
-  level?: number
-  activeItem?: string
+  tree: TableOfContents;
+  level?: number;
+  activeItem?: string;
 }
 
 function Tree({ tree, level = 1, activeItem }: TreeProps) {
   return tree?.items?.length && level < 3 ? (
-    <ul className={cn("m-0 list-none space-y-2", { "pl-2 border-l border-muted": level !== 1 })}>
+    <ul
+      className={cn("m-0 list-none space-y-2", {
+        "pl-2 border-l border-muted": level !== 1,
+      })}
+    >
       {tree.items.map((item, index) => {
-        const isActiveParent = item.items?.some((subItem) => `#${activeItem}` === subItem.url)
+        const isActiveParent = item.items?.some(
+          subItem => `#${activeItem}` === subItem.url
+        );
         return (
           <li key={index} className="relative group pl-2">
             <a
@@ -99,13 +105,18 @@ function Tree({ tree, level = 1, activeItem }: TreeProps) {
               {item.title}
             </a>
             {item.items?.length ? (
-              <ul className={cn("pl-4 border-l border-muted", { "block": isActiveParent, "hidden group-hover:block": !isActiveParent })}>
+              <ul
+                className={cn("pl-4 border-l border-muted", {
+                  block: isActiveParent,
+                  "hidden group-hover:block": !isActiveParent,
+                })}
+              >
                 <Tree tree={item} level={level + 1} activeItem={activeItem} />
               </ul>
             ) : null}
           </li>
-        )
+        );
       })}
     </ul>
-  ) : null
+  ) : null;
 }
