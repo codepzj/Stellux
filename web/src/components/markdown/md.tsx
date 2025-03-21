@@ -8,6 +8,10 @@ import { Terminal } from "lucide-react";
 import CopyButton from "./copy";
 import React from "react";
 
+const replaceSpace = (node: React.ReactNode) => {
+  return node?.toString().toLowerCase().replace(/ /g, "-").replace(".", "");
+};
+
 export default function StelluxMarkdown({ content }: { content: string }) {
   return (
     <div className="markdown-body py-4">
@@ -15,6 +19,21 @@ export default function StelluxMarkdown({ content }: { content: string }) {
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
         remarkPlugins={[remarkGfm]}
         components={{
+          h2: ({ children }) => {
+            return <h2 id={replaceSpace(children)}>{children}</h2>;
+          },
+          h3: ({ children }) => {
+            return <h3 id={replaceSpace(children)}>{children}</h3>;
+          },
+          h4: ({ children }) => {
+            return <h4 id={replaceSpace(children)}>{children}</h4>;
+          },
+          h5: ({ children }) => {
+            return <h5 id={replaceSpace(children)}>{children}</h5>;
+          },
+          h6: ({ children }) => {
+            return <h6 id={replaceSpace(children)}>{children}</h6>;
+          },
           pre: ({ children }) => <pre style={{ padding: "0" }}>{children}</pre>,
           code: ({ node, className, children, ...props }) => {
             // 判断是否为代码块

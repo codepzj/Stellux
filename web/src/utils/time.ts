@@ -27,7 +27,7 @@ export const timeAgo = (time: string) => {
 
 // 计算文章字数和阅读时间
 export const readTime = (content: string) => {
-  const wordsPerMinute = 200;
+  const wordsPerMinute = 500;
   const words = content.length;
   const minutes = Math.ceil(words / wordsPerMinute);
   return { words, minutes };

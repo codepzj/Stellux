@@ -108,6 +108,18 @@
   --color-prettylights-syntax-sublimelinter-gutter-mark: #3d444d;
 }
 
+.markdown-body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: var(--fgColor-default);
+  background-color: var(--bgColor-default);
+  font-family: "LXGW WenKai GB Screen", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
 // 列表显示黑色圆点
 .markdown-body ul,
 .markdown-body ol {
@@ -127,5 +139,5 @@
 
 // 注释字体
 .markdown-body pre .hljs-comment {
-  font-family: "WeiRuanYaHei";
+  font-family: "LXGW WenKai GB Screen", sans-serif;
 }

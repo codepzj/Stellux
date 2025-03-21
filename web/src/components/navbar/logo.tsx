@@ -1,22 +1,23 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import LightLogo from "@/assets/logo/logo-light.png";
+import DarkLogo from "@/assets/logo/logo-dark.png";
+import { useMounted } from "@/hooks/use-mounted";
 
 export default function Logo() {
   const router = useRouter();
-  return (
-    <div
-      className="mr-4 flex items-center cursor-pointer lg:mr-6"
+  const { resolvedTheme } = useTheme();
+  const mounted = useMounted();
+  return mounted && (
+    <Image
+      src={resolvedTheme === "dark" ? DarkLogo : LightLogo}
+      alt="logo"
+      width={128}
+      height={128}
+      className="mr-4 flex items-center cursor-pointer lg:mr-6 hover:scale-95 transition-all duration-300"
       onClick={() => router.push("/")}
-    >
-      <svg fill="none" height="48" width="48" viewBox="0 0 32 32">
-        <path
-          clipRule="evenodd"
-          d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-          fill="currentColor"
-          fillRule="evenodd"
-        />
-      </svg>
-      <div className="text-lg font-bold hidden md:block">Stellux</div>
-    </div>
+    />
   );
 }
