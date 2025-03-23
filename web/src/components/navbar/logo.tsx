@@ -17,7 +17,7 @@ export default function Logo() {
         alt="logo"
         width={128}
         height={128}
-        className="mr-4 flex items-center cursor-pointer lg:mr-6 hover:scale-95 transition-all duration-300"
+        className="mr-4 flex items-center cursor-pointer lg:mr-6 hover:scale-95"
         onClick={() => router.push("/")}
       />
     )

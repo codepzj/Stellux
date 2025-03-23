@@ -2,7 +2,6 @@
 "use client";
 
 import * as React from "react";
-
 import { TableOfContents } from "@/lib/toc";
 import { cn } from "@/lib/utils";
 import { useMounted } from "@/hooks/use-mounted";
@@ -14,19 +13,20 @@ interface TocProps {
 export function DashboardTableOfContents({ toc }: TocProps) {
   const itemIds = React.useMemo(
     () =>
-      toc.items
-        ? toc.items
-            .flatMap(item => [item.url, item?.items?.map(item => item.url)])
-            .flat()
-            .filter(Boolean)
-            .map(id => id?.split("#")[1])
+      toc
+        ? toc
+            .flatMap((item) => [
+              item.url?.replace(/^#/, ""), // 处理 #header-xx
+              ...(item.items?.map((subItem) => subItem.url?.replace(/^#/, "")) || []),
+            ])
+            .filter(Boolean) // 确保非空
         : [],
     [toc]
   );
-  const activeHeading = useActiveItem(itemIds);
-  const mounted = useMounted();
 
-  if (!toc?.items?.length) {
+  const activeHeading = useActiveItem(itemIds);
+
+  if (!toc?.length) {
     return null;
   }
 
@@ -38,13 +38,14 @@ export function DashboardTableOfContents({ toc }: TocProps) {
   );
 }
 
+// 监听滚动位置，确定当前激活的标题
 function useActiveItem(itemIds: string[]) {
   const [activeId, setActiveId] = React.useState(null);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveId(entry.target.id);
           }
@@ -53,7 +54,7 @@ function useActiveItem(itemIds: string[]) {
       { rootMargin: `0% 0% -80% 0%` }
     );
 
-    itemIds?.forEach(id => {
+    itemIds?.forEach((id) => {
       const element = document.getElementById(id);
       if (element) {
         observer.observe(element);
@@ -61,7 +62,7 @@ function useActiveItem(itemIds: string[]) {
     });
 
     return () => {
-      itemIds?.forEach(id => {
+      itemIds?.forEach((id) => {
         const element = document.getElementById(id);
         if (element) {
           observer.unobserve(element);
@@ -80,25 +81,34 @@ interface TreeProps {
 }
 
 function Tree({ tree, level = 1, activeItem }: TreeProps) {
-  return tree?.items?.length && level < 3 ? (
+  function hasActiveChild(items: TableOfContents[], activeItem: string): boolean {
+    return items?.some(
+      (item) =>
+        item.url?.replace(/^#/, "") === activeItem || // 处理 #header-xx
+        (item.items && hasActiveChild(item.items, activeItem))
+    );
+  }
+
+  return tree?.length && level < 3 ? (
     <ul
-      className={cn("m-0 list-none space-y-2", {
-        "pl-2 border-l border-muted": level !== 1,
+      className={cn("m-0 list-none", {
+        "pl-3 border-l border-muted": level === 1, // 只在最外层加边框
       })}
     >
-      {tree.items.map((item, index) => {
-        const isActiveParent = item.items?.some(
-          subItem => `#${activeItem}` === subItem.url
-        );
+      {tree.map((item, index) => {
+        const itemId = item.url?.replace(/^#/, ""); // 处理 #header-xx
+        const isActive = itemId === activeItem;
+        const isActiveParent = hasActiveChild(item.items || [], activeItem);
+
         return (
-          <li key={index} className="relative group pl-2">
+          <li key={index} className="relative group">
             <a
               href={item.url}
               className={cn(
-                "block transition-colors duration-200",
-                "hover:text-primary", // 悬停时高亮
-                item.url === `#${activeItem}`
-                  ? "font-semibold text-primary" // 选中时高亮
+                "block transition-colors duration-200 px-2 py-1",
+                "hover:text-primary",
+                isActive
+                  ? "font-semibold text-primary"
                   : "text-muted-foreground"
               )}
             >
@@ -106,12 +116,15 @@ function Tree({ tree, level = 1, activeItem }: TreeProps) {
             </a>
             {item.items?.length ? (
               <ul
-                className={cn("pl-4 border-l border-muted", {
-                  block: isActiveParent,
-                  "hidden group-hover:block": !isActiveParent,
-                })}
+                className={cn(
+                  "pl-3 transition-all duration-300 ease-in-out",
+                  {
+                    block: isActiveParent || isActive, // 激活时展开
+                    "hidden group-hover:block": !isActiveParent && !isActive, // 非激活项在 hover 时展开
+                  }
+                )}
               >
-                <Tree tree={item} level={level + 1} activeItem={activeItem} />
+                <Tree tree={item.items} level={level + 1} activeItem={activeItem} />
               </ul>
             ) : null}
           </li>

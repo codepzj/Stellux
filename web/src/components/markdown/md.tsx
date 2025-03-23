@@ -13,6 +13,7 @@ const replaceSpace = (node: React.ReactNode) => {
 };
 
 export default function StelluxMarkdown({ content }: { content: string }) {
+  let index = 1;
   return (
     <div className="markdown-body py-4">
       <Markdown
@@ -20,19 +21,19 @@ export default function StelluxMarkdown({ content }: { content: string }) {
         remarkPlugins={[remarkGfm]}
         components={{
           h2: ({ children }) => {
-            return <h2 id={replaceSpace(children)}>{children}</h2>;
+            return <h2 id={`header-${index++}`}>{children}</h2>;
           },
           h3: ({ children }) => {
-            return <h3 id={replaceSpace(children)}>{children}</h3>;
+            return <h3 id={`header-${index++}`}>{children}</h3>;
           },
           h4: ({ children }) => {
-            return <h4 id={replaceSpace(children)}>{children}</h4>;
+            return <h4 id={`header-${index++}`}>{children}</h4>;
           },
           h5: ({ children }) => {
-            return <h5 id={replaceSpace(children)}>{children}</h5>;
+            return <h5 id={`header-${index++}`}>{children}</h5>;
           },
           h6: ({ children }) => {
-            return <h6 id={replaceSpace(children)}>{children}</h6>;
+            return <h6 id={`header-${index++}`}>{children}</h6>;
           },
           pre: ({ children }) => <pre style={{ padding: "0" }}>{children}</pre>,
           code: ({ node, className, children, ...props }) => {

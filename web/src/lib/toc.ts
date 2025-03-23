@@ -63,11 +63,23 @@ function getItems(node, current): Items {
   return {};
 }
 
+const updateUrlsWithIncrement = (items, counter = { count: 1 }) => {
+  return items?.map(item => {
+    const newItem = { ...item, url: `#header-${counter.count++}` };
+
+    if (item.items) {
+      newItem.items = updateUrlsWithIncrement(item.items, counter);
+    }
+
+    return newItem;
+  });
+}
+
 const getToc = () => (node, file) => {
   const table = toc(node);
   const items = getItems(table.map, {});
 
-  file.data = items;
+  file.data = updateUrlsWithIncrement(items.items);
 };
 
 export type TableOfContents = Items;
