@@ -4,7 +4,7 @@
       v-model:value="configForm.title"
       addon-before="标题"
       show-count
-      :maxlength="50"
+      :maxlength="20"
       class="w-2/5"
     />
     <div class="flex items-center gap-2">
@@ -15,7 +15,6 @@
   </div>
   <MdEditor
     class="h-[calc(100vh-180px)]"
-    :style="{ fontFamily: 'LXGW WenKai GB Screen' }"
     v-model="configForm.content"
     :theme="theme"
     previewTheme="vuepress"

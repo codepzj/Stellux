@@ -90,7 +90,6 @@ const state = reactive({
 const router = useRouter();
 
 const onSelect = ({ key }: { key: string }) => {
-  console.log(key);
   router.push({ name: key });
 };
 

@@ -7,7 +7,6 @@ import type { PageResponse, Response } from "@/api/interfaces/resp";
 import request from "@/utils/request";
 
 export const createPost: (data: PostReq) => Promise<Response<any>> = data => {
-  console.log("data", data);
   return request.post("/admin-api/posts/create", data);
 };
 

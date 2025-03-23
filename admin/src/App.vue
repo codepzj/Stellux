@@ -48,7 +48,6 @@ const spinning = computed(() => systemStore.spinning);
 const tip = computed(() => systemStore.tip);
 onMounted(() => {
   themeStore.initTheme();
-  console.log(themeStore.tailwindTheme);
 });
 </script>
 
