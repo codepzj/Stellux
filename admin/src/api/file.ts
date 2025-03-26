@@ -1,7 +1,7 @@
 import request from "@/utils/request";
-import type { PageResponse, Response } from "@/api/interfaces/resp";
+import type { PageResponse, Response } from "@/types/response";
 import type { UploadFile } from "ant-design-vue/lib/upload/interface";
-import type { IFile } from "@/api/interfaces/file";
+import type { IFile } from "@/types/file";
 export const uploadPicturesLocal: (data: {
   files: UploadFile[];
 }) => Promise<Response<any>> = ({ files }: { files: UploadFile[] }) => {

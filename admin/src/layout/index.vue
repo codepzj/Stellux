@@ -11,6 +11,7 @@
     </a-layout-header>
     <a-layout style="min-height: calc(100vh - 48px)">
       <a-layout-sider
+        :collapsed="width<768"
         :style="{
           background: themeStore.tailwindTheme === 'dark' ? '#1d1d1d' : '#fff',
         }"
@@ -34,6 +35,10 @@ import AppHeader from "./components/AppHeader.vue";
 import AppMain from "./components/AppMain.vue";
 import { useThemeStore } from "@/store/theme";
 const themeStore = useThemeStore();
+import { useWindowSize } from "@vueuse/core";
+
+const { width } = useWindowSize();
+
 </script>
 
 <style lang="scss" scoped></style>

@@ -2,8 +2,8 @@ import type {
   PostReq,
   PostUpdateStatusReq,
   PostVO,
-} from "@/api/interfaces/posts";
-import type { PageReq, PageResponse, Response } from "@/api/interfaces/resp";
+} from "@/types/posts";
+import type { PageReq, PageResponse, Response } from "@/types/response";
 import request from "@/utils/request";
 
 export const createPost: (data: PostReq) => Promise<Response<any>> = data => {

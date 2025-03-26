@@ -71,12 +71,12 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
-import type { PostVO } from "@/api/interfaces/posts";
+import type { PostVO } from "@/types/posts";
 import {
   deletePostSoft,
   getPostsByPage,
   updatePostStatus,
-} from "@/api/modules/posts";
+} from "@/api/posts";
 
 import { formatTime } from "@/utils/time";
 import { message } from "ant-design-vue";

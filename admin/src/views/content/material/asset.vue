@@ -17,8 +17,8 @@
 import { onMounted, ref } from "vue";
 import PhotoWall from "./components/photo-wall.vue";
 import UploadModal from "./components/upload-modal.vue";
-import { getFilesByPage } from "@/api/modules/file";
-import type { IFile } from "@/api/interfaces/file";
+import { getFilesByPage } from "@/api/file";
+import type { IFile } from "@/types/file";
 import { message, type UploadFile } from "ant-design-vue";
 import { useSystemStore } from "@/store/system";
 

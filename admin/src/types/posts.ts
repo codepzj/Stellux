@@ -29,3 +29,8 @@ export interface PostUpdateStatusReq {
   id: string;
   is_publish: boolean;
 }
+
+export interface PostLabel {
+  label: string;
+  value: string;
+}

@@ -1,5 +1,5 @@
-import type { LoginForm, LoginVO, UserListVO } from "@/api/interfaces/user";
-import type { Response } from "@/api/interfaces/resp";
+import type { LoginForm, LoginVO, UserListVO } from "@/types/user";
+import type { Response } from "@/types/response";
 import request from "@/utils/request";
 
 export const userLogin: (

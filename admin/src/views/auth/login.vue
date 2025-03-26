@@ -65,12 +65,12 @@
 import { reactive, computed } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import type { LoginForm, LoginVO } from "@/api/interfaces/user";
-import { userLogin } from "@/api/modules/user";
+import type { LoginForm, LoginVO } from "@/types/user";
+import { userLogin } from "@/api/user";
 import { useUserStore } from "@/store/user";
 import darkLogo from "@/assets/logo/logo-dark.png";
 import lightLogo from "@/assets/logo/logo-light.png";
-import type { Response } from "@/api/interfaces/resp";
+import type { Response } from "@/types/response";
 import { useRouter } from "vue-router";
 import { useThemeStore } from "@/store/theme";
 

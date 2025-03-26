@@ -39,8 +39,8 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import type { UserListVO } from "@/api/interfaces/user";
-import { getUserList } from "@/api/modules/user";
+import type { UserListVO } from "@/types/user";
+import { getUserList } from "@/api/user";
 import { message } from "ant-design-vue";
 import { formatTime } from "@/utils/time";
 const userList = ref<UserListVO>([]);

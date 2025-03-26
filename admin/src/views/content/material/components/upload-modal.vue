@@ -42,7 +42,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { deletePhotoByUid, uploadPicturesLocal } from "@/api/modules/file";
+import { deletePhotoByUid, uploadPicturesLocal } from "@/api/file";
 import { message, type UploadFile } from "ant-design-vue";
 import { InboxOutlined } from "@ant-design/icons-vue";
 import type { UploadProps } from "ant-design-vue/lib/upload/interface";

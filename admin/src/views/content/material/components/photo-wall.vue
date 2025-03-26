@@ -34,9 +34,9 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
-import type { IFile } from "@/api/interfaces/file";
+import type { IFile } from "@/types/file";
 import { message, type UploadFile } from "ant-design-vue";
-import { deletePhotoByUid } from "@/api/modules/file";
+import { deletePhotoByUid } from "@/api/file";
 
 const props = defineProps<{
   current: number;
@@ -222,17 +222,11 @@ function getBase64(file: File) {
     align-items: center;
   }
 }
-:deep(
-  .ant-upload-wrapper.ant-upload-picture-card-wrapper
-    .ant-upload-list.ant-upload-list-picture-card
-    .ant-upload-list-item
-) {
-  padding: 16px;
-  &::before {
-    width: calc(100% - 32px);
-    height: calc(100% - 32px);
-  }
+
+:deep(.ant-upload-list-picture-card .ant-upload-list-item::before) {
+  border-radius: 0 25px;
 }
+
 :deep(
   .ant-upload-wrapper.ant-upload-picture-card-wrapper
     .ant-upload-list-item.ant-upload-list-item-done.selected
@@ -240,12 +234,4 @@ function getBase64(file: File) {
   border: 1px dashed #1890ff;
 }
 
-:deep(
-  .ant-upload-wrapper.ant-upload-picture-card-wrapper
-    .ant-upload-list.ant-upload-list-picture-card
-    .ant-upload-list-item-container
-) {
-  width: 132px;
-  height: 132px;
-}
 </style>
