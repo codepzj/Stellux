@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-[calc(100vh-56px)] overflow-y-scroll">
+  <div style="padding-right: 15px">
     <router-view></router-view>
   </div>
 </template>

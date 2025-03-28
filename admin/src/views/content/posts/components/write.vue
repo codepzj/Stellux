@@ -6,7 +6,7 @@
       addon-before="标题"
       show-count
       :maxlength="50"
-      class="w-2/5"
+      class="md:w-2/5 w-[300px]"
       @change="updateTitle"
     />
     <slot name="action" />

@@ -1,109 +1,116 @@
 <template>
   <div>
     <a-menu
-      v-model:selectedKeys="state.selectedKeys"
+      v-model:selectedKeys="sidebarStore.selectedKeys"
       mode="inline"
-      :open-keys="state.openKeys"
-      :items="items"
+      :open-keys="sidebarStore.openKeys"
+      :items="menuItems"
       @openChange="onOpenChange"
       @select="onSelect"
       :style="{ height: '100%', borderRight: 0 }"
     ></a-menu>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { VueElement, h, reactive } from "vue";
+import { computed, h } from "vue";
 import { useRouter } from "vue-router";
-import {
-  HomeOutlined,
-  UserOutlined,
-  AppstoreOutlined,
-  InteractionOutlined,
-  LineChartOutlined,
-  BellOutlined,
-  SettingOutlined,
-} from "@ant-design/icons-vue";
+import { routes } from "@/router/router";
+import { useSidebarStore } from "@/store/sidebar";
 import type { ItemType } from "ant-design-vue";
+import type { RouteRecordRaw } from "vue-router";
+import type { VNodeChild } from "vue";
+import * as Icons from "@ant-design/icons-vue"; // Import all icons dynamically
+
+type MenuItemType = {
+  key: string;
+  label: string;
+  children?: MenuItemType[];
+  icon?: () => VNodeChild;
+  type?: "group";
+} & Omit<ItemType, "key" | "label" | "children" | "icon" | "type">;
 
 function getItem(
-  label: VueElement | string,
+  label: string,
   key: string,
-  icon?: any,
-  children?: ItemType[],
+  icon?: string,
+  children?: MenuItemType[],
   type?: "group"
-): ItemType {
+): MenuItemType {
   return {
-    key: key.charAt(0).toUpperCase() + key.slice(1), // 将key改为大驼峰
-    icon,
+    key,
+    icon:
+      icon && Icons[icon as keyof typeof Icons]
+        ? () => h(Icons[icon as keyof typeof Icons])
+        : undefined,
     children,
     label,
     type,
-  } as ItemType;
+  };
 }
 
-const items: ItemType[] = reactive([
-  getItem("仪表盘", "Dashboard", () => h(HomeOutlined)),
-  getItem("用户管理", "User", () => h(UserOutlined), [
-    getItem("用户列表", "UserList", null),
-    getItem("用户角色", "UserRole", null),
-  ]),
-  getItem("内容管理", "Content", () => h(AppstoreOutlined), [
-    getItem("发布文章", "PublishArticle", null),
-    getItem("文章列表", "ArticleList", null),
-    getItem("草稿箱", "Draft", null),
-    getItem("素材库", "MaterialLibrary", null),
-    getItem("回收站", "RecycleBin", null),
-  ]),
-  getItem("互动管理", "Interaction", () => h(InteractionOutlined), [
-    getItem("评论管理", "Comment", null),
-    getItem("点赞管理", "Like", null),
-    getItem("私信管理", "Message", null),
-  ]),
-  getItem("数据分析", "Data", () => h(LineChartOutlined), [
-    getItem("文章统计", "ArticleStatistics", null),
-    getItem("用户统计", "UserStatistics", null),
-    getItem("互动统计", "InteractionStatistics", null),
-  ]),
-  getItem("通知中心", "Notice", () => h(BellOutlined), [
-    getItem("系统通知", "SystemNotifications", null),
-    getItem("用户通知", "UserNotifications", null),
-  ]),
-  getItem("系统设置", "System", () => h(SettingOutlined), [
-    getItem("系统设置", "SystemSettings", null),
-  ]),
-]);
+const menuItems = computed(() => {
+  const mainRoute = routes.find((r): r is RouteRecordRaw => r.path === "/");
+  if (!mainRoute || !mainRoute.children) return [];
 
-const state = reactive({
-  rootSubmenuKeys: [
-    "Dashboard",
-    "User",
-    "Content",
-    "Interaction",
-    "Data",
-    "Notice",
-    "System",
-  ],
-  openKeys: ["User", "Content"],
-  selectedKeys: [],
+  const generateMenuItems = (route: RouteRecordRaw): MenuItemType | null => {
+    if (!route.name || !route.meta?.title || route.meta.hidden === true) {
+      return null;
+    }
+
+    const hasComponent = !!route.component;
+    const childrenRoutes = route.children?.filter(
+      (child): child is RouteRecordRaw =>
+        !!child.name && !!child.meta?.title && child.meta.hidden !== true
+    );
+
+    const itemChildren = childrenRoutes
+      ?.map((child) => generateMenuItems(child))
+      .filter((item): item is MenuItemType => item !== null);
+
+    if (!hasComponent && (!itemChildren || itemChildren.length === 0)) {
+      return null;
+    }
+
+    return getItem(
+      route.meta.title as string,
+      route.name.toString(),
+      route.meta.icon as string | undefined,
+      itemChildren?.length ? itemChildren : undefined
+    );
+  };
+
+  return mainRoute.children
+    .map((route) => generateMenuItems(route))
+    .filter((item): item is MenuItemType => item !== null);
 });
+
+const sidebarStore = useSidebarStore();
+
+const rootSubmenuKeys = computed(() =>
+  menuItems.value
+    .filter((item): item is MenuItemType => !!item.children)
+    .map((item) => item.key)
+);
 
 const router = useRouter();
 
 const onSelect = ({ key }: { key: string }) => {
+  sidebarStore.setSelectedKeys([key]);
   router.push({ name: key });
 };
 
 const onOpenChange = (openKeys: string[]) => {
   const latestOpenKey = openKeys.find(
-    key => state.openKeys.indexOf(key) === -1
+    (key) => sidebarStore.openKeys.indexOf(key) === -1
   );
   if (
     typeof latestOpenKey === "string" &&
-    state.rootSubmenuKeys.indexOf(latestOpenKey) === -1
+    rootSubmenuKeys.value.indexOf(latestOpenKey) === -1
   ) {
-    state.openKeys = openKeys;
+    sidebarStore.setOpenKeys(openKeys);
   } else {
-    state.openKeys = latestOpenKey ? [latestOpenKey] : [];
+    sidebarStore.setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
   }
 };
 </script>

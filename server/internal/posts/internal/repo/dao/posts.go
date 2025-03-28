@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/codepzj/Stellux/server/global"
@@ -23,6 +24,7 @@ type IPostsDao interface {
 	AdminGetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
 	AdminFindOneAndUpdateStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 	AdminCreate(ctx context.Context, posts *domain.Posts) error
+	AdminUpdate(ctx context.Context, posts *domain.Posts) error
 	AdminResumePostById(ctx context.Context, id bson.ObjectID) error
 	AdminDeleteSoftById(ctx context.Context, id bson.ObjectID) error
 	AdminDeletePostById(ctx context.Context, id bson.ObjectID) error
@@ -141,6 +143,14 @@ func (p *PostsDao) AdminGetAllCountByKeyword(ctx context.Context, keyword string
 	return p.postColl.CountDocuments(ctx, filter)
 }
 
+// 管理员查看被软删除文章
+// func (p *PostsDao) AdminFindListByDeleted(ctx context.Context, skip int64, limit int64, field string, order int) ([]*domain.Posts, error) {
+// 	findOptions := options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{field: order})
+// 	cursor, err := p.postColl.Find(ctx, bson.D{{Key: "deleted_at", Value: bson.M{"$ne": nil}}}, findOptions)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// }
 // AdminCreate 管理员创建文章
 func (p *PostsDao) AdminCreate(ctx context.Context, posts *domain.Posts) error {
 	posts.ID = bson.NewObjectID()
@@ -151,6 +161,17 @@ func (p *PostsDao) AdminCreate(ctx context.Context, posts *domain.Posts) error {
 		return errors.Wrap(err, "添加文章失败")
 	}
 	return nil
+}
+
+// AdminUpdate 管理员更新文章
+func (p *PostsDao) AdminUpdate(ctx context.Context, posts *domain.Posts) error {
+	posts.UpdatedAt = time.Now()
+	fmt.Println("post", posts)
+	result, err := p.postColl.UpdateOne(ctx, bson.M{"_id": posts.ID}, bson.M{"$set": posts})
+	if result.ModifiedCount == 0 {
+		return errors.New("更新条数为0，更新失败")
+	}
+	return err
 }
 
 // AdminFindOneAndUpdateStatus 管理员上下架文章

@@ -1,9 +1,27 @@
 <template>
+  <div class="flex justify-between items-center my-4">
+    <div class="flex items-center gap-2">
+      <a-button>分类</a-button>
+      <a-button>标签</a-button>
+      <a-button danger @click="">回收站</a-button>
+    </div>
+    <div class="flex items-center gap-2">
+      <a-input-search
+        v-model:value="searchText"
+        placeholder="搜索"
+        style="width: 225px"
+        enter-button
+        @search="onSearch"
+      />
+    </div>
+  </div>
   <a-table
     :columns="columns"
-    :data-source="posts.list"
-    :scroll="{ x: 1200 }"
-    :expand-column-width="100"
+    :data-source="postList"
+    :row-selection="{
+      selectedRowKeys: tableSelectedRowKeys,
+      onChange: onSelectChange,
+    }"
   >
     <template #headerCell="{ column }">
       <template v-if="column.key === 'title'"> 标题 </template>
@@ -11,10 +29,16 @@
 
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'title'">
-        <a>
-          {{ record.title }}
-        </a>
+        <div class="flex items-center gap-2">
+          <a>{{ record.title }}</a>
+          <span
+            v-if="!record.is_publish"
+            id="title-status"
+            class="inline-block w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"
+          ></span>
+        </div>
       </template>
+
       <template v-else-if="column.key === 'author'">
         <span>
           {{ record.author }}
@@ -48,7 +72,8 @@
       </template>
       <template v-else-if="column.key === 'is_publish'">
         <span>
-          {{ record.is_publish ? "已发布" : "未发布" }}
+          <a-tag v-if="record.is_publish" color="success"> 已发布 </a-tag>
+          <a-tag v-else color="red"> 未发布 </a-tag>
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
@@ -59,7 +84,13 @@
             >{{ record.is_publish ? "下架" : "发布" }}</a-button
           >
           <a-divider type="vertical" />
-          <a-button size="small">编辑</a-button>
+          <a-button
+            size="small"
+            @click="
+              $router.push({ name: 'EditArticle', params: { id: record.id } })
+            "
+            >编辑</a-button
+          >
           <a-divider type="vertical" />
           <a-button size="small" danger @click="handleDelete(record.id)"
             >删除</a-button
@@ -70,17 +101,16 @@
   </a-table>
 </template>
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import type { PostVO } from "@/types/posts";
-import {
-  deletePostSoft,
-  getPostsByPage,
-  updatePostStatus,
-} from "@/api/posts";
+import { deletePostSoft, getPostsByPage, updatePostStatus } from "@/api/posts";
 
 import { formatTime } from "@/utils/time";
 import { message } from "ant-design-vue";
 
+const searchText = ref("");
+// 表格选中的行
+const tableSelectedRowKeys = ref<string[]>([]);
 const posts = reactive({
   page_no: 1,
   size: 10,
@@ -88,6 +118,24 @@ const posts = reactive({
   total_page: 1,
   list: [] as PostVO[],
 });
+
+// 计算属性，将posts.list中的每一项添加key属性
+const postList = computed(() => {
+  return posts.list.map(item => {
+    return {
+      ...item,
+      key: item.id,
+    };
+  });
+});
+const onSearch = (value: string) => {
+  console.log(value);
+};
+
+const onSelectChange = (selectedRowKeys: string[]) => {
+  console.log(selectedRowKeys);
+  tableSelectedRowKeys.value = selectedRowKeys;
+};
 
 onMounted(async () => {
   const res = await getPostsByPage({
@@ -110,7 +158,6 @@ const columns = [
     width: 100,
     dataIndex: "author",
     key: "author",
-    fixed: "left",
   },
   {
     title: "创建时间",
@@ -147,10 +194,11 @@ const columns = [
     width: 100,
     key: "is_publish",
     dataIndex: "is_publish",
+    fixed: "right",
   },
   {
     title: "操作",
-    width: 250,
+    width: 500,
     key: "action",
     dataIndex: "action",
     fixed: "right",
@@ -189,3 +237,17 @@ const handleDelete = async (id: string) => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+:deep(.anticon.anticon-search) {
+  display: inline-flex;
+}
+#title-status::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+</style>

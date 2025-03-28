@@ -18,6 +18,7 @@ type IPostHandler interface {
 	FindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error)
 	AdminFindPostsByCondition(ctx *gin.Context, page wrap.Page) (*wrap.Response[any], error)
 	AdminUpdatePostsStatus(ctx *gin.Context, updatePublishStatusReq UpdatePublishStatusReq) (*wrap.Response[any], error)
+	AdminUpdatePost(ctx *gin.Context, updatePostReq UpdatePostReq) (*wrap.Response[any], error)
 	AdminCreatePost(ctx *gin.Context, postsReq PostsReq) (*wrap.Response[any], error)
 	AdminResumePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
 	DeletePostSoftById(ctx *gin.Context) (*wrap.Response[any], error)
@@ -41,6 +42,7 @@ func (h *PostsHandler) RegisterGinRoutes(router *gin.Engine) {
 	{
 		adminPostsGroup.POST("/list", wrap.WrapWithBody(h.AdminFindPostsByCondition)) // 管理员根据条件获取文章（分页，排序，关键词，不区分发布）
 		adminPostsGroup.POST("/create", wrap.WrapWithBody(h.AdminCreatePost))         // 管理员创建文章
+		adminPostsGroup.PUT("/update", wrap.WrapWithBody(h.AdminUpdatePost))         // 管理员更新文章
 		adminPostsGroup.PATCH("/status", wrap.WrapWithBody(h.AdminUpdatePostsStatus)) // 管理员更新文章发布状态
 		adminPostsGroup.PATCH("/resume/:id", wrap.WrapWithUri(h.AdminResumePostSoftById))    // 管理员恢复删除文章
 		adminPostsGroup.PATCH("/delete/:id", wrap.WrapWithUri(h.AdminDeletePostSoftById))    // 管理员软删除文章
@@ -111,6 +113,15 @@ func (h *PostsHandler) AdminCreatePost(ctx *gin.Context, postsReq PostsReq) (*wr
 		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
 	}
 	return wrap.Success[any](nil, "新增文章成功"), nil
+}
+
+// AdminUpdatePost 管理员更新文章
+func (h *PostsHandler) AdminUpdatePost(ctx *gin.Context, updatePostReq UpdatePostReq) (*wrap.Response[any], error) {
+	err := h.serv.AdminUpdatePost(ctx, updatePostReqToPosts(updatePostReq))
+	if err != nil {
+		return wrap.Fail[any](http.StatusBadRequest, nil, err.Error()), err
+	}
+	return wrap.Success[any](nil, "更新文章成功"), nil
 }
 
 // AdminUpdatePostsStatus 管理员更新文章发布状态

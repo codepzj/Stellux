@@ -18,6 +18,7 @@ type IPostsService interface {
 	AdminUpdatePostStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 	AdminDeletePostSoftById(ctx context.Context, id bson.ObjectID) error
 	AdminCreatePost(ctx context.Context, posts *domain.Posts) error
+	AdminUpdatePost(ctx context.Context, posts *domain.Posts) error
 	AdminResumePostSoftById(ctx context.Context, id bson.ObjectID) error
 }
 
@@ -74,6 +75,11 @@ func (p *PostsService) AdminFindPostByCondition(ctx context.Context, page *wrap.
 // AdminCreatePost 管理员创建文章
 func (p *PostsService) AdminCreatePost(ctx context.Context, posts *domain.Posts) error {
 	return p.repo.AdminCreatePost(ctx, posts)
+}
+
+// AdminUpdatePost 管理员更新文章
+func (p *PostsService) AdminUpdatePost(ctx context.Context, posts *domain.Posts) error {
+	return p.repo.AdminUpdatePost(ctx, posts)
 }
 
 // AdminUpdatePostStatus 管理员上下架文章

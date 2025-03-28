@@ -18,6 +18,7 @@ type IPostsRepo interface {
 	AdminFindPostsByCondition(ctx context.Context, pageNo int64, pageSize int64, keyword string, field string, order int) ([]*domain.Posts, int64, int64, error)
 	AdminGetAllCountByKeyword(ctx context.Context, keyword string) (int64, error)
 	AdminCreatePost(ctx context.Context, posts *domain.Posts) error
+	AdminUpdatePost(ctx context.Context, posts *domain.Posts) error
 	AdminUpdatePostStatus(ctx context.Context, id bson.ObjectID, isPublish *bool) error
 	AdminResumePostById(ctx context.Context, id bson.ObjectID) error
 	AdminDeletePostSoftById(ctx context.Context, id bson.ObjectID) error
@@ -90,6 +91,11 @@ func (p *PostsRepo) AdminGetAllCountByKeyword(ctx context.Context, keyword strin
 // AdminCreatePost 管理员创建文章
 func (p *PostsRepo) AdminCreatePost(ctx context.Context, posts *domain.Posts) error {
 	return p.dao.AdminCreate(ctx, posts)
+}
+
+// AdminUpdatePost 管理员更新文章
+func (p *PostsRepo) AdminUpdatePost(ctx context.Context, posts *domain.Posts) error {
+	return p.dao.AdminUpdate(ctx, posts)
 }
 
 // AdminUpdatePostStatus 管理员上下架文章

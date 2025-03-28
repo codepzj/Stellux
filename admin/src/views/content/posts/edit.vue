@@ -1,4 +1,10 @@
 <template>
+  <div class="flex justify-start items-center gap-2">
+    <a-button @click="$router.back()" class="flex items-center">
+      <RollbackOutlined />返回
+    </a-button>
+    <span class="text-lg font-bold">编辑文章</span>
+  </div>
   <Write
     mode="create"
     v-model:title="form.title"
@@ -19,26 +25,29 @@
     :tags="tags"
   >
     <template #action>
-        <a-button type="text" danger @click="open = false">取消</a-button>
-        <a-button type="text" @click="onSubmitPost">发布</a-button>
+      <a-button type="text" danger @click="open = false">取消</a-button>
+      <a-button type="text" @click="onSubmitPost">更新</a-button>
     </template>
   </Modal>
 </template>
 <script lang="ts" setup>
 import Write from "./components/write.vue";
 import Modal from "./components/modal.vue";
+import { RollbackOutlined } from "@ant-design/icons-vue";
 
-import { reactive, ref } from "vue";
-import type { PostLabel, PostReq, PostVO } from "@/types/posts";
+import { onMounted, reactive, ref } from "vue";
+import type { PostLabel, PostUpdateReq, PostVO } from "@/types/posts";
 import type { Rule } from "ant-design-vue/es/form";
-import { createPost } from "@/api/posts";
+import { getPostById, updatePost } from "@/api/posts";
 import { message } from "ant-design-vue";
 import type { Response } from "@/types/response";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
+const route = useRoute();
 const router = useRouter();
 const open = ref(false); // 弹窗状态
-const form = reactive<PostReq>({
+const form = reactive<PostUpdateReq>({
+  id: "",
   title: "",
   content: "",
   author: "",
@@ -80,6 +89,14 @@ const category = ref<PostLabel[]>([
 
 const tags = ref<PostLabel[]>([
   {
+    label: "golang",
+    value: "golang",
+  },
+  {
+    label: "python",
+    value: "python",
+  },
+  {
     label: "Vue",
     value: "vue",
   },
@@ -87,19 +104,21 @@ const tags = ref<PostLabel[]>([
     label: "React",
     value: "react",
   },
-  {
-    label: "JavaScript",
-    value: "javascript",
-  },
 ]);
 
 const onSubmitPost = () => {
-  modalRef.value.validate().then((res: PostReq) => {
-    createPost(res).then((res: Response<PostVO>) => {
+  modalRef.value.validate().then(() => {
+    updatePost(form).then((res: Response<PostVO>) => {
       message.success(res.msg);
       open.value = false;
       router.push("/content/list");
     });
   });
 };
+
+onMounted(async () => {
+  const { id } = route.params as { id: string };
+  const res = await getPostById(id);
+  Object.assign(form, res.data);
+});
 </script>
