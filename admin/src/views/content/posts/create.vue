@@ -19,8 +19,8 @@
     :tags="tags"
   >
     <template #action>
-        <a-button type="text" danger @click="open = false">取消</a-button>
-        <a-button type="text" @click="onSubmitPost">发布</a-button>
+      <a-button type="text" danger @click="open = false">取消</a-button>
+      <a-button type="text" @click="onSubmitPost">发布</a-button>
     </template>
   </Modal>
 </template>

@@ -3,7 +3,7 @@
     <div class="flex items-center gap-2">
       <a-button>分类</a-button>
       <a-button>标签</a-button>
-      <a-button danger @click="">回收站</a-button>
+      <a-button danger>回收站</a-button>
     </div>
     <div class="flex items-center gap-2">
       <a-input-search

@@ -65,7 +65,7 @@ const menuItems = computed(() => {
     );
 
     const itemChildren = childrenRoutes
-      ?.map((child) => generateMenuItems(child))
+      ?.map(child => generateMenuItems(child))
       .filter((item): item is MenuItemType => item !== null);
 
     if (!hasComponent && (!itemChildren || itemChildren.length === 0)) {
@@ -81,7 +81,7 @@ const menuItems = computed(() => {
   };
 
   return mainRoute.children
-    .map((route) => generateMenuItems(route))
+    .map(route => generateMenuItems(route))
     .filter((item): item is MenuItemType => item !== null);
 });
 
@@ -90,7 +90,7 @@ const sidebarStore = useSidebarStore();
 const rootSubmenuKeys = computed(() =>
   menuItems.value
     .filter((item): item is MenuItemType => !!item.children)
-    .map((item) => item.key)
+    .map(item => item.key)
 );
 
 const router = useRouter();
@@ -102,7 +102,7 @@ const onSelect = ({ key }: { key: string }) => {
 
 const onOpenChange = (openKeys: string[]) => {
   const latestOpenKey = openKeys.find(
-    (key) => sidebarStore.openKeys.indexOf(key) === -1
+    key => sidebarStore.openKeys.indexOf(key) === -1
   );
   if (
     typeof latestOpenKey === "string" &&

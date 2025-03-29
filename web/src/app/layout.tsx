@@ -20,9 +20,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col h-screen">
+          <div className="h-screen flex flex-col">
             <NavBar />
-            <div className="flex-1 mt-12">{children}</div>
+            <div className="mt-14">{children}</div>
           </div>
         </ThemeProvider>
       </body>

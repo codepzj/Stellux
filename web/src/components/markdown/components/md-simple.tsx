@@ -4,17 +4,13 @@ import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import "@/styles/md.scss";
 import { Terminal } from "lucide-react";
-import CopyButton from "./copy";
+import CopyButton from "@/components/markdown/components/copy";
 import React from "react";
 
-const replaceSpace = (node: React.ReactNode) => {
-  return node?.toString().toLowerCase().replace(/ /g, "-").replace(".", "");
-};
-
-export default function StelluxMarkdown({ content }: { content: string }) {
+export default function MdSimple({ content }: { content: string }) {
   let index = 1;
   return (
-    <div className="markdown-body py-4">
+    <div className="markdown-body">
       <Markdown
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
         remarkPlugins={[remarkGfm]}

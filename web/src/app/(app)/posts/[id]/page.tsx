@@ -2,9 +2,10 @@ import { Separator } from "@/components/ui/separator";
 import { Book, Clock } from "lucide-react";
 
 import request from "@/utils/request";
-import StelluxMarkdown from "@/components/markdown/md";
+import Md from "@/components/markdown";
+import Toc from "@/components/toc";
+import "md-editor-rt/lib/preview.css";
 import { getTableOfContents } from "@/lib/toc";
-import { DashboardTableOfContents } from "@/components/toc";
 
 import { timeAgo, readTime } from "@/utils/time";
 import { PostVO } from "@/types/posts";
@@ -37,14 +38,14 @@ export default async function PostPage({
             <Clock size={14} /> {minutes}分钟
           </span>
         </div>
-        <Separator className="mt-4" />
-        <StelluxMarkdown content={data.content} />
+        <Separator className="my-4" />
+        <Md content={data.content} />
       </div>
 
       {/* 目录（TOC）固定在右侧 */}
       {toc && (
         <div className="hidden lg:block w-[200px] sticky top-32 h-fit">
-          <DashboardTableOfContents toc={toc} />
+          <Toc toc={toc} />
         </div>
       )}
     </div>

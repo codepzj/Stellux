@@ -26,7 +26,11 @@
       :footer="null"
       @cancel="handleCancel"
     >
-      <img :alt="previewTitle" class="w-full max-w-[800px] max-h-[600px] mx-auto" :src="previewImage" />
+      <img
+        :alt="previewTitle"
+        class="w-full max-w-[800px] max-h-[600px] mx-auto"
+        :src="previewImage"
+      />
     </a-modal>
   </div>
 </template>
@@ -57,7 +61,11 @@ const photosWall = computed(() =>
   props.list.map(item => ({
     uid: item.uid,
     name: item.name,
-    status: /\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)$/i.test(baseURL + item.url) ? "done" : "error",
+    status: /\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|avif)$/i.test(
+      baseURL + item.url
+    )
+      ? "done"
+      : "error",
     url: baseURL + item.url,
     thumbUrl: baseURL + item.url,
   }))
@@ -77,15 +85,18 @@ watch(photosWall, async () => {
 // 添加复选框或单选框
 const addSelectionControls = () => {
   if (!photoWallRef.value) return;
-  const items = Array.from(photoWallRef.value.querySelectorAll(".ant-upload-list-item")) as HTMLElement[];
-  
-  items.forEach((item) => {
+  const items = Array.from(
+    photoWallRef.value.querySelectorAll(".ant-upload-list-item")
+  ) as HTMLElement[];
+
+  items.forEach(item => {
     if (item.querySelector(".selection-control")) return;
 
     const input = document.createElement("input");
     input.className = "selection-control";
-    input.style.cssText = "position: absolute; top: 2px; right: 2px; z-index: 10;";
-    
+    input.style.cssText =
+      "position: absolute; top: 2px; right: 2px; z-index: 10;";
+
     if (props.type === "display") {
       input.type = "checkbox";
       input.onchange = () => toggleMultipleSelection(item, input.checked);
@@ -100,7 +111,10 @@ const addSelectionControls = () => {
 
 // 处理多选
 const toggleMultipleSelection = (item: HTMLElement, checked: boolean) => {
-  const url = item.querySelector(".ant-upload-list-item-thumbnail")?.getAttribute("href") || "";
+  const url =
+    item
+      .querySelector(".ant-upload-list-item-thumbnail")
+      ?.getAttribute("href") || "";
   item.classList.toggle("selected", checked);
 
   selectedPhotos.value = checked
@@ -110,13 +124,20 @@ const toggleMultipleSelection = (item: HTMLElement, checked: boolean) => {
 
 // 处理单选
 const toggleSingleSelection = (item: HTMLElement) => {
-  const url = item.querySelector(".ant-upload-list-item-thumbnail")?.getAttribute("href") || "";
+  const url =
+    item
+      .querySelector(".ant-upload-list-item-thumbnail")
+      ?.getAttribute("href") || "";
 
   // 清空所有选中的
-  const items = Array.from(photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []) as HTMLElement[];
-  items.forEach((otherItem) => {
+  const items = Array.from(
+    photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []
+  ) as HTMLElement[];
+  items.forEach(otherItem => {
     otherItem.classList.remove("selected");
-    const input = otherItem.querySelector(".selection-control") as HTMLInputElement;
+    const input = otherItem.querySelector(
+      ".selection-control"
+    ) as HTMLInputElement;
     if (input) input.checked = false;
   });
 
@@ -131,23 +152,35 @@ const toggleSingleSelection = (item: HTMLElement) => {
 // 全选
 const handleSelectAll = () => {
   if (props.type !== "display") return;
-  const items = Array.from(photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []) as HTMLElement[];
+  const items = Array.from(
+    photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []
+  ) as HTMLElement[];
 
   selectedPhotos.value = items.map(item => {
-    const checkbox = item.querySelector(".selection-control") as HTMLInputElement;
+    const checkbox = item.querySelector(
+      ".selection-control"
+    ) as HTMLInputElement;
     checkbox.checked = true;
     item.classList.add("selected");
-    return item.querySelector(".ant-upload-list-item-thumbnail")?.getAttribute("href") || "";
+    return (
+      item
+        .querySelector(".ant-upload-list-item-thumbnail")
+        ?.getAttribute("href") || ""
+    );
   });
 };
 
 // 取消全选
 const handleSelectNone = () => {
   if (props.type !== "display") return;
-  const items = Array.from(photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []) as HTMLElement[];
+  const items = Array.from(
+    photoWallRef.value?.querySelectorAll(".ant-upload-list-item") || []
+  ) as HTMLElement[];
 
   items.forEach(item => {
-    const checkbox = item.querySelector(".selection-control") as HTMLInputElement;
+    const checkbox = item.querySelector(
+      ".selection-control"
+    ) as HTMLInputElement;
     checkbox.checked = false;
     item.classList.remove("selected");
   });
@@ -156,7 +189,8 @@ const handleSelectNone = () => {
 
 // 预览图片
 const handlePreview = async (file: UploadFile) => {
-  previewImage.value = file.url || (await getBase64(file.originFileObj as File)) || "";
+  previewImage.value =
+    file.url || (await getBase64(file.originFileObj as File)) || "";
   previewVisible.value = true;
   previewTitle.value = file.name || file.url?.split("/").pop() || "";
 };
@@ -168,10 +202,14 @@ const handleCancel = () => {
 };
 
 // 监听选中照片
-watch(selectedPhotos, () => {
-  emit("selected-picture", selectedPhotos.value);
-  console.log(selectedPhotos.value);
-}, { deep: true });
+watch(
+  selectedPhotos,
+  () => {
+    emit("selected-picture", selectedPhotos.value);
+    console.log(selectedPhotos.value);
+  },
+  { deep: true }
+);
 
 // 获取 Base64 格式图片
 const getBase64 = (file: File) =>

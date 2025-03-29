@@ -1,8 +1,7 @@
-<!-- 写文章展示组件 -->
 <template>
   <div class="flex h-14 items-center justify-between">
     <a-input
-      v-model:value="props.title"
+      v-model:value="processedTitle"
       addon-before="标题"
       show-count
       :maxlength="50"
@@ -13,14 +12,15 @@
   </div>
   <MdEditor
     class="h-[calc(100vh-180px)]"
-    v-model="props.content"
+    v-model="processedContent"
     :theme="theme"
     previewTheme="github"
-    @change="updateContent"
+    @change="handleContentChange"
   />
 </template>
+
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useThemeStore } from "@/store/theme";
 import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
@@ -28,7 +28,6 @@ import "md-editor-v3/lib/style.css";
 const themeStore = useThemeStore();
 const theme = computed(() => themeStore.tailwindTheme);
 
-// 文章表单插槽
 const props = defineProps<{
   mode: "create" | "update";
   title?: string;
@@ -37,15 +36,69 @@ const props = defineProps<{
 
 const emit = defineEmits(["update:title", "update:content"]);
 
-// 共享title
-const updateTitle = (e: InputEvent) => {
-  emit("update:title", (e.target as HTMLInputElement).value);
+// 使用 ref 管理处理后的值
+const processedTitle = ref(props.title?.trim() || "");
+const processedContent = ref(props.content?.trim() || "");
+
+// 处理 content 并提取一级标题
+const processContent = (content: string) => {
+  const trimmedContent = (content || "").trim();
+  let newTitle = processedTitle.value;
+  let newContent = trimmedContent;
+
+  // 检查是否有内容
+  if (trimmedContent) {
+    const lines = trimmedContent.split("\n");
+    const firstLine = lines[0].trim();
+
+    // 如果第一行是一级标题，则提取标题并移除该行
+    if (firstLine.startsWith("# ")) {
+      newTitle = firstLine.substring(2).trim();
+      newContent = lines.slice(1).join("\n").trim();
+    }
+  }
+
+  return { newTitle, newContent };
 };
 
-// 共享content
-const updateContent = (value: string) => {
-  emit("update:content", value);
+// 处理 Markdown 编辑器内容变化
+const handleContentChange = (value: string) => {
+  const { newTitle, newContent } = processContent(value);
+  processedTitle.value = newTitle;
+  processedContent.value = newContent;
+  emit("update:title", newTitle);
+  emit("update:content", newContent);
 };
+
+// 处理标题输入框变化
+const updateTitle = (e: InputEvent) => {
+  const newTitle = (e.target as HTMLInputElement).value.trim();
+  processedTitle.value = newTitle;
+  emit("update:title", newTitle);
+};
+
+// 监听 props 变化以同步外部更新
+watch(
+  () => props.content,
+  newContent => {
+    if (newContent?.trim() !== processedContent.value) {
+      const { newTitle, newContent: processed } = processContent(
+        newContent || ""
+      );
+      processedTitle.value = newTitle;
+      processedContent.value = processed;
+    }
+  }
+);
+
+watch(
+  () => props.title,
+  newTitle => {
+    if (newTitle?.trim() !== processedTitle.value) {
+      processedTitle.value = newTitle?.trim() || "";
+    }
+  }
+);
 </script>
 
 <style lang="scss">

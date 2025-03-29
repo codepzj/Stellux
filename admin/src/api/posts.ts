@@ -1,8 +1,4 @@
-import type {
-  PostReq,
-  PostUpdateStatusReq,
-  PostVO,
-} from "@/types/posts";
+import type { PostReq, PostUpdateStatusReq, PostVO } from "@/types/posts";
 import type { PageReq, PageResponse, Response } from "@/types/response";
 import request from "@/utils/request";
 

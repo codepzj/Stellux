@@ -9,6 +9,16 @@
   border-color: hsl(var(--border) / 0.7);
 }
 
+// 点击按钮偏移问题
+body {
+  overflow-y: scroll !important;
+}
+
+html > body[data-scroll-locked] {
+  overflow: visible !important;
+  margin-right: 0 !important;
+}
+
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

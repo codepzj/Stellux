@@ -9,7 +9,7 @@
     >
       <app-header></app-header>
     </a-layout-header>
-    <a-layout style="flex: 1; overflow: hidden;">
+    <a-layout style="flex: 1; overflow: hidden">
       <a-layout-sider
         :collapsed="width < 768"
         :style="{
@@ -18,17 +18,14 @@
       >
         <Sidebar></Sidebar>
       </a-layout-sider>
-      <a-layout style="margin: 0 0 0 15px;">
-        <a-layout-content style="display: flex; flex-direction: column; height: 100%;">
+      <a-layout style="margin: 0 0 0 15px">
+        <a-layout-content
+          style="display: flex; flex-direction: column; height: 100%"
+        >
           <tab
-            style="
-              position: sticky;
-              top: 0;
-              z-index: 10;
-              background: inherit;
-            "
+            style="position: sticky; top: 0; z-index: 10; background: inherit"
           ></tab>
-          <div style="flex: 1; overflow-y: auto;">
+          <div style="flex: 1; overflow-y: auto">
             <app-main></app-main>
           </div>
         </a-layout-content>

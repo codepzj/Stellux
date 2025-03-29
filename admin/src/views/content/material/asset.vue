@@ -3,7 +3,7 @@
     <a-skeleton :loading="systemStore.loading" :paragraph="{ rows: 12 }">
       <PhotoWall :list="list" :mode="selectType" type="display">
         <template #action1>
-          <a-button type="primary" danger @click="">删除</a-button>
+          <a-button type="primary" danger>删除</a-button>
         </template>
         <template #action2>
           <span>
@@ -11,8 +11,7 @@
               v-model:value="selectType"
               style="width: 6em"
               :options="selectTypeOptions"
-              ><template #suffixIcon
-                ><UnorderedListOutlined /></template
+              ><template #suffixIcon><UnorderedListOutlined /></template
             ></a-select>
           </span>
           <UploadModal @update:list="getList" />

@@ -5,30 +5,16 @@ import { Button } from "@/components/ui/button";
 import Logo from "./logo";
 import Nav from "./nav";
 import ThemeSwitcher from "./theme-switcher";
+import MdThemeSwitcher from "./md-theme-switcher";
 import DropDownMenu from "./drop-menu";
 import Github from "@/components/icons/github";
 import clsx from "clsx";
 
 export default function NavBar() {
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setHidden(currentScrollY > lastScrollY && currentScrollY > 50);
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   return (
     <header
       className={clsx(
-        "fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300",
-        hidden ? "-translate-y-full" : "translate-y-0"
+        "fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300"
       )}
     >
       <div className="container-wrapper">
@@ -54,6 +40,7 @@ export default function NavBar() {
               >
                 <Github />
               </Button>
+              <MdThemeSwitcher />
               <ThemeSwitcher />
             </div>
           </div>
