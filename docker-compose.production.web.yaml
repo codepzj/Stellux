@@ -1,0 +1,18 @@
+services:
+  admin:
+    container_name: stellux-admin
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - 9002:9002
+    restart: always
+
+  web:
+    container_name: stellux-web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - 9003:9003
+    restart: always

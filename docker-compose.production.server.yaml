@@ -1,0 +1,27 @@
+services:
+  mongo:
+    image: mongo:8.0
+    container_name: stellux-mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/mongo:/data/db
+      - ./scripts/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+    env_file:
+      - ./server/config/stellux.production.yaml
+    command: --auth --bind_ip_all
+    restart: always
+
+  server:
+    container_name: stellux-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    ports:
+      - 9001:9001
+    restart: always
+    volumes:
+      - ./server/config:/app/config # 挂载配置文件
+      - ./server/static:/app/static # 挂载静态文件

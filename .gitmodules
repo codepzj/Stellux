@@ -1,0 +1,9 @@
+[submodule "admin"]
+	path = admin
+	url = https://github.com/StelluxWiki/Stellux-Admin.git
+[submodule "server"]
+	path = server
+	url = https://github.com/StelluxWiki/Stellux-Server.git
+[submodule "web"]
+	path = web
+	url = https://github.com/StelluxWiki/Stellux-Web.git
