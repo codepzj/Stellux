@@ -3,10 +3,13 @@
 Stellux - 于留白中沉淀，于极简中思索
 
 后端仓库: https://github.com/StelluxWiki/Stellux-Server
+
 前端仓库: https://github.com/StelluxWiki/Stellux-Web
+
 后台仓库: https://github.com/StelluxWiki/Stellux-Admin
 
 项目预览：[https://gowiki.site](https://gowiki.site/)
+
 项目文档：[https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad)
 
 ## 项目部署文档
@@ -14,8 +17,6 @@ Stellux - 于留白中沉淀，于极简中思索
 * 后端部署：[后端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c0c9796f61777ec3e29b0)
 * 后台部署：[后台部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c134096f61777ec3e29b1)
 * 前端部署：[前端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c135c96f61777ec3e29b2)
-
-
 
 ## 项目简介
 
@@ -241,7 +242,6 @@ web
 - 增加更丰富的写作辅助功能（如全文检索、标签联动）
 - 优化移动端体验
 - 增强权限体系及团队协作功能
-
 
 感谢使用 Stellux，欢迎贡献代码和建议，一起打造极致写作体验！  
 项目地址：[https://github.com/StelluxWiki/Stellux](https://github.com/StelluxWiki/Stellux)  
