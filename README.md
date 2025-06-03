@@ -91,7 +91,6 @@ VITE_API_URL=http://localhost:9002/api
 
 ```env
 NEXT_PUBLIC_PROJECT_API=http://localhost:9001
-NEXT_PUBLIC_SITE_URL=http://localhost:9003
 ```
 
 ### 后端
