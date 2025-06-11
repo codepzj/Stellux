@@ -12,4 +12,3 @@ build-all-no-cache:
 	docker-compose -f docker-compose.production.server.yaml build --no-cache
 	docker-compose -f docker-compose.production.web.yaml build --no-cache
 
-
