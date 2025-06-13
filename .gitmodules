@@ -7,3 +7,6 @@
 [submodule "web"]
 	path = web
 	url = https://github.com/StelluxWiki/Stellux-Web.git
+[submodule "react"]
+	path = react
+	url = https://github.com/codepzj/Stellux-React.git
