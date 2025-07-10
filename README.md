@@ -14,9 +14,9 @@ Stellux - 于留白中沉淀，于极简中思索
 
 ## 项目部署文档
 
-* 后端部署：[后端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c0c9796f61777ec3e29b0)
-* 后台部署：[后台部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c134096f61777ec3e29b1)
-* 前端部署：[前端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c135c96f61777ec3e29b2)
+- 后端部署：[后端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c0c9796f61777ec3e29b0)
+- 后台部署：[后台部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c134096f61777ec3e29b1)
+- 前端部署：[前端部署指南](https://gowiki.site/doc/stellux/683c0b8e96f61777ec3e29ad/683c135c96f61777ec3e29b2)
 
 ## 项目简介
 
@@ -24,9 +24,9 @@ Stellux - 于留白中沉淀，于极简中思索
 
 ## 技术栈
 
-* 前端：React、Next.js、TailwindCSS、TypeScript、Zustand、React Hooks、HeroUI、ShadcnUI、Vercel、Docker
-* 后端：Gin、MongoDB、Go-Mongox、Viper、Casbin、Slog、Wire、Go-Template
-* 控制台：Vue、TailwindCSS、Ant Design Vue、Pinia
+- 前端：React、Next.js、TailwindCSS、TypeScript、Zustand、React Hooks、HeroUI、ShadcnUI、Vercel、Docker
+- 后端：Gin、MongoDB、Go-Mongox、Viper、Casbin、Slog、Wire、Go-Template
+- 控制台：Vue、TailwindCSS、Ant Design Vue、Pinia
 
 ## 项目初衷
 
@@ -39,30 +39,30 @@ Stellux - 于留白中沉淀，于极简中思索
 ### 前端界面预览
 
 首页
-![首页](https://image.codepzj.cn/image/20250601151953328.png)
+![首页](https://cdn.codepzj.cn/image/20250601151953328.png)
 
 博客详情
-![博客详情](https://image.codepzj.cn/image/20250601152027843.png)
+![博客详情](https://cdn.codepzj.cn/image/20250601152027843.png)
 
 文档详情
-![文档详情](https://image.codepzj.cn/image/20250601152034301.png)
+![文档详情](https://cdn.codepzj.cn/image/20250601152034301.png)
 
 ### 控制台界面预览
 
 首页
-![首页](https://image.codepzj.cn/image/20250601152110138.png)
+![首页](https://cdn.codepzj.cn/image/20250601152110138.png)
 
 用户管理
-![用户管理](https://image.codepzj.cn/image/20250601152145354.png)
+![用户管理](https://cdn.codepzj.cn/image/20250601152145354.png)
 
 文档管理
-![文档功能](https://image.codepzj.cn/image/20250601152224586.png)
+![文档功能](https://cdn.codepzj.cn/image/20250601152224586.png)
 
 图片墙
-![图片墙](https://image.codepzj.cn/image/20250601152311570.png)
+![图片墙](https://cdn.codepzj.cn/image/20250601152311570.png)
 
 设置页面
-![设置页面](https://image.codepzj.cn/image/20250601152356534.png)
+![设置页面](https://cdn.codepzj.cn/image/20250601152356534.png)
 
 ## 项目运行指南
 
@@ -77,9 +77,9 @@ pnpm run dev
 
 默认后台账号密码：
 
-* 管理员：admin / 123456
-* 普通用户：alice / 123456
-* 游客：test / 123456
+- 管理员：admin / 123456
+- 普通用户：alice / 123456
+- 游客：test / 123456
 
 在控制端根目录创建 `.env.production`，内容：
 
@@ -142,7 +142,7 @@ go run main.go
 
 成功启动截图：
 
-![运行成功](https://image.codepzj.cn/image/20250601153403462.png)
+![运行成功](https://cdn.codepzj.cn/image/20250601153403462.png)
 
 ## 项目结构
 
@@ -244,4 +244,4 @@ web
 
 感谢使用 Stellux，欢迎贡献代码和建议，一起打造极致写作体验！  
 项目地址：[https://github.com/StelluxWiki/Stellux](https://github.com/StelluxWiki/Stellux)  
-开发者：浩瀚星河  
+开发者：浩瀚星河
